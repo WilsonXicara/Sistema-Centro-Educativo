@@ -5,9 +5,6 @@
  */
 package Principal;
 
-import Clases.Asignacion;
-import Clases.FabricaAsignaciones;
-
 /**
  *
  * @author Usuario
@@ -18,9 +15,7 @@ public class SistemaCentroEducativo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FabricaAsignaciones fabrica = new FabricaAsignaciones();
-        Asignacion asignadorEST = fabrica.crearAsignador(FabricaAsignaciones.TIPO_ASIGNACION_ESTUDIANTE);
-        asignadorEST.crearAsignacion();
+        
     }
     
 }
