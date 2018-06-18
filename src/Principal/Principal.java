@@ -6,6 +6,11 @@
 package Principal;
 
 //import sce.nivel.basico.NivelBasico;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sce.nivel.NivelEducativo;
 import sce.principal.Asignacion;
 import sce.principal.AsignacionBuilder;
@@ -18,12 +23,15 @@ import sce.principal.Persona;
  * @author Usuario
  */
 public class Principal {
+    private static Connection conexion;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        NivelEducativo director = new NivelEducativo();
+        crearConexion();
+        
+        NivelEducativo director = new NivelEducativo(conexion);
         Asignacion asig = director.crearAsignacion(CentroEducativo.TIPO_ASIGNACION_ESTUDIANTE);
         ElementoEducativo ciclo = director.crearElementoEducativo(CentroEducativo.TIPO_ELEMENTO_EDUCATIVO_CICLO_ESCOLAR);
         ElementoEducativo grado = director.crearElementoEducativo(CentroEducativo.TIPO_ELEMENTO_EDUCATIVO_GRADO);
@@ -37,5 +45,14 @@ public class Principal {
         
         asig = builder.getAsignacion();
         asig.crearAsignacion();
+    }
+    public static void crearConexion() {
+        try {
+            String driver="com.mysql.jdbc.Driver", url="jdbc:mysql://";
+            Class.forName(driver);//Se utiliza el driver de conexion
+            conexion=DriverManager.getConnection(url+"localhost/<nombre_bd>","<usuario>","<contraseña>");//Se conecta con la base de datos
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
