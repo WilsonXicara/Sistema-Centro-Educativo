@@ -5,8 +5,6 @@
  */
 package sce.principal.command;
 
-import sce.principal.entity.EstudianteEntity;
-
 /**
  *
  * @author Usuario
@@ -14,17 +12,14 @@ import sce.principal.entity.EstudianteEntity;
 public interface EstudianteCommand {
     /**
      * Muestra el CicloEscolar al que ha sido asignado el EstudianteCommand actual.
-     * @param estudiante
      */
-    public void consultarCicloEscolar(EstudianteEntity estudiante);
+    public void consultarCicloEscolar();
     /**
      * Muestra el Grado al que ha sido asignado el EstudianteCommand actual.
-     * @param estudiante
      */
-    public void consultarGrado(EstudianteEntity estudiante);
+    public void consultarGrado();
     /**
      * Muestra el listado de Cursos al que ha sido asgnado el EstudianteCommand actual.
-     * @param estudiante
      */
-    public void consultarCursos(EstudianteEntity estudiante);
+    public void consultarCursos();
 }

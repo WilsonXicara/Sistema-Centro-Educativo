@@ -84,10 +84,5 @@ public class AsignacionCursoEntity implements Serializable, Asignacion {
     public String toString() {
         return "sce.principal.entity.Asignacion_Curso[ id=" + id + " ]";
     }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
-    }
     
 }

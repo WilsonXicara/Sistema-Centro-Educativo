@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sce.nivel;
+package sce.nivel.generico;
 
 import sce.principal.Asignacion;
 import sce.principal.AsignacionBuilder;
-import sce.principal.ElementoEducativo;
 import sce.principal.Persona;
+import sce.principal.ElementoAsignatura;
 
 /**
  *
  * @author Usuario
  */
-public class AsignacionBasicoBuilder implements AsignacionBuilder {
+public class AsignacionConcretBuilder implements AsignacionBuilder {
     private Asignacion asignacion;
     private int tipoAsignacion;
     
-    public AsignacionBasicoBuilder() { }
+    public AsignacionConcretBuilder() { }
 
     @Override
     public void setAsignacion(Asignacion asignacion, int tipoAsignacion) {
@@ -27,12 +27,12 @@ public class AsignacionBasicoBuilder implements AsignacionBuilder {
     }
 
     @Override
-    public void setElementoPrincipal(ElementoEducativo elemento) {
+    public void setElementoPrincipal(ElementoAsignatura elemento) {
         // AÚN PENDIENTE DE IMPLEMENTAR
     }
 
     @Override
-    public void setElementoSecundario(ElementoEducativo ee) {
+    public void setElementoSecundario(ElementoAsignatura ee) {
         // AÚN PENDIENTE DE IMPLEMENTAR
     }
 

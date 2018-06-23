@@ -11,7 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import sce.principal.ElementoEducativo;
+import sce.principal.ElementoAsignatura;
 
 /**
  *
@@ -19,7 +19,7 @@ import sce.principal.ElementoEducativo;
  */
 @Entity
 @Table(name = CicloEscolarEntity.tableName)
-public class CicloEscolarEntity implements Serializable, ElementoEducativo {
+public class CicloEscolarEntity implements Serializable, ElementoAsignatura {
 
     private static final long serialVersionUID = 1L;
     public static final String tableName = "ciclo_escolar";
@@ -43,11 +43,6 @@ public class CicloEscolarEntity implements Serializable, ElementoEducativo {
 
     public Boolean isCerrado() {
         return cerrado;
-    }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
     }
 
     public void setId(Long id) {

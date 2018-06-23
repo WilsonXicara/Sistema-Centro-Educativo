@@ -76,10 +76,4 @@ public class AsignacionGradoEntity implements Serializable, Asignacion {
     public String toString() {
         return "sce.principal.entity.Asignacion_Grado[ id=" + id + " ]";
     }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
-    }
-    
 }

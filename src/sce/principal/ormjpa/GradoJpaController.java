@@ -137,17 +137,17 @@ public class GradoJpaController implements Serializable, GradoCommand {
     }
 
     @Override
-    public void consultarCursos(GradoEntity grado) {
+    public void consultarCursos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarCatedratico(GradoEntity grado) {
+    public void consultarCatedratico() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarEstudiantes(GradoEntity grado) {
+    public void consultarEstudiantes() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import sce.principal.RegistroEntity;
 
 /**
  *
@@ -19,7 +18,7 @@ import sce.principal.RegistroEntity;
  */
 @Entity
 @Table(name = CalendarioCicloEscolarEntity.tableName)
-public class CalendarioCicloEscolarEntity implements Serializable, RegistroEntity {
+public class CalendarioCicloEscolarEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String tableName = "calendario_ciclo_escolar";
@@ -101,11 +100,6 @@ public class CalendarioCicloEscolarEntity implements Serializable, RegistroEntit
     @Override
     public String toString() {
         return "sce.principal.entity.CalendarioCicloEscolarEntity[ id=" + id + " ]";
-    }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
     }
     
 }

@@ -12,23 +12,19 @@ package sce.principal.command;
 public interface CursoCommand {
     /**
      * Muestra el Catedratico responsable del CursoCommand actual.
-     * @param curso
      */
-    public void consultarCatedratico(sce.principal.entity.CursoEntity curso);
+    public void consultarCatedratico();
     /**
      * Muestra a los Estudiantes asignados al CursoCommand actual.
-     * @param curso
      */
-    public void consultarParticipantes(sce.principal.entity.CursoEntity curso);
+    public void consultarParticipantes();
     /**
      * Muestra la forma en que están distribuidas las notas del CursoCommand actual.
-     * @param curso
      */
-    public void consultarDistribucionNotas(sce.principal.entity.CursoEntity curso);
+    public void consultarDistribucionNotas();
     /**
      * Muestra la distrución actual de notas del curso y posibilita la edición de la misma.
-     * @param curso
      */
-    public void crearDistribucionNotas(sce.principal.entity.CursoEntity curso);
-    public void modificarNotas(sce.principal.entity.CursoEntity curso);
+    public void crearDistribucionNotas();
+    public void modificarNotas();
 }

@@ -19,7 +19,7 @@ import sce.principal.Persona;
  *
  * @author Usuario
  */
-@Entity
+@Entity(name="Estudiante")
 @NamedQueries({
     @NamedQuery(name="Estudiante.buscarPorCui", query="SELECT COUNT(e.cui) FROM Estudiante AS e WHERE e.cui = :estudianteCui"),
     @NamedQuery(name="Estudiante.buscarPorAsignacionId", query="SELECT e FROM Estudiante AS e WHERE e.asignacion_id = :asignacionId")
@@ -57,11 +57,6 @@ public class EstudianteEntity implements Serializable, Persona {
 
     public Long getAsignacion_id() {
         return asignacion_id;
-    }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
     }
 
     public void setId(Long id) {

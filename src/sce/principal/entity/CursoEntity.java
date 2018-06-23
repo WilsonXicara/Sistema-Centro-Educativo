@@ -11,7 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import sce.principal.ElementoEducativo;
+import sce.principal.ElementoAsignatura;
 
 /**
  *
@@ -19,7 +19,7 @@ import sce.principal.ElementoEducativo;
  */
 @Entity
 @Table(name = CursoEntity.tableName)
-public class CursoEntity implements Serializable, ElementoEducativo {
+public class CursoEntity implements Serializable, ElementoAsignatura {
 
     private static final long serialVersionUID = 1L;
     public static final String tableName = "curso";
@@ -38,11 +38,6 @@ public class CursoEntity implements Serializable, ElementoEducativo {
 
     public String getDescripcion() {
         return descripcion;
-    }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
     }
 
     public void setId(Long id) {

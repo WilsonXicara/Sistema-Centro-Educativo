@@ -5,8 +5,6 @@
  */
 package sce.principal.command;
 
-import sce.principal.Asignacion;
-
 /**
  *
  * @author Usuario
@@ -14,7 +12,6 @@ import sce.principal.Asignacion;
 public interface AsignacionCommand {
     /**
      * Ejecuta la acción correspondiente a la asignación, según el tipo de la misma.
-     * @param asignador
      */
-    public void crearAsignacion(Asignacion asignador);
+    public void crearAsignacion();
 }

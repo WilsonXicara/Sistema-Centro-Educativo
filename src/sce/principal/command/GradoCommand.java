@@ -14,17 +14,14 @@ import sce.principal.entity.GradoEntity;
 public interface GradoCommand {
     /**
      * Muestra el listado de Cursos asignados al GradoCommand actual.
-     * @param grado
      */
-    public void consultarCursos(GradoEntity grado);
+    public void consultarCursos();
     /**
      * Muestra el Catedratico asignado al GradoCommand actual.
-     * @param grado
      */
-    public void consultarCatedratico(GradoEntity grado);
+    public void consultarCatedratico();
     /**
      * Muestra a los Estudiantes asignados al GradoCommand actual.
-     * @param grado
      */
-    public void consultarEstudiantes(GradoEntity grado);
+    public void consultarEstudiantes();
 }

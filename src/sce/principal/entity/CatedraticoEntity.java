@@ -28,7 +28,6 @@ public class CatedraticoEntity implements Serializable, Persona {
     private Long id;
     private String nombres, apellidos, direccion;
     private Long asignacion_id;
-    private boolean yaExiste = false;
 
     public Long getId() {
         return id;
@@ -50,11 +49,6 @@ public class CatedraticoEntity implements Serializable, Persona {
         return asignacion_id;
     }
 
-    @Override
-    public boolean yaExiste() {
-        return yaExiste;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -73,10 +67,6 @@ public class CatedraticoEntity implements Serializable, Persona {
 
     public void setAsignacion_id(Long asignacion_id) {
         this.asignacion_id = asignacion_id;
-    }
-
-    public void setYaExiste(boolean yaExiste) {
-        this.yaExiste = yaExiste;
     }
 
     @Override

@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import sce.principal.RegistroEntity;
 
 /**
  *
@@ -19,7 +18,7 @@ import sce.principal.RegistroEntity;
  */
 @Entity
 @Table(name = NotasEstudianteEntity.tableName)
-public class NotasEstudianteEntity implements Serializable, RegistroEntity {
+public class NotasEstudianteEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String tableName = "notas_estudiante";
@@ -93,10 +92,4 @@ public class NotasEstudianteEntity implements Serializable, RegistroEntity {
     public String toString() {
         return "sce.principal.entity.NotasEstudianteEntity[ id=" + id + " ]";
     }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
-    }
-    
 }

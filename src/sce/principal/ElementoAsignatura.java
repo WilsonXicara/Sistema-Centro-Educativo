@@ -9,6 +9,5 @@ package sce.principal;
  *
  * @author Usuario
  */
-public interface ElementoEducativo {
-    public boolean yaExiste();
+public interface ElementoAsignatura {
 }

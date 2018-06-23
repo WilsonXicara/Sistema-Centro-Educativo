@@ -5,16 +5,14 @@
  */
 package sce.principal.command;
 
-import sce.principal.entity.CatedraticoEntity;
-
 /**
  *
  * @author Usuario
  */
 public interface CatedraticoCommand {
-    public void consultarCicloEscolar(CatedraticoEntity estudiante);
+    public void consultarCicloEscolar();
 
-    public void consultarGrados(CatedraticoEntity estudiante);
+    public void consultarGrados();
 
-    public void consultarCursos(CatedraticoEntity estudiante);
+    public void consultarCursos();
 }
