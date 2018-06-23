@@ -137,18 +137,18 @@ public class CatedraticoJpaController implements Serializable, CatedraticoComman
     }
 
     @Override
-    public void consultarCicloEscolar(CatedraticoEntity estudiante) {
-        
+    public void consultarCicloEscolar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarGrados(CatedraticoEntity estudiante) {
-        
+    public void consultarGrados() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarCursos(CatedraticoEntity estudiante) {
-        
+    public void consultarCursos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

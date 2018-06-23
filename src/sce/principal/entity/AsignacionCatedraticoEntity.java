@@ -76,10 +76,5 @@ public class AsignacionCatedraticoEntity implements Serializable, Asignacion {
     public String toString() {
         return "sce.principal.entity.Asignacion_Catedratico[ id=" + id + " ]";
     }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
-    }
     
 }

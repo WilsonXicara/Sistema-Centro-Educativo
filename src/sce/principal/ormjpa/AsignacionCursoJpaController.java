@@ -13,7 +13,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.Asignacion;
 import sce.principal.command.AsignacionCommand;
 import sce.principal.entity.AsignacionCursoEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
@@ -22,7 +21,7 @@ import sce.principal.ormjpa.exceptions.NonexistentEntityException;
  *
  * @author Usuario
  */
-public class AsignacionCursoJpaController implements Serializable, AsignacionCommand {
+public class AsignacionCursoJpaController implements Serializable {
 
     public AsignacionCursoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -136,11 +135,4 @@ public class AsignacionCursoJpaController implements Serializable, AsignacionCom
             em.close();
         }
     }
-
-    @Override
-    public void crearAsignacion(Asignacion asignador) {
-        AsignacionCursoEntity asignador2 = (AsignacionCursoEntity)asignador;
-        create(asignador2);
-    }
-    
 }

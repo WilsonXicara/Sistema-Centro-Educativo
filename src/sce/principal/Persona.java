@@ -10,5 +10,4 @@ package sce.principal;
  * @author Usuario
  */
 public interface Persona {
-    public boolean yaExiste();
 }

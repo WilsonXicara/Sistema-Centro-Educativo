@@ -9,6 +9,8 @@ package sce.principal;
  *
  * @author Usuario
  */
-public interface RegistroEntity {
-    public boolean yaExiste();
+public interface ElementoEducativoCommand {
+    public void guardarPersona(Persona persona);
+    public void guardarElementoAsignatura(ElementoAsignatura elemento);
+    public void guardarAsignacion(Asignacion asignacion);
 }

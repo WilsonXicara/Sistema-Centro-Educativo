@@ -152,18 +152,18 @@ public class EstudianteJpaController implements Serializable, EstudianteCommand 
     }
 
     @Override
-    public void consultarCicloEscolar(EstudianteEntity estudiante) {
-        
+    public void consultarCicloEscolar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarGrado(EstudianteEntity estudiante) {
-        
+    public void consultarGrado() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarCursos(EstudianteEntity estudiante) {
-        
+    public void consultarCursos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

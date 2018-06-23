@@ -137,28 +137,27 @@ public class CursoJpaController implements Serializable, CursoCommand {
     }
 
     @Override
-    public void consultarCatedratico(CursoEntity curso) {
+    public void consultarCatedratico() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarParticipantes(CursoEntity curso) {
+    public void consultarParticipantes() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarDistribucionNotas(CursoEntity curso) {
+    public void consultarDistribucionNotas() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void crearDistribucionNotas(CursoEntity curso) {
+    public void crearDistribucionNotas() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void modificarNotas(CursoEntity curso) {
+    public void modificarNotas() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

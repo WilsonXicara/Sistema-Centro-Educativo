@@ -14,12 +14,12 @@ public interface AsignacionBuilder {
      * Método para insertar un elemento principal a la asignación correspondiente.
      * @param principal que es un CicloEscolar o un Grado (para una Asignación de tipo AsignacionCurso)
      */
-    public void setElementoPrincipal(ElementoEducativo principal);
+    public void setElementoPrincipal(ElementoAsignatura principal);
     /**
      * Método para insertar un elemento secundario a la asignación correspondiente.
      * @param secundario que es un Grado o un Curso
      */
-    public void setElementoSecundario(ElementoEducativo secundario);
+    public void setElementoSecundario(ElementoAsignatura secundario);
     /**
      * Método para insertar un elemento terciario a la asignación correspondiente.
      * @param terciario que es un Estudiante o un Catedratico

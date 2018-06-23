@@ -137,22 +137,22 @@ public class CicloEscolarJpaController implements Serializable, CicloEscolarComm
     }
 
     @Override
-    public void abrirCiclo(CicloEscolarEntity cicloEscolar) {
+    public void abrirCiclo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void cerrarCiclo(CicloEscolarEntity cicloEscolar) {
+    public void cerrarCiclo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarGrados(CicloEscolarEntity cicloEscolar) {
+    public void consultarGrados() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void consultarCalendario(CicloEscolarEntity cicloEscolar) {
+    public void consultarCalendario() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

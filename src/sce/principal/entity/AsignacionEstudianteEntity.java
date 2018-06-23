@@ -84,10 +84,5 @@ public class AsignacionEstudianteEntity implements Serializable, Asignacion {
     public String toString() {
         return "sce.principal.entity.Asignacion_Estudiante[ id=" + id + " ]";
     }
-
-    @Override
-    public boolean yaExiste() {
-        return id != null;
-    }
     
 }
