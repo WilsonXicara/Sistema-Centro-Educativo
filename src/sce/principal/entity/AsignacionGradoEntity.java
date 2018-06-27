@@ -10,47 +10,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import sce.principal.Asignacion;
+import javax.persistence.Table;;
 
 /**
  *
  * @author Usuario
  */
-@Entity
+@Entity(name = AsignacionGradoEntity.tableName)
 @Table(name = AsignacionGradoEntity.tableName)
-public class AsignacionGradoEntity implements Serializable, Asignacion {
-
+public class AsignacionGradoEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String tableName = "asignacion_grado";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long ciclo_escolar_id, grado_id;
+    private Long asignacion_carrera_id, grado_id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getCiclo_escolar_id() {
-        return ciclo_escolar_id;
-    }
-
-    public Long getGrado_id() {
-        return grado_id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCiclo_escolar_id(Long ciclo_escolar_id) {
-        this.ciclo_escolar_id = ciclo_escolar_id;
-    }
-
-    public void setGrado_id(Long grado_id) {
-        this.grado_id = grado_id;
-    }
+    public Long getId() { return id; }
+    public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }
+    public Long getGrado_id() { return grado_id; }
+    public void setId(Long id) { this.id = id; }
+    public void setAsignacion_carrera_id(Long asignacion_carrera_id) { this.asignacion_carrera_id = asignacion_carrera_id; }
+    public void setGrado_id(Long grado_id) { this.grado_id = grado_id; }
 
     @Override
     public int hashCode() {
@@ -58,7 +40,6 @@ public class AsignacionGradoEntity implements Serializable, Asignacion {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -71,9 +52,17 @@ public class AsignacionGradoEntity implements Serializable, Asignacion {
         }
         return true;
     }
-
     @Override
     public String toString() {
-        return "sce.principal.entity.Asignacion_Grado[ id=" + id + " ]";
+        return "sce.principal.entity.AsignacionGradoEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", grado_id=" + grado_id + '}';
+    }
+    
+    public void copy(Object object) {
+        if (object instanceof AsignacionGradoEntity) {
+            AsignacionGradoEntity aux = (AsignacionGradoEntity)object;
+            this.id = aux.id;
+            this.asignacion_carrera_id = aux.asignacion_carrera_id;
+            this.grado_id = aux.grado_id;
+        }
     }
 }

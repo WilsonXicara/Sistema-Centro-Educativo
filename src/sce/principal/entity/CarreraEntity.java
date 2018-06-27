@@ -16,21 +16,26 @@ import javax.persistence.Table;
  *
  * @author Usuario
  */
-@Entity(name = DistribucionNotasEntity.tableName)
-@Table(name = DistribucionNotasEntity.tableName)
-public class DistribucionNotasEntity implements Serializable {
+@Entity(name = CarreraEntity.tableName)
+@Table(name = CarreraEntity.tableName)
+public class CarreraEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String tableName = "distribucion_notas";
+    public static final String tableName = "carrera";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Float esperado;
+    private String nombre, descripcion;
+    private Long pensum_id;
 
     public Long getId() { return id; }
-    public Float getEsperado() { return esperado; }
+    public String getNombre() { return nombre; }
+    public String getDescripcion() { return descripcion; }
+    public Long getPensum_id() { return pensum_id; }
     public void setId(Long id) { this.id = id; }
-    public void setEsperado(Float esperado) { this.esperado = esperado; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setPensum_id(Long pensum_id) { this.pensum_id = pensum_id; }
     
     @Override
     public int hashCode() {
@@ -41,10 +46,10 @@ public class DistribucionNotasEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DistribucionNotasEntity)) {
+        if (!(object instanceof CarreraEntity)) {
             return false;
         }
-        DistribucionNotasEntity other = (DistribucionNotasEntity) object;
+        CarreraEntity other = (CarreraEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -52,14 +57,16 @@ public class DistribucionNotasEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.DistribucionNotasEntity{" + "id=" + id + ", esperado=" + esperado + '}';
+        return "sce.principal.entity.CarreraEntity{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", pensum_id=" + pensum_id + '}';
     }
     
     public void copy(Object object) {
-        if (object instanceof DistribucionNotasEntity) {
-            DistribucionNotasEntity aux = (DistribucionNotasEntity)object;
+        if (object instanceof CarreraEntity) {
+            CarreraEntity aux = (CarreraEntity)object;
             this.id = aux.id;
-            this.esperado = aux.esperado;
+            this.nombre = aux.nombre;
+            this.descripcion = aux.descripcion;
+            this.pensum_id = aux.pensum_id;
         }
     }
 }

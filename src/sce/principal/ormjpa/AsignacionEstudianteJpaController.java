@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.AsignacionEstudianteEntity;
@@ -30,13 +31,32 @@ public class AsignacionEstudianteJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public AsignacionEstudianteEntity buscarAsignacionAGrado(AsignacionEstudianteEntity asignacion) {
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarAsignacionAGrado", AsignacionEstudianteEntity.class);
+        List<AsignacionEstudianteEntity> encontrados = query
+                //.setParameter("idCicloEscolar", asignacion.getCiclo_escolar_id())
+                .setParameter("idEstudiante", asignacion.getEstudiante_id())
+                .setParameter("idGrado", asignacion.getGrado_id())
+                .getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
+    }
 
-    public void create(AsignacionEstudianteEntity asignacion_Estudiante) {
+    public void create(AsignacionEstudianteEntity asignacionEstudiante) {
         EntityManager em = null;
         try {
+            AsignacionEstudianteEntity existente = buscarAsignacionAGrado(asignacionEstudiante);
+            if (existente != null) {
+                asignacionEstudiante.copy(existente);
+                return;
+            }
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(asignacion_Estudiante);
+            em.persist(asignacionEstudiante);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,19 +65,19 @@ public class AsignacionEstudianteJpaController implements Serializable {
         }
     }
 
-    public void edit(AsignacionEstudianteEntity asignacion_Estudiante) throws NonexistentEntityException, Exception {
+    public void edit(AsignacionEstudianteEntity asignacionEstudiante) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            asignacion_Estudiante = em.merge(asignacion_Estudiante);
+            asignacionEstudiante = em.merge(asignacionEstudiante);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = asignacion_Estudiante.getId();
+                Long id = asignacionEstudiante.getId();
                 if (findAsignacion_Estudiante(id) == null) {
-                    throw new NonexistentEntityException("The asignacion_Estudiante with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The asignacionEstudiante with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -73,14 +93,14 @@ public class AsignacionEstudianteJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AsignacionEstudianteEntity asignacion_Estudiante;
+            AsignacionEstudianteEntity asignacionEstudiante;
             try {
-                asignacion_Estudiante = em.getReference(AsignacionEstudianteEntity.class, id);
-                asignacion_Estudiante.getId();
+                asignacionEstudiante = em.getReference(AsignacionEstudianteEntity.class, id);
+                asignacionEstudiante.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The asignacion_Estudiante with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asignacionEstudiante with id " + id + " no longer exists.", enfe);
             }
-            em.remove(asignacion_Estudiante);
+            em.remove(asignacionEstudiante);
             em.getTransaction().commit();
         } finally {
             if (em != null) {

@@ -16,22 +16,24 @@ import javax.persistence.Table;
  *
  * @author Usuario
  */
-@Entity(name = DistribucionNotasEntity.tableName)
-@Table(name = DistribucionNotasEntity.tableName)
-public class DistribucionNotasEntity implements Serializable {
+@Entity(name = AsignacionCatedraticoGradosEntity.tableName)
+@Table(name = AsignacionCatedraticoGradosEntity.tableName)
+public class AsignacionCatedraticoGradosEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String tableName = "distribucion_notas";
+    public static final String tableName = "asignacion_catedratico_grados";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Float esperado;
+    private Long asignacion_catedratico_id, grado_id;
 
     public Long getId() { return id; }
-    public Float getEsperado() { return esperado; }
+    public Long getAsignacion_catedratico_id() { return asignacion_catedratico_id; }
+    public Long getGrado_id() { return grado_id; }
     public void setId(Long id) { this.id = id; }
-    public void setEsperado(Float esperado) { this.esperado = esperado; }
-    
+    public void setAsignacion_catedratico_id(Long asignacion_catedratico_id) { this.asignacion_catedratico_id = asignacion_catedratico_id; }
+    public void setGrado_id(Long grado_id) { this.grado_id = grado_id; }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -41,10 +43,10 @@ public class DistribucionNotasEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DistribucionNotasEntity)) {
+        if (!(object instanceof AsignacionCatedraticoGradosEntity)) {
             return false;
         }
-        DistribucionNotasEntity other = (DistribucionNotasEntity) object;
+        AsignacionCatedraticoGradosEntity other = (AsignacionCatedraticoGradosEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -52,14 +54,15 @@ public class DistribucionNotasEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.DistribucionNotasEntity{" + "id=" + id + ", esperado=" + esperado + '}';
+        return "AsignacionCatedraticoGradosEntity{" + "id=" + id + ", asignacion_catedratico_id=" + asignacion_catedratico_id + ", grado_id=" + grado_id + '}';
     }
     
     public void copy(Object object) {
-        if (object instanceof DistribucionNotasEntity) {
-            DistribucionNotasEntity aux = (DistribucionNotasEntity)object;
+        if (object instanceof AsignacionCatedraticoGradosEntity) {
+            AsignacionCatedraticoGradosEntity aux = (AsignacionCatedraticoGradosEntity)object;
             this.id = aux.id;
-            this.esperado = aux.esperado;
+            this.asignacion_catedratico_id = aux.asignacion_catedratico_id;
+            this.grado_id = aux.grado_id;
         }
     }
 }

@@ -15,13 +15,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.CatedraticoEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
-import sce.principal.command.CatedraticoCommand;
 
 /**
  *
  * @author Usuario
  */
-public class CatedraticoJpaController implements Serializable, CatedraticoCommand {
+public class CatedraticoJpaController implements Serializable {
 
     public CatedraticoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -135,20 +134,4 @@ public class CatedraticoJpaController implements Serializable, CatedraticoComman
             em.close();
         }
     }
-
-    @Override
-    public void consultarCicloEscolar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarGrados() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarCursos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

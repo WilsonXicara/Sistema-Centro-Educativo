@@ -17,6 +17,16 @@
     <class>sce.principal.entity.NotasEstudianteEntity</class>
     <class>sce.principal.entity.NotaActividadEntity</class>
     <class>sce.principal.entity.NotaDistribucionNotasEntity</class>
+    <class>sce.principal.entity.GradoEntity</class>
+    <class>sce.principal.entity.AsignacionCursosEstudianteEntity</class>
+    <class>sce.principal.entity.AtributosAdicionalesEntity</class>
+    <class>sce.principal.entity.AsignacionCatedraticoCursosEntity</class>
+    <class>sce.principal.entity.AsignacionCatedraticoGradosEntity</class>
+    <class>sce.principal.entity.CursoPrerrequisitoEntity</class>
+    <class>sce.principal.entity.AsignacionCarreraEntity</class>
+    <class>sce.principal.entity.CarreraEntity</class>
+    <class>sce.principal.entity.DetallePensumEntity</class>
+    <class>sce.principal.entity.PensumEntity</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sce_db"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

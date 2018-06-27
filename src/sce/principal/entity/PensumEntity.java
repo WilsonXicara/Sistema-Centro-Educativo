@@ -16,21 +16,23 @@ import javax.persistence.Table;
  *
  * @author Usuario
  */
-@Entity(name = DistribucionNotasEntity.tableName)
-@Table(name = DistribucionNotasEntity.tableName)
-public class DistribucionNotasEntity implements Serializable {
+@Entity(name = PensumEntity.tableName)
+@Table(name = PensumEntity.tableName)
+public class PensumEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String tableName = "distribucion_notas";
+    public static final String tableName = "pensum";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Float esperado;
+    private String codigo, descripcion;
 
     public Long getId() { return id; }
-    public Float getEsperado() { return esperado; }
+    public String getCodigo() { return codigo; }
+    public String getDescripcion() { return descripcion; }
     public void setId(Long id) { this.id = id; }
-    public void setEsperado(Float esperado) { this.esperado = esperado; }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
     
     @Override
     public int hashCode() {
@@ -41,10 +43,10 @@ public class DistribucionNotasEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DistribucionNotasEntity)) {
+        if (!(object instanceof PensumEntity)) {
             return false;
         }
-        DistribucionNotasEntity other = (DistribucionNotasEntity) object;
+        PensumEntity other = (PensumEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -52,14 +54,15 @@ public class DistribucionNotasEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.DistribucionNotasEntity{" + "id=" + id + ", esperado=" + esperado + '}';
+        return "sce.principal.entity.PensumEntity{" + "id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + '}';
     }
     
     public void copy(Object object) {
-        if (object instanceof DistribucionNotasEntity) {
-            DistribucionNotasEntity aux = (DistribucionNotasEntity)object;
+        if (object instanceof PensumEntity) {
+            PensumEntity aux = (PensumEntity)object;
             this.id = aux.id;
-            this.esperado = aux.esperado;
+            this.codigo = aux.codigo;
+            this.descripcion = aux.descripcion;
         }
     }
 }

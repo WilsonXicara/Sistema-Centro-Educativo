@@ -11,17 +11,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.CursoEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
-import sce.principal.command.CursoCommand;
 
 /**
  *
  * @author Usuario
  */
-public class CursoJpaController implements Serializable, CursoCommand {
+public class CursoJpaController implements Serializable {
 
     public CursoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -31,10 +31,28 @@ public class CursoJpaController implements Serializable, CursoCommand {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public CursoEntity buscarCursoDescripcion(CursoEntity curso) {
+        EntityManager em = getEntityManager();
+        TypedQuery<CursoEntity> query = em.createNamedQuery("Curso.buscarCursoDescripcion", CursoEntity.class);
+        List<CursoEntity> encontrados = query
+                .setParameter("nombreCurso", curso.getCurso())
+                .setParameter("descripcionCurso", curso.getDescripcion())
+                .getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
+    }
 
     public void create(CursoEntity cursoEntity) {
         EntityManager em = null;
         try {
+            CursoEntity existente = buscarCursoDescripcion(cursoEntity);
+            if (existente != null) {
+                cursoEntity.copy(existente);
+                return;
+            }
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(cursoEntity);
@@ -134,30 +152,5 @@ public class CursoJpaController implements Serializable, CursoCommand {
         } finally {
             em.close();
         }
-    }
-
-    @Override
-    public void consultarCatedratico() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarParticipantes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarDistribucionNotas() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void crearDistribucionNotas() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void modificarNotas() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -13,16 +13,16 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.entity.NotaDistribucionNotasEntity;
+import sce.principal.entity.PensumEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
 /**
  *
  * @author Usuario
  */
-public class NotaDistribucionNotasJpaController implements Serializable {
+public class PensumJpaController implements Serializable {
 
-    public NotaDistribucionNotasJpaController(EntityManagerFactory emf) {
+    public PensumJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,12 +31,12 @@ public class NotaDistribucionNotasJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(NotaDistribucionNotasEntity notaDistribucionNotasEntity) {
+    public void create(PensumEntity pensumEntity) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(notaDistribucionNotasEntity);
+            em.persist(pensumEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,19 +45,19 @@ public class NotaDistribucionNotasJpaController implements Serializable {
         }
     }
 
-    public void edit(NotaDistribucionNotasEntity notaDistribucionNotasEntity) throws NonexistentEntityException, Exception {
+    public void edit(PensumEntity pensumEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            notaDistribucionNotasEntity = em.merge(notaDistribucionNotasEntity);
+            pensumEntity = em.merge(pensumEntity);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = notaDistribucionNotasEntity.getId();
-                if (findNotaDistribucionNotasEntity(id) == null) {
-                    throw new NonexistentEntityException("The notaDistribucionNotasEntity with id " + id + " no longer exists.");
+                Long id = pensumEntity.getId();
+                if (findPensumEntity(id) == null) {
+                    throw new NonexistentEntityException("The pensumEntity with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -73,14 +73,14 @@ public class NotaDistribucionNotasJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            NotaDistribucionNotasEntity notaDistribucionNotasEntity;
+            PensumEntity pensumEntity;
             try {
-                notaDistribucionNotasEntity = em.getReference(NotaDistribucionNotasEntity.class, id);
-                notaDistribucionNotasEntity.getId();
+                pensumEntity = em.getReference(PensumEntity.class, id);
+                pensumEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The notaDistribucionNotasEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The pensumEntity with id " + id + " no longer exists.", enfe);
             }
-            em.remove(notaDistribucionNotasEntity);
+            em.remove(pensumEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -89,19 +89,19 @@ public class NotaDistribucionNotasJpaController implements Serializable {
         }
     }
 
-    public List<NotaDistribucionNotasEntity> findNotaDistribucionNotasEntityEntities() {
-        return findNotaDistribucionNotasEntityEntities(true, -1, -1);
+    public List<PensumEntity> findPensumEntityEntities() {
+        return findPensumEntityEntities(true, -1, -1);
     }
 
-    public List<NotaDistribucionNotasEntity> findNotaDistribucionNotasEntityEntities(int maxResults, int firstResult) {
-        return findNotaDistribucionNotasEntityEntities(false, maxResults, firstResult);
+    public List<PensumEntity> findPensumEntityEntities(int maxResults, int firstResult) {
+        return findPensumEntityEntities(false, maxResults, firstResult);
     }
 
-    private List<NotaDistribucionNotasEntity> findNotaDistribucionNotasEntityEntities(boolean all, int maxResults, int firstResult) {
+    private List<PensumEntity> findPensumEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(NotaDistribucionNotasEntity.class));
+            cq.select(cq.from(PensumEntity.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -113,20 +113,20 @@ public class NotaDistribucionNotasJpaController implements Serializable {
         }
     }
 
-    public NotaDistribucionNotasEntity findNotaDistribucionNotasEntity(Long id) {
+    public PensumEntity findPensumEntity(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(NotaDistribucionNotasEntity.class, id);
+            return em.find(PensumEntity.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getNotaDistribucionNotasEntityCount() {
+    public int getPensumEntityCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<NotaDistribucionNotasEntity> rt = cq.from(NotaDistribucionNotasEntity.class);
+            Root<PensumEntity> rt = cq.from(PensumEntity.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

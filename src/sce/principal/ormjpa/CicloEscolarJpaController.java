@@ -11,17 +11,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.CicloEscolarEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
-import sce.principal.command.CicloEscolarCommand;
 
 /**
  *
  * @author Usuario
  */
-public class CicloEscolarJpaController implements Serializable, CicloEscolarCommand {
+public class CicloEscolarJpaController implements Serializable {
 
     public CicloEscolarJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -32,9 +32,24 @@ public class CicloEscolarJpaController implements Serializable, CicloEscolarComm
         return emf.createEntityManager();
     }
 
+    public CicloEscolarEntity buscarPorAnio(String anio) {
+        EntityManager em = getEntityManager();
+        TypedQuery<CicloEscolarEntity> query = em.createNamedQuery("CicloEscolar.buscarPorAnio", CicloEscolarEntity.class);
+        List<CicloEscolarEntity> encontrados = query.setParameter("cicloEscolar", anio).getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
+    }
+    
     public void create(CicloEscolarEntity cicloEscolarEntity) {
         EntityManager em = null;
         try {
+            CicloEscolarEntity existente = buscarPorAnio(cicloEscolarEntity.getCiclo_escolar());
+            if (existente != null) {
+                cicloEscolarEntity.copy(existente);
+                return;
+            }
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(cicloEscolarEntity);
@@ -135,25 +150,4 @@ public class CicloEscolarJpaController implements Serializable, CicloEscolarComm
             em.close();
         }
     }
-
-    @Override
-    public void abrirCiclo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void cerrarCiclo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarGrados() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarCalendario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }
