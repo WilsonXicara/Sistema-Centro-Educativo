@@ -5,144 +5,96 @@
  */
 package Principal;
 
-//import sce.nivel.basico.NivelBasico;
-import java.util.List;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.util.Date;
+import java.util.Iterator;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import sce.nivel.generico.ElementolEducativoFactory;
-import sce.principal.Persona;
-import sce.principal.command.EstudianteCommand;
-import sce.principal.entity.AsignacionCursoEntity;
-import sce.principal.entity.CicloEscolarEntity;
+import sce.asignacion.curso.AsignacionCursoCreador;
+import sce.asignacion.curso.AsignacionCursoBuscador;
+import sce.principal.entity.AsignacionCarreraEntity;
 import sce.principal.entity.CursoEntity;
-import sce.principal.entity.EstudianteEntity;
-import sce.principal.ormjpa.CursoJpaController;
-import sce.principal.ormjpa.EstudianteJpaController;
-import sce.principal.ElementoAsignatura;
-import sce.principal.ElementoEducativoSave;
+import sce.principal.entity.DistribucionNotasEntity;
 
 /**
  *
  * @author Usuario
  */
 public class Principal {
-    //private static Connection conexion;
+    public static final int CANTIDAD_ESTUDIANTES = 5;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // CREAR ESTUDIANTES
+        JsonObject toJson1 = new JsonObject();
+        toJson1.addProperty("name", "Juan");
+        toJson1.addProperty("age", 22);
+        toJson1.addProperty("birthday", new Date().toString());
+        JsonObject toJson2 = new JsonObject();
+        toJson2.addProperty("nombres", "Wilson");
+        toJson2.addProperty("apellidos", "Xicará");
+        toJson1.add("información", toJson2);
+        System.out.println("object = "+toJson1.toString());
+        
+        JsonParser parser = new JsonParser();
+        JsonElement elementObject = parser.parse("{'name':'Juan','age':22,'birthday':'Wed Feb 26 20:39:53 CET 2014'}");
+        
+        /*elementObject.getAsJsonObject().
+        JsonArray arreglo = elementObject.getAsJsonArray();
+        Iterator<JsonElement> iterador = arreglo.iterator();
+        while(iterador.hasNext()) {
+            //iterador.next().
+        }
+        String name = elementObject.getAsJsonObject().get("name").getAsString();*/
+        /*EntityManagerFactory emf = Persistence.createEntityManagerFactory("Sistema-Centro-EducativoPU");
+        
+        //AsignacionCarrera
+        CicloEscolarEntity cicloEscolar = new CicloEscolarEntity(); //Se crea un ciclo escolar
+        CarreraEntity carrera = new CarreraEntity();    //Se crea una carrera
+        AsignacionCarrera asignacionC = new AsignacionCarrera(emf);
+        asignacionC.setCarrera(carrera);
+        asignacionC.setCicloEscolar(cicloEscolar);
+        asignacionC.crearAsignacion(); //Se crea una nueva asignación
+        
+        //AsignacionCatedratico
+        CatedraticoEntity catedratico = new CatedraticoEntity();
+        AsignacionCatedratico asignacionCat = new AsignacionCatedratico(emf);
+        AsignacionCarreraEntity ace = new AsignacionCarreraEntity();
+        asignacionCat.setAce(ace);
+        asignacionCat.setCatedratico(catedratico);
+        asignacionCat.crearAsignacion();
+        
+        //Asignacion de cursos a un catedrático
+        AsignacionCatedraticoEntity asigCat = new AsignacionCatedraticoEntity();
+        AsignacionCursoEntity asigCursos = new AsignacionCursoEntity();
+        AsignacionCatedraticoCursos asignacionCursos = new AsignacionCatedraticoCursos(emf);
+        asignacionCursos.setAsigCatE(asigCat);
+        asignacionCursos.setAsigCursoE(asigCursos);
+        asignacionCursos.crearAsignacion();
+        
+        //Asignacion de grados a una carrera 
+        AsignacionCarreraEntity nuevaCarrera = new AsignacionCarreraEntity();
+        GradoEntity grado = new GradoEntity();
+        AsignacionGrado asigGrado = new AsignacionGrado(emf);
+        asigGrado.setCarrera(nuevaCarrera);
+        asigGrado.setGrado(grado);
+        asigGrado.crearAsignacion();*/
+    }
+    public static void asignacion_estudiantes_a_grados(String cicloEscolarAcual) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Sistema-Centro-EducativoPU");
-        ElementolEducativoFactory director = new ElementolEducativoFactory(emf);
-        ElementoEducativoSave guardador = new ElementoEducativoSave(emf);
-        //Otro director = new Otro(emf);
-        Persona encargado = director.obtenerPersona(Otro.TIPO_PERSONA_ENCARGADO);
-        System.out.println("encargado = "+encargado);
-        ElementoAsignatura elementoE = director.obtenerElementoAsignatura(Otro.TIPO_ELEMENTO_EDUCATIVO_GRADO);
-        System.out.println("elemento = "+elementoE);
-        EstudianteEntity estudiante = (EstudianteEntity)director.obtenerPersona(ElementolEducativoFactory.TIPO_PERSONA_ESTUDIANTE);
-        // Llenado de estudiante
-        estudiante.setCui("9234567890123");
-        estudiante.setNombres("Óscar");
-        estudiante.setApellidos("Juárez");
-        estudiante.setDireccion("Xela");
-        guardador.guardarPersona(estudiante);
-        System.out.println("EXITO");
-        /*AsignacionCatedraticoBasico asignadorCat = (AsignacionCatedraticoBasico) director.obtenerAsignacion(0);
-        asignadorCat.guardarAsignacion(asignadorCat);
-        director.guardarAsignacion(asignadorCat);*/
-        // Ciclo escolar
-        CicloEscolarEntity ciclo = (CicloEscolarEntity) director.obtenerElementoAsignatura(ElementolEducativoFactory.TIPO_ELEMENTO_EDUCATIVO_CICLO_ESCOLAR, 2l);
-        System.out.println("ciclo="+ciclo);
-        // CursoEntity
-        CursoEntity curso = (CursoEntity)director.obtenerElementoAsignatura(ElementolEducativoFactory.TIPO_ELEMENTO_EDUCATIVO_CURSO);
-        curso.setCurso("Matemáticas");
-        curso.setDescripcion("Algo");
-        guardador.guardarElementoAsignatura(curso);
-        // Asignación curos
-        AsignacionCursoEntity asignacionC = (AsignacionCursoEntity)director.obtenerAsignacion(ElementolEducativoFactory.TIPO_ASIGNACION_CURSO);
-        asignacionC.setCiclo_escolar_id(ciclo.getId());
-        asignacionC.setCurso_id(curso.getId());
-        guardador.guardarAsignacion(asignacionC);
-        EstudianteJpaController est = new EstudianteJpaController(emf);
+        AsignacionCarreraEntity carrera = new AsignacionCarreraEntity();
+        AsignacionCursoCreador asignacionCurso = new AsignacionCursoCreador(emf, carrera);
+        //asignacionCurso.setGrado(new GradoEntity());
+        CursoEntity curso = new CursoEntity();
+        DistribucionNotasEntity distribucion = new DistribucionNotasEntity();
+        asignacionCurso.addCurso(curso, distribucion);
+        asignacionCurso.crearAsignacion();
         
-        List<EstudianteEntity> lista = est.buscarPorAsignacionId(0l);
-        for (EstudianteEntity estudiante1 : lista) {
-            System.out.println("algo");
-            System.out.println(estudiante1);
-        }
-        
-        Otro2 otro2 = new Otro2(emf);
-        otro2.create(estudiante);
-    }
-    public static class EstudiantePrimaria extends Estudiante {
-        
-        public EstudiantePrimaria(EntityManagerFactory emf) {
-            super(emf);
-        }
-        @Override
-        public void consultarCicloEscolar() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-        public void otroMetodo() {
-            
-        }
-    }
-    public static class Estudiante implements EstudianteCommand {
-        EntityManagerFactory emf;
-        EstudianteEntity estudiante;
-        String numeroTelefono = "";
-        
-        public Estudiante(EntityManagerFactory emf) {
-            this.emf = emf;
-        }
-        public void setId(int id) {
-            this.estudiante.setId((long)id);
-        }
-        public void consultarCursos() {
-            CursoJpaController cursos = new CursoJpaController(emf);
-            cursos.findCursoEntity(estudiante.getId());
-        }
-        public void guardar() {
-            String aux = "";
-            aux = "{Telefono:"+numeroTelefono+"}";
-        }
-
-        @Override
-        public void consultarCicloEscolar() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public void consultarGrado() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
-    public static class Encargado implements Persona {
-    }
-    public static class Otro extends ElementolEducativoFactory {
-        public static final int TIPO_PERSONA_ENCARGADO = 100;
-        public Otro(EntityManagerFactory emf) {
-            super(emf);
-        }
-        @Override
-        public Persona obtenerPersona(int tipoPersona, Long ID) {
-            switch(tipoPersona) {
-                case ElementolEducativoFactory.TIPO_PERSONA_ESTUDIANTE:
-                case ElementolEducativoFactory.TIPO_PERSONA_CATEDRATICO:
-                    return super.obtenerPersona(tipoPersona, ID);
-                case TIPO_PERSONA_ENCARGADO:
-                    return new Encargado();
-            }
-            return null;
-        }
-    }
-    public static class Otro2 extends EstudianteJpaController {
-        
-        public Otro2(EntityManagerFactory emf) {
-            super(emf);
-        }
-        
+        AsignacionCursoBuscador buscador = new AsignacionCursoBuscador(emf);
+        buscador.obtenerCursoAsignados(0, 0l);
     }
 }

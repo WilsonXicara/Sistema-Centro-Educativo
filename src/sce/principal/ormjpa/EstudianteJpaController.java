@@ -16,13 +16,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.EstudianteEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
-import sce.principal.command.EstudianteCommand;
 
 /**
  *
  * @author Usuario
  */
-public class EstudianteJpaController implements Serializable, EstudianteCommand {
+public class EstudianteJpaController implements Serializable {
 
     public EstudianteJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -33,10 +32,14 @@ public class EstudianteJpaController implements Serializable, EstudianteCommand 
         return emf.createEntityManager();
     }
     
-    public Long buscarPorCui(String cui) {
+    public EstudianteEntity buscarPorCui(String cui) {
         EntityManager em = getEntityManager();
-        TypedQuery<Long> query = em.createNamedQuery("Estudiante.buscarPorCui", Long.class);
-        return query.setParameter("estudianteCui", cui).getResultList().get(0);
+        TypedQuery<EstudianteEntity> query = em.createNamedQuery("Estudiante.buscarPorCui", EstudianteEntity.class);
+        List<EstudianteEntity> encontrados = query.setParameter("estudianteCui", cui).getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
     }
     public List<EstudianteEntity> buscarPorAsignacionId(Long idAsignacion) {
         EntityManager em = getEntityManager();
@@ -47,7 +50,9 @@ public class EstudianteJpaController implements Serializable, EstudianteCommand 
     public void create(EstudianteEntity estudianteEntity) {
         EntityManager em = null;
         try {
-            if (buscarPorCui(estudianteEntity.getCui()) > 0l) {
+            EstudianteEntity existente = buscarPorCui(estudianteEntity.getCui());
+            if (existente != null) {
+                estudianteEntity.copy(existente);
                 return;
             }
             em = getEntityManager();
@@ -150,20 +155,4 @@ public class EstudianteJpaController implements Serializable, EstudianteCommand 
             em.close();
         }
     }
-
-    @Override
-    public void consultarCicloEscolar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarGrado() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void consultarCursos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

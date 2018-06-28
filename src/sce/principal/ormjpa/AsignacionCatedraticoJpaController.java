@@ -31,12 +31,12 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(AsignacionCatedraticoEntity asignacion_Catedratico) {
+    public void create(AsignacionCatedraticoEntity asignacionCatedraticoEntity) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(asignacion_Catedratico);
+            em.persist(asignacionCatedraticoEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,19 +45,19 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         }
     }
 
-    public void edit(AsignacionCatedraticoEntity asignacion_Catedratico) throws NonexistentEntityException, Exception {
+    public void edit(AsignacionCatedraticoEntity asignacionCatedraticoEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            asignacion_Catedratico = em.merge(asignacion_Catedratico);
+            asignacionCatedraticoEntity = em.merge(asignacionCatedraticoEntity);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = asignacion_Catedratico.getId();
-                if (findAsignacion_Catedratico(id) == null) {
-                    throw new NonexistentEntityException("The asignacion_Catedratico with id " + id + " no longer exists.");
+                Long id = asignacionCatedraticoEntity.getId();
+                if (findAsignacionCatedraticoEntity(id) == null) {
+                    throw new NonexistentEntityException("The asignacionCatedraticoEntity with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -73,14 +73,14 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AsignacionCatedraticoEntity asignacion_Catedratico;
+            AsignacionCatedraticoEntity asignacionCatedraticoEntity;
             try {
-                asignacion_Catedratico = em.getReference(AsignacionCatedraticoEntity.class, id);
-                asignacion_Catedratico.getId();
+                asignacionCatedraticoEntity = em.getReference(AsignacionCatedraticoEntity.class, id);
+                asignacionCatedraticoEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The asignacion_Catedratico with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asignacionCatedraticoEntity with id " + id + " no longer exists.", enfe);
             }
-            em.remove(asignacion_Catedratico);
+            em.remove(asignacionCatedraticoEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -89,15 +89,15 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         }
     }
 
-    public List<AsignacionCatedraticoEntity> findAsignacion_CatedraticoEntities() {
-        return findAsignacion_CatedraticoEntities(true, -1, -1);
+    public List<AsignacionCatedraticoEntity> findAsignacionCatedraticoEntityEntities() {
+        return findAsignacionCatedraticoEntityEntities(true, -1, -1);
     }
 
-    public List<AsignacionCatedraticoEntity> findAsignacion_CatedraticoEntities(int maxResults, int firstResult) {
-        return findAsignacion_CatedraticoEntities(false, maxResults, firstResult);
+    public List<AsignacionCatedraticoEntity> findAsignacionCatedraticoEntityEntities(int maxResults, int firstResult) {
+        return findAsignacionCatedraticoEntityEntities(false, maxResults, firstResult);
     }
 
-    private List<AsignacionCatedraticoEntity> findAsignacion_CatedraticoEntities(boolean all, int maxResults, int firstResult) {
+    private List<AsignacionCatedraticoEntity> findAsignacionCatedraticoEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -113,7 +113,7 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         }
     }
 
-    public AsignacionCatedraticoEntity findAsignacion_Catedratico(Long id) {
+    public AsignacionCatedraticoEntity findAsignacionCatedraticoEntity(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(AsignacionCatedraticoEntity.class, id);
@@ -122,7 +122,7 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         }
     }
 
-    public int getAsignacion_CatedraticoCount() {
+    public int getAsignacionCatedraticoEntityCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();

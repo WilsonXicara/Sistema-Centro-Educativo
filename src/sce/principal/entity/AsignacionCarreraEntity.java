@@ -16,32 +16,29 @@ import javax.persistence.Table;
  *
  * @author Usuario
  */
-@Entity(name = AsignacionCatedraticoEntity.tableName)
-@Table(name = AsignacionCatedraticoEntity.tableName)
-public class AsignacionCatedraticoEntity implements Serializable {
+@Entity(name = AsignacionCarreraEntity.tableName)
+@Table(name = AsignacionCarreraEntity.tableName)
+public class AsignacionCarreraEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String tableName = "asignacion_catedratico";
+    public static final String tableName = "asignacion_carrera";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long asignacion_carrera_id, catedratico_id;
+    private Long ciclo_escolar_id, carrera_id;
     private Boolean anulado = false;
     private String razon_anulacion;
-    private Long asignacion_anterior_id=0l;
 
     public Long getId() { return id; }
-    public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }
-    public Long getCatedratico_id() { return catedratico_id; }
+    public Long getCiclo_escolar_id() { return ciclo_escolar_id; }
+    public Long getCarrera_id() { return carrera_id; }
     public Boolean getAnulado() { return anulado; }
     public String getRazon_anulacion() { return razon_anulacion; }
-    public Long getAsignacion_anterior_id() { return asignacion_anterior_id; }
     public void setId(Long id) { this.id = id; }
-    public void setAsignacion_carrera_id(Long asignacion_carrera_id) { this.asignacion_carrera_id = asignacion_carrera_id; }
-    public void setCatedratico_id(Long catedratico_id) { this.catedratico_id = catedratico_id; }
+    public void setCiclo_escolar_id(Long ciclo_escolar_id) { this.ciclo_escolar_id = ciclo_escolar_id; }
+    public void setCarrera_id(Long carrera_id) { this.carrera_id = carrera_id; }
     public void setAnulado(Boolean anulado) { this.anulado = anulado; }
     public void setRazon_anulacion(String razon_anulacion) { this.razon_anulacion = razon_anulacion; }
-    public void setAsignacion_anterior_id(Long asignacion_anterior_id) { this.asignacion_anterior_id = asignacion_anterior_id; }
 
     @Override
     public int hashCode() {
@@ -52,29 +49,29 @@ public class AsignacionCatedraticoEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AsignacionCatedraticoEntity)) {
+        if (!(object instanceof AsignacionCarreraEntity)) {
             return false;
         }
-        AsignacionCatedraticoEntity other = (AsignacionCatedraticoEntity) object;
+        AsignacionCarreraEntity other = (AsignacionCarreraEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
     }
+
     @Override
     public String toString() {
-        return "sce.principal.entity.AsignacionCatedraticoEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", catedratico_id=" + catedratico_id + ", anulado=" + anulado + ", razon_anulacion=" + razon_anulacion + ", asignacion_anterior_id=" + asignacion_anterior_id + '}';
+        return "sce.principal.entity.AsignacionCarreraEntity{" + "id=" + id + ", ciclo_escolar_id=" + ciclo_escolar_id + ", carrera_id=" + carrera_id + ", anulado=" + anulado + ", razon_anulacion=" + razon_anulacion + '}';
     }
     
     public void copy(Object object) {
-        if (object instanceof AsignacionCatedraticoEntity) {
-            AsignacionCatedraticoEntity aux = (AsignacionCatedraticoEntity)object;
+        if (object instanceof AsignacionCarreraEntity) {
+            AsignacionCarreraEntity aux = (AsignacionCarreraEntity)object;
             this.id = aux.id;
-            this.asignacion_carrera_id = aux.asignacion_carrera_id;
-            this.catedratico_id = aux.catedratico_id;
+            this.ciclo_escolar_id = aux.ciclo_escolar_id;
+            this.carrera_id = aux.carrera_id;
             this.anulado = aux.anulado;
             this.razon_anulacion = aux.razon_anulacion;
-            this.asignacion_anterior_id = aux.asignacion_anterior_id;
         }
     }
 }

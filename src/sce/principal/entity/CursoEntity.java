@@ -10,47 +10,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import sce.principal.ElementoAsignatura;
 
 /**
  *
  * @author Usuario
  */
-@Entity
+@Entity(name=CursoEntity.tableName)
+@NamedQueries({
+    @NamedQuery(name="Curso.buscarCursoDescripcion", query="SELECT c FROM "+CursoEntity.tableName+" AS c WHERE c.curso = :nombreCurso AND c.descripcion = :descripcionCurso")
+})
 @Table(name = CursoEntity.tableName)
-public class CursoEntity implements Serializable, ElementoAsignatura {
-
+public class CursoEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String tableName = "curso";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String curso, descripcion;
+    private Integer creditos;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public Long getId() { return id; }
+    public String getCurso() { return curso; }
+    public String getDescripcion() { return descripcion; }
+    public Integer getCreditos() { return creditos; }
+    public void setId(Long id) { this.id = id; }
+    public void setCurso(String curso) { this.curso = curso; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setCreditos(Integer creditos) { this.creditos = creditos; }
 
     @Override
     public int hashCode() {
@@ -58,7 +48,6 @@ public class CursoEntity implements Serializable, ElementoAsignatura {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -71,10 +60,18 @@ public class CursoEntity implements Serializable, ElementoAsignatura {
         }
         return true;
     }
-
     @Override
     public String toString() {
-        return "orm.Curso[ id=" + id + " ]";
+        return "sce.principal.entity.CursoEntity{" + "id=" + id + ", curso=" + curso + ", descripcion=" + descripcion + ", creditos=" + creditos + '}';
     }
     
+    public void copy(Object object) {
+        if (object instanceof CursoEntity) {
+            CursoEntity aux = (CursoEntity)object;
+            this.id = aux.id;
+            this.curso = aux.curso;
+            this.descripcion = aux.descripcion;
+            this.creditos = aux.creditos;
+        }
+    }
 }

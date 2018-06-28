@@ -14,16 +14,16 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.entity.GradoEntity;
+import sce.principal.entity.AsignacionCursosEstudianteEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
 /**
  *
  * @author Usuario
  */
-public class GradoJpaController implements Serializable {
+public class AsignacionCursosEstudianteJpaController implements Serializable {
 
-    public GradoJpaController(EntityManagerFactory emf) {
+    public AsignacionCursosEstudianteJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,12 +32,12 @@ public class GradoJpaController implements Serializable {
         return emf.createEntityManager();
     }
     
-    public GradoEntity buscarPorGradoSeccion(String grado, String seccion) {
+    public AsignacionCursosEstudianteEntity buscarCursoAsignado(Long idAsignacionEst, Long idCurso) {
         EntityManager em = getEntityManager();
-        TypedQuery<GradoEntity> query = em.createNamedQuery("Grado.buscarPorGradoSeccion", GradoEntity.class);
-        List<GradoEntity> encontrados = query
-                .setParameter("nombreGrado", grado)
-                .setParameter("nombreSeccion", seccion)
+        TypedQuery<AsignacionCursosEstudianteEntity> query = em.createNamedQuery("AsignacionCursosEstudiante.buscarCursoAsignado", AsignacionCursosEstudianteEntity.class);
+        List<AsignacionCursosEstudianteEntity> encontrados = query
+                .setParameter("idAsignacionEst", idAsignacionEst)
+                .setParameter("idCurso", idCurso)
                 .getResultList();
         if (encontrados.isEmpty()) {
             return null;
@@ -45,17 +45,17 @@ public class GradoJpaController implements Serializable {
         return encontrados.get(0);
     }
 
-    public void create(GradoEntity gradoEntity) {
+    public void create(AsignacionCursosEstudianteEntity asignacionCursosEstudiante) {
         EntityManager em = null;
         try {
-            GradoEntity existente = buscarPorGradoSeccion(gradoEntity.getGrado(), gradoEntity.getSeccion());
+            AsignacionCursosEstudianteEntity existente = buscarCursoAsignado(asignacionCursosEstudiante.getAsignacion_estudiante_id(), asignacionCursosEstudiante.getCurso_id());
             if (existente != null) {
-                gradoEntity.copy(existente);
+                asignacionCursosEstudiante.copy(existente);
                 return;
             }
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(gradoEntity);
+            em.persist(asignacionCursosEstudiante);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -64,19 +64,19 @@ public class GradoJpaController implements Serializable {
         }
     }
 
-    public void edit(GradoEntity gradoEntity) throws NonexistentEntityException, Exception {
+    public void edit(AsignacionCursosEstudianteEntity asignacionCursosEstudiante) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            gradoEntity = em.merge(gradoEntity);
+            asignacionCursosEstudiante = em.merge(asignacionCursosEstudiante);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = gradoEntity.getId();
-                if (findGradoEntity(id) == null) {
-                    throw new NonexistentEntityException("The gradoEntity with id " + id + " no longer exists.");
+                Long id = asignacionCursosEstudiante.getId();
+                if (findAsignacionCursosEstudiante(id) == null) {
+                    throw new NonexistentEntityException("The asignacionCursosEstudiante with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -92,14 +92,14 @@ public class GradoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            GradoEntity gradoEntity;
+            AsignacionCursosEstudianteEntity asignacionCursosEstudiante;
             try {
-                gradoEntity = em.getReference(GradoEntity.class, id);
-                gradoEntity.getId();
+                asignacionCursosEstudiante = em.getReference(AsignacionCursosEstudianteEntity.class, id);
+                asignacionCursosEstudiante.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The gradoEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asignacionCursosEstudiante with id " + id + " no longer exists.", enfe);
             }
-            em.remove(gradoEntity);
+            em.remove(asignacionCursosEstudiante);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -108,19 +108,19 @@ public class GradoJpaController implements Serializable {
         }
     }
 
-    public List<GradoEntity> findGradoEntityEntities() {
-        return findGradoEntityEntities(true, -1, -1);
+    public List<AsignacionCursosEstudianteEntity> findAsignacionCursosEstudianteEntities() {
+        return findAsignacionCursosEstudianteEntities(true, -1, -1);
     }
 
-    public List<GradoEntity> findGradoEntityEntities(int maxResults, int firstResult) {
-        return findGradoEntityEntities(false, maxResults, firstResult);
+    public List<AsignacionCursosEstudianteEntity> findAsignacionCursosEstudianteEntities(int maxResults, int firstResult) {
+        return findAsignacionCursosEstudianteEntities(false, maxResults, firstResult);
     }
 
-    private List<GradoEntity> findGradoEntityEntities(boolean all, int maxResults, int firstResult) {
+    private List<AsignacionCursosEstudianteEntity> findAsignacionCursosEstudianteEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(GradoEntity.class));
+            cq.select(cq.from(AsignacionCursosEstudianteEntity.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -132,20 +132,20 @@ public class GradoJpaController implements Serializable {
         }
     }
 
-    public GradoEntity findGradoEntity(Long id) {
+    public AsignacionCursosEstudianteEntity findAsignacionCursosEstudiante(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(GradoEntity.class, id);
+            return em.find(AsignacionCursosEstudianteEntity.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getGradoEntityCount() {
+    public int getAsignacionCursosEstudianteCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<GradoEntity> rt = cq.from(GradoEntity.class);
+            Root<AsignacionCursosEstudianteEntity> rt = cq.from(AsignacionCursosEstudianteEntity.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -153,4 +153,5 @@ public class GradoJpaController implements Serializable {
             em.close();
         }
     }
+    
 }

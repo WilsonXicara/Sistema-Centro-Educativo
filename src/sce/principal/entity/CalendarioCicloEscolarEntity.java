@@ -16,66 +16,31 @@ import javax.persistence.Table;
  *
  * @author Usuario
  */
-@Entity
+@Entity(name = CalendarioCicloEscolarEntity.tableName)
 @Table(name = CalendarioCicloEscolarEntity.tableName)
 public class CalendarioCicloEscolarEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String tableName = "calendario_ciclo_escolar";
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long ciclo_escolar_id;
+    private Long asignacion_carrera_id;
     private Integer mes, dia_inicio, dia_fin;
     private String actividad;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getCiclo_escolar_id() {
-        return ciclo_escolar_id;
-    }
-
-    public Integer getMes() {
-        return mes;
-    }
-
-    public Integer getDia_inicio() {
-        return dia_inicio;
-    }
-
-    public Integer getDia_fin() {
-        return dia_fin;
-    }
-
-    public String getActividad() {
-        return actividad;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCiclo_escolar_id(Long ciclo_escolar_id) {
-        this.ciclo_escolar_id = ciclo_escolar_id;
-    }
-
-    public void setMes(Integer mes) {
-        this.mes = mes;
-    }
-
-    public void setDia_inicio(Integer dia_inicio) {
-        this.dia_inicio = dia_inicio;
-    }
-
-    public void setDia_fin(Integer dia_fin) {
-        this.dia_fin = dia_fin;
-    }
-
-    public void setActividad(String actividad) {
-        this.actividad = actividad;
-    }
+    public Long getId() { return id; }
+    public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }
+    public Integer getMes() { return mes; }
+    public Integer getDia_inicio() { return dia_inicio; }
+    public Integer getDia_fin() { return dia_fin; }
+    public String getActividad() { return actividad; }
+    public void setId(Long id) { this.id = id; }
+    public void setAsignacion_carrera_id(Long asignacion_carrera_id) { this.asignacion_carrera_id = asignacion_carrera_id; }
+    public void setMes(Integer mes) { this.mes = mes; }
+    public void setDia_inicio(Integer dia_inicio) { this.dia_inicio = dia_inicio; }
+    public void setDia_fin(Integer dia_fin) { this.dia_fin = dia_fin; }
+    public void setActividad(String actividad) { this.actividad = actividad; }
 
     @Override
     public int hashCode() {
@@ -83,7 +48,6 @@ public class CalendarioCicloEscolarEntity implements Serializable {
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -96,10 +60,20 @@ public class CalendarioCicloEscolarEntity implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
-        return "sce.principal.entity.CalendarioCicloEscolarEntity[ id=" + id + " ]";
+        return "sce.principal.entity.CalendarioCicloEscolarEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", mes=" + mes + ", dia_inicio=" + dia_inicio + ", dia_fin=" + dia_fin + ", actividad=" + actividad + '}';
     }
     
+    public void copy(Object object) {
+        if (object instanceof CalendarioCicloEscolarEntity) {
+            CalendarioCicloEscolarEntity aux = (CalendarioCicloEscolarEntity)object;
+            this.id = aux.id;
+            this.asignacion_carrera_id = aux.asignacion_carrera_id;
+            this.mes = aux.mes;
+            this.dia_inicio = aux.dia_inicio;
+            this.dia_fin = aux.dia_fin;
+            this.actividad = aux.actividad;
+        }
+    }
 }

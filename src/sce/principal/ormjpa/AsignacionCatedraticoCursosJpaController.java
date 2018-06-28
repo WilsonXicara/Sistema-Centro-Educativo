@@ -13,16 +13,16 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.entity.NotasEstudianteEntity;
+import sce.principal.entity.AsignacionCatedraticoCursosEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
 /**
  *
  * @author Usuario
  */
-public class NotasEstudianteJpaController implements Serializable {
+public class AsignacionCatedraticoCursosJpaController implements Serializable {
 
-    public NotasEstudianteJpaController(EntityManagerFactory emf) {
+    public AsignacionCatedraticoCursosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,12 +31,12 @@ public class NotasEstudianteJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(NotasEstudianteEntity notasEstudianteEntity) {
+    public void create(AsignacionCatedraticoCursosEntity asignacionCatedraticoCursosEntity) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(notasEstudianteEntity);
+            em.persist(asignacionCatedraticoCursosEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,19 +45,19 @@ public class NotasEstudianteJpaController implements Serializable {
         }
     }
 
-    public void edit(NotasEstudianteEntity notasEstudianteEntity) throws NonexistentEntityException, Exception {
+    public void edit(AsignacionCatedraticoCursosEntity asignacionCatedraticoCursosEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            notasEstudianteEntity = em.merge(notasEstudianteEntity);
+            asignacionCatedraticoCursosEntity = em.merge(asignacionCatedraticoCursosEntity);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = notasEstudianteEntity.getId();
-                if (findNotasEstudianteEntity(id) == null) {
-                    throw new NonexistentEntityException("The notasEstudianteEntity with id " + id + " no longer exists.");
+                Long id = asignacionCatedraticoCursosEntity.getId();
+                if (findAsignacionCatedraticoCursosEntity(id) == null) {
+                    throw new NonexistentEntityException("The asignacionCatedraticoCursosEntity with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -73,14 +73,14 @@ public class NotasEstudianteJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            NotasEstudianteEntity notasEstudianteEntity;
+            AsignacionCatedraticoCursosEntity asignacionCatedraticoCursosEntity;
             try {
-                notasEstudianteEntity = em.getReference(NotasEstudianteEntity.class, id);
-                notasEstudianteEntity.getId();
+                asignacionCatedraticoCursosEntity = em.getReference(AsignacionCatedraticoCursosEntity.class, id);
+                asignacionCatedraticoCursosEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The notasEstudianteEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asignacionCatedraticoCursosEntity with id " + id + " no longer exists.", enfe);
             }
-            em.remove(notasEstudianteEntity);
+            em.remove(asignacionCatedraticoCursosEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -89,19 +89,19 @@ public class NotasEstudianteJpaController implements Serializable {
         }
     }
 
-    public List<NotasEstudianteEntity> findNotasEstudianteEntityEntities() {
-        return findNotasEstudianteEntityEntities(true, -1, -1);
+    public List<AsignacionCatedraticoCursosEntity> findAsignacionCatedraticoCursosEntityEntities() {
+        return findAsignacionCatedraticoCursosEntityEntities(true, -1, -1);
     }
 
-    public List<NotasEstudianteEntity> findNotasEstudianteEntityEntities(int maxResults, int firstResult) {
-        return findNotasEstudianteEntityEntities(false, maxResults, firstResult);
+    public List<AsignacionCatedraticoCursosEntity> findAsignacionCatedraticoCursosEntityEntities(int maxResults, int firstResult) {
+        return findAsignacionCatedraticoCursosEntityEntities(false, maxResults, firstResult);
     }
 
-    private List<NotasEstudianteEntity> findNotasEstudianteEntityEntities(boolean all, int maxResults, int firstResult) {
+    private List<AsignacionCatedraticoCursosEntity> findAsignacionCatedraticoCursosEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(NotasEstudianteEntity.class));
+            cq.select(cq.from(AsignacionCatedraticoCursosEntity.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -113,20 +113,20 @@ public class NotasEstudianteJpaController implements Serializable {
         }
     }
 
-    public NotasEstudianteEntity findNotasEstudianteEntity(Long id) {
+    public AsignacionCatedraticoCursosEntity findAsignacionCatedraticoCursosEntity(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(NotasEstudianteEntity.class, id);
+            return em.find(AsignacionCatedraticoCursosEntity.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getNotasEstudianteEntityCount() {
+    public int getAsignacionCatedraticoCursosEntityCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<NotasEstudianteEntity> rt = cq.from(NotasEstudianteEntity.class);
+            Root<AsignacionCatedraticoCursosEntity> rt = cq.from(AsignacionCatedraticoCursosEntity.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

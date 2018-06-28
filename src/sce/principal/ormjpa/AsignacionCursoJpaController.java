@@ -11,9 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.command.AsignacionCommand;
 import sce.principal.entity.AsignacionCursoEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
@@ -32,6 +32,14 @@ public class AsignacionCursoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    public List<AsignacionCursoEntity> buscarAsignacionAGrado(Long idCicloEscolar, Long idGrado) {
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.obtenerCursosAsignadosAGrado", AsignacionCursoEntity.class);
+        return query
+                .setParameter("idCicloEscolar", idCicloEscolar)
+                .setParameter("idGrado", idGrado)
+                .getResultList();
+    }
     public void create(AsignacionCursoEntity asignacion_Curso) {
         EntityManager em = null;
         try {

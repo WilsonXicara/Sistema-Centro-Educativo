@@ -11,19 +11,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.entity.GradoEntity;
+import sce.principal.entity.AsignacionCatedraticoGradosEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
 /**
  *
  * @author Usuario
  */
-public class GradoJpaController implements Serializable {
+public class AsignacionCatedraticoGradosJpaController implements Serializable {
 
-    public GradoJpaController(EntityManagerFactory emf) {
+    public AsignacionCatedraticoGradosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,31 +30,13 @@ public class GradoJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
-    public GradoEntity buscarPorGradoSeccion(String grado, String seccion) {
-        EntityManager em = getEntityManager();
-        TypedQuery<GradoEntity> query = em.createNamedQuery("Grado.buscarPorGradoSeccion", GradoEntity.class);
-        List<GradoEntity> encontrados = query
-                .setParameter("nombreGrado", grado)
-                .setParameter("nombreSeccion", seccion)
-                .getResultList();
-        if (encontrados.isEmpty()) {
-            return null;
-        }
-        return encontrados.get(0);
-    }
 
-    public void create(GradoEntity gradoEntity) {
+    public void create(AsignacionCatedraticoGradosEntity asignacionCatedraticoGradosEntity) {
         EntityManager em = null;
         try {
-            GradoEntity existente = buscarPorGradoSeccion(gradoEntity.getGrado(), gradoEntity.getSeccion());
-            if (existente != null) {
-                gradoEntity.copy(existente);
-                return;
-            }
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(gradoEntity);
+            em.persist(asignacionCatedraticoGradosEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -64,19 +45,19 @@ public class GradoJpaController implements Serializable {
         }
     }
 
-    public void edit(GradoEntity gradoEntity) throws NonexistentEntityException, Exception {
+    public void edit(AsignacionCatedraticoGradosEntity asignacionCatedraticoGradosEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            gradoEntity = em.merge(gradoEntity);
+            asignacionCatedraticoGradosEntity = em.merge(asignacionCatedraticoGradosEntity);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = gradoEntity.getId();
-                if (findGradoEntity(id) == null) {
-                    throw new NonexistentEntityException("The gradoEntity with id " + id + " no longer exists.");
+                Long id = asignacionCatedraticoGradosEntity.getId();
+                if (findAsignacionCatedraticoGradosEntity(id) == null) {
+                    throw new NonexistentEntityException("The asignacionCatedraticoGradosEntity with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -92,14 +73,14 @@ public class GradoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            GradoEntity gradoEntity;
+            AsignacionCatedraticoGradosEntity asignacionCatedraticoGradosEntity;
             try {
-                gradoEntity = em.getReference(GradoEntity.class, id);
-                gradoEntity.getId();
+                asignacionCatedraticoGradosEntity = em.getReference(AsignacionCatedraticoGradosEntity.class, id);
+                asignacionCatedraticoGradosEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The gradoEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The asignacionCatedraticoGradosEntity with id " + id + " no longer exists.", enfe);
             }
-            em.remove(gradoEntity);
+            em.remove(asignacionCatedraticoGradosEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -108,19 +89,19 @@ public class GradoJpaController implements Serializable {
         }
     }
 
-    public List<GradoEntity> findGradoEntityEntities() {
-        return findGradoEntityEntities(true, -1, -1);
+    public List<AsignacionCatedraticoGradosEntity> findAsignacionCatedraticoGradosEntityEntities() {
+        return findAsignacionCatedraticoGradosEntityEntities(true, -1, -1);
     }
 
-    public List<GradoEntity> findGradoEntityEntities(int maxResults, int firstResult) {
-        return findGradoEntityEntities(false, maxResults, firstResult);
+    public List<AsignacionCatedraticoGradosEntity> findAsignacionCatedraticoGradosEntityEntities(int maxResults, int firstResult) {
+        return findAsignacionCatedraticoGradosEntityEntities(false, maxResults, firstResult);
     }
 
-    private List<GradoEntity> findGradoEntityEntities(boolean all, int maxResults, int firstResult) {
+    private List<AsignacionCatedraticoGradosEntity> findAsignacionCatedraticoGradosEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(GradoEntity.class));
+            cq.select(cq.from(AsignacionCatedraticoGradosEntity.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -132,20 +113,20 @@ public class GradoJpaController implements Serializable {
         }
     }
 
-    public GradoEntity findGradoEntity(Long id) {
+    public AsignacionCatedraticoGradosEntity findAsignacionCatedraticoGradosEntity(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(GradoEntity.class, id);
+            return em.find(AsignacionCatedraticoGradosEntity.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getGradoEntityCount() {
+    public int getAsignacionCatedraticoGradosEntityCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<GradoEntity> rt = cq.from(GradoEntity.class);
+            Root<AsignacionCatedraticoGradosEntity> rt = cq.from(AsignacionCatedraticoGradosEntity.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -153,4 +134,5 @@ public class GradoJpaController implements Serializable {
             em.close();
         }
     }
+    
 }
