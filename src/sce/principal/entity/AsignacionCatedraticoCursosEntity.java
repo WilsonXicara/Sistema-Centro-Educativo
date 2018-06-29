@@ -25,14 +25,16 @@ public class AsignacionCatedraticoCursosEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long asignacion_catedratico_id, curso_id;
+    private Long asignacion_catedratico_id, asignacion_curso_id, asignacion_catedratico_grados_id;
 
     public Long getId() { return id; }
     public Long getAsignacion_catedratico_id() { return asignacion_catedratico_id; }
-    public Long getCurso_id() { return curso_id; }
+    public Long getAsignacion_curso_id() { return asignacion_curso_id; }
+    public Long getAsignacion_catedratico_grados_id() { return asignacion_catedratico_grados_id; }
     public void setId(Long id) { this.id = id; }
     public void setAsignacion_catedratico_id(Long asignacion_catedratico_id) { this.asignacion_catedratico_id = asignacion_catedratico_id; }
-    public void setCurso_id(Long curso_id) { this.curso_id = curso_id; }
+    public void setAsignacion_curso_id(Long asignacion_curso_id) { this.asignacion_curso_id = asignacion_curso_id; }
+    public void setAsignacion_catedratico_grados_id(Long asignacion_catedratico_grados_id) { this.asignacion_catedratico_grados_id = asignacion_catedratico_grados_id; }
 
     @Override
     public int hashCode() {
@@ -54,7 +56,7 @@ public class AsignacionCatedraticoCursosEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.AsignacionCatedraticoCursosEntity{" + "id=" + id + ", asignacion_catedratico_id=" + asignacion_catedratico_id + ", curso_id=" + curso_id + '}';
+        return "sce.principal.entity.AsignacionCatedraticoCursosEntity{" + "id=" + id + ", asignacion_catedratico_id=" + asignacion_catedratico_id + ", curso_id=" + asignacion_curso_id + '}';
     }
     
     public void copy(Object object) {
@@ -62,7 +64,7 @@ public class AsignacionCatedraticoCursosEntity implements Serializable {
             AsignacionCatedraticoCursosEntity aux = (AsignacionCatedraticoCursosEntity)object;
             this.id = aux.id;
             this.asignacion_catedratico_id = aux.asignacion_catedratico_id;
-            this.curso_id = aux.curso_id;
+            this.asignacion_curso_id = aux.asignacion_curso_id;
         }
     }
 }

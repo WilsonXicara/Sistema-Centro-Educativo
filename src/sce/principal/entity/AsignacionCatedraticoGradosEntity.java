@@ -25,14 +25,14 @@ public class AsignacionCatedraticoGradosEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long asignacion_catedratico_id, grado_id;
+    private Long asignacion_catedratico_id, asignacion_grado_id;
 
     public Long getId() { return id; }
     public Long getAsignacion_catedratico_id() { return asignacion_catedratico_id; }
-    public Long getGrado_id() { return grado_id; }
+    public Long getAsignacion_grado_id() { return asignacion_grado_id; }
     public void setId(Long id) { this.id = id; }
     public void setAsignacion_catedratico_id(Long asignacion_catedratico_id) { this.asignacion_catedratico_id = asignacion_catedratico_id; }
-    public void setGrado_id(Long grado_id) { this.grado_id = grado_id; }
+    public void setAsignacion_grado_id(Long asignacion_grado_id) { this.asignacion_grado_id = asignacion_grado_id; }
 
     @Override
     public int hashCode() {
@@ -54,7 +54,7 @@ public class AsignacionCatedraticoGradosEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "AsignacionCatedraticoGradosEntity{" + "id=" + id + ", asignacion_catedratico_id=" + asignacion_catedratico_id + ", grado_id=" + grado_id + '}';
+        return "AsignacionCatedraticoGradosEntity{" + "id=" + id + ", asignacion_catedratico_id=" + asignacion_catedratico_id + ", grado_id=" + asignacion_grado_id + '}';
     }
     
     public void copy(Object object) {
@@ -62,7 +62,7 @@ public class AsignacionCatedraticoGradosEntity implements Serializable {
             AsignacionCatedraticoGradosEntity aux = (AsignacionCatedraticoGradosEntity)object;
             this.id = aux.id;
             this.asignacion_catedratico_id = aux.asignacion_catedratico_id;
-            this.grado_id = aux.grado_id;
+            this.asignacion_grado_id = aux.asignacion_grado_id;
         }
     }
 }

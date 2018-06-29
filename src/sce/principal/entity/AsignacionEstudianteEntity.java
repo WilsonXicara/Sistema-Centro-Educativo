@@ -20,7 +20,8 @@ import javax.persistence.Table;
  */
 @Entity(name = AsignacionEstudianteEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="AsignacionEstudiante.buscarAsignacionAGrado", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.ciclo_escolar_id = :idCicloEscolar AND ae.estudiante_id = :idEstudiante AND ae.grado_id = :idGrado")
+    @NamedQuery(name="AsignacionEstudiante.buscarPorCarrera", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.asignacion_carrera_id = :idCarrera"),
+    @NamedQuery(name="AsignacionEstudiante.buscarPorGrado", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.asignacion_grado_id = :idGrado")
 })
 @Table(name = AsignacionEstudianteEntity.tableName)
 public class AsignacionEstudianteEntity implements Serializable {
@@ -30,20 +31,20 @@ public class AsignacionEstudianteEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long asignacion_carrera_id, estudiante_id, grado_id;
+    private Long asignacion_carrera_id, estudiante_id, asignacion_grado_id;
     private Boolean anulado = false;
     private String razon_anulacion;
 
     public Long getId() { return id; }
     public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }
     public Long getEstudiante_id() { return estudiante_id; }
-    public Long getGrado_id() { return grado_id; }
+    public Long getAsignacion_grado_id() { return asignacion_grado_id; }
     public Boolean getAnulado() { return anulado; }
     public String getRazon_anulacion() { return razon_anulacion; }
     public void setId(Long id) { this.id = id; }
     public void setAsignacion_carrera_id(Long asignacion_carrera_id) { this.asignacion_carrera_id = asignacion_carrera_id; }
     public void setEstudiante_id(Long estudiante_id) { this.estudiante_id = estudiante_id; }
-    public void setGrado_id(Long grado_id) { this.grado_id = grado_id; }
+    public void setAsignacion_grado_id(Long asignacion_grado_id) { this.asignacion_grado_id = asignacion_grado_id; }
     public void setAnulado(Boolean anulado) { this.anulado = anulado; }
     public void setRazon_anulacion(String razon_anulacion) { this.razon_anulacion = razon_anulacion; }
 
@@ -67,7 +68,7 @@ public class AsignacionEstudianteEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.AsignacionEstudianteEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", estudiante_id=" + estudiante_id + ", grado_id=" + grado_id + ", anulado=" + anulado + ", razon_anulacion=" + razon_anulacion + '}';
+        return "sce.principal.entity.AsignacionEstudianteEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", estudiante_id=" + estudiante_id + ", grado_id=" + asignacion_grado_id + ", anulado=" + anulado + ", razon_anulacion=" + razon_anulacion + '}';
     }
     
     public void copy(Object object) {
@@ -76,7 +77,7 @@ public class AsignacionEstudianteEntity implements Serializable {
             this.id = aux.id;
             this.asignacion_carrera_id = aux.asignacion_carrera_id;
             this.estudiante_id = aux.estudiante_id;
-            this.grado_id = aux.grado_id;
+            this.asignacion_grado_id = aux.asignacion_grado_id;
             this.anulado = aux.anulado;
             this.razon_anulacion = aux.razon_anulacion;
         }

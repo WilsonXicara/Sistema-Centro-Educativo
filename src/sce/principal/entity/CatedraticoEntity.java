@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import sce.persona.PersonaEntity;
 
 /**
  *
@@ -18,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity(name = CatedraticoEntity.tableName)
 @Table(name = CatedraticoEntity.tableName)
-public class CatedraticoEntity implements Serializable {
+public class CatedraticoEntity implements Serializable, PersonaEntity {
     private static final long serialVersionUID = 1L;
     public static final String tableName = "catedratico";
     

@@ -48,7 +48,7 @@ public class AsignacionCursosEstudianteJpaController implements Serializable {
     public void create(AsignacionCursosEstudianteEntity asignacionCursosEstudiante) {
         EntityManager em = null;
         try {
-            AsignacionCursosEstudianteEntity existente = buscarCursoAsignado(asignacionCursosEstudiante.getAsignacion_estudiante_id(), asignacionCursosEstudiante.getCurso_id());
+            AsignacionCursosEstudianteEntity existente = buscarCursoAsignado(asignacionCursosEstudiante.getAsignacion_estudiante_id(), asignacionCursosEstudiante.getAsignacion_curso_id());
             if (existente != null) {
                 asignacionCursosEstudiante.copy(existente);
                 return;

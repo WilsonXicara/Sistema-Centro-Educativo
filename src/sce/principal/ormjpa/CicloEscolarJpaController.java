@@ -41,6 +41,11 @@ public class CicloEscolarJpaController implements Serializable {
         }
         return encontrados.get(0);
     }
+    public List<CicloEscolarEntity> buscarCicloNoListo() {
+        EntityManager em = getEntityManager();
+        TypedQuery<CicloEscolarEntity> query = em.createNamedQuery("CicloEscolar.buscarCicloNoListo", CicloEscolarEntity.class);
+        return query.getResultList();
+    }
     
     public void create(CicloEscolarEntity cicloEscolarEntity) {
         EntityManager em = null;
