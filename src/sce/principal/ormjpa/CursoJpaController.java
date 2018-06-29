@@ -34,10 +34,9 @@ public class CursoJpaController implements Serializable {
     
     public CursoEntity buscarCursoDescripcion(CursoEntity curso) {
         EntityManager em = getEntityManager();
-        TypedQuery<CursoEntity> query = em.createNamedQuery("Curso.buscarCursoDescripcion", CursoEntity.class);
+        TypedQuery<CursoEntity> query = em.createNamedQuery("Curso.buscarCurso", CursoEntity.class);
         List<CursoEntity> encontrados = query
                 .setParameter("nombreCurso", curso.getCurso())
-                .setParameter("descripcionCurso", curso.getDescripcion())
                 .getResultList();
         if (encontrados.isEmpty()) {
             return null;

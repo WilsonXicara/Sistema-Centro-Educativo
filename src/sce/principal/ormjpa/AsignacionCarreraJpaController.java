@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.AsignacionCarreraEntity;
@@ -30,7 +31,13 @@ public class AsignacionCarreraJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    
+    public List<AsignacionCarreraEntity> buscarPorCiclo(Long idCicloEscolar){
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCarreraEntity> query = em.createNamedQuery("AsignacionCarrera.buscarPorCiclo",AsignacionCarreraEntity.class);
+        return query.setParameter("idCicloEscolar", idCicloEscolar).getResultList();
+    }
+    
     public void create(AsignacionCarreraEntity asignacionCarreraEntity) {
         EntityManager em = null;
         try {

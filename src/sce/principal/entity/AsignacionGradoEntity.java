@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;;
 
 /**
@@ -17,6 +18,7 @@ import javax.persistence.Table;;
  * @author Usuario
  */
 @Entity(name = AsignacionGradoEntity.tableName)
+@NamedQuery(name="AsignacionGrado.buscarPorCarrera", query="SELECT ag FROM "+AsignacionGradoEntity.tableName+" AS ag WHERE ag.asignacion_carrera_id = :idAsigCarrera")
 @Table(name = AsignacionGradoEntity.tableName)
 public class AsignacionGradoEntity implements Serializable {
     private static final long serialVersionUID = 1L;

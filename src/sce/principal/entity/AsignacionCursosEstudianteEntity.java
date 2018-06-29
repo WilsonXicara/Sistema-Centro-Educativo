@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity(name = AsignacionCursosEstudianteEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="AsignacionCursosEstudiante.buscarCursoAsignado", query="SELECT aec FROM "+AsignacionCursosEstudianteEntity.tableName+" AS aec WHERE aec.asignacion_estudiante_id = :idAsignacionEst AND aec.curso_id = :idCurso")
+    @NamedQuery(name="AsignacionCursosEstudiante.buscarCursoAsignado", query="SELECT aec FROM "+AsignacionCursosEstudianteEntity.tableName+" AS aec WHERE aec.asignacion_estudiante_id = :idAsignacionEst AND aec.asignacion_curso_id = :idCurso")
 })
 @Table(name = AsignacionCursosEstudianteEntity.tableName)
 public class AsignacionCursosEstudianteEntity implements Serializable {
@@ -30,22 +30,20 @@ public class AsignacionCursosEstudianteEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long asignacion_estudiante_id, curso_id, distribucion_notas_id;
+    private Long asignacion_estudiante_id, asignacion_curso_id;
     private Float acumulado;
     private Boolean anulado = false;
     private String razon_anulacion;
 
     public Long getId() { return id; }
     public Long getAsignacion_estudiante_id() { return asignacion_estudiante_id; }
-    public Long getCurso_id() { return curso_id; }
-    public Long getDistribucion_notas_id() { return distribucion_notas_id; }
+    public Long getAsignacion_curso_id() { return asignacion_curso_id; }
     public Float getAcumulado() { return acumulado; }
     public Boolean getAnulado() { return anulado; }
     public String getRazon_anulacion() { return razon_anulacion; }
     public void setId(Long id) { this.id = id; }
     public void setAsignacion_estudiante_id(Long asignacion_estudiante_id) { this.asignacion_estudiante_id = asignacion_estudiante_id; }
-    public void setCurso_id(Long curso_id) { this.curso_id = curso_id; }
-    public void setDistribucion_notas_id(Long distribucion_notas_id) { this.distribucion_notas_id = distribucion_notas_id; }
+    public void setAsignacion_curso_id(Long asignacion_curso_id) { this.asignacion_curso_id = asignacion_curso_id; }
     public void setAcumulado(Float acumulado) { this.acumulado = acumulado; }
     public void setAnulado(Boolean anulado) { this.anulado = anulado; }
     public void setRazon_anulacion(String razon_anulacion) { this.razon_anulacion = razon_anulacion; }
@@ -71,7 +69,7 @@ public class AsignacionCursosEstudianteEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "sce.principal.entity.AsignacionCursosEstudianteEntity{" + "id=" + id + ", asignacion_estudiante_id=" + asignacion_estudiante_id + ", curso_id=" + curso_id + ", distribucion_notas_id=" + distribucion_notas_id + ", acumulado=" + acumulado + ", anulado=" + anulado + ", razon_anulacion=" + razon_anulacion + '}';
+        return "sce.principal.entity.AsignacionCursosEstudianteEntity{" + "id=" + id + ", asignacion_estudiante_id=" + asignacion_estudiante_id + ", curso_id=" + asignacion_curso_id + ", acumulado=" + acumulado + ", anulado=" + anulado + ", razon_anulacion=" + razon_anulacion + '}';
     }
     
     public void copy(Object object) {
@@ -79,8 +77,7 @@ public class AsignacionCursosEstudianteEntity implements Serializable {
             AsignacionCursosEstudianteEntity aux = (AsignacionCursosEstudianteEntity)object;
             this.id = aux.id;
             this.asignacion_estudiante_id = aux.asignacion_estudiante_id;
-            this.curso_id = aux.curso_id;
-            this.distribucion_notas_id = aux.distribucion_notas_id;
+            this.asignacion_curso_id = aux.asignacion_curso_id;
             this.acumulado = aux.acumulado;
             this.anulado = aux.anulado;
             this.razon_anulacion = aux.razon_anulacion;

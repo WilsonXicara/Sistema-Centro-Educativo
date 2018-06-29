@@ -20,7 +20,8 @@ import javax.persistence.Table;;
  */
 @Entity(name = AsignacionCursoEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="AsignacionCurso.obtenerCursosAsignadosAGrado", query="SELECT ac FROM "+AsignacionCursoEntity.tableName+" AS ac WHERE ac.ciclo_escolar_id = :idCicloEscolar AND ac.grado_id = :idGrado")
+    @NamedQuery(name="AsignacionCurso.buscarPorCarrera", query="SELECT ac FROM "+AsignacionCursoEntity.tableName+" AS ac WHERE ac.asignacion_carrera_id = :idCarrera"),
+    @NamedQuery(name="AsignacionCurso.buscarPorGrado", query="SELECT ac FROM "+AsignacionCursoEntity.tableName+" AS ac WHERE ac.asignacion_grado_id = :idGrado")
 })
 @Table(name = AsignacionCursoEntity.tableName)
 public class AsignacionCursoEntity implements Serializable {
@@ -30,16 +31,16 @@ public class AsignacionCursoEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long asignacion_carrera_id, grado_id, curso_id, distribucion_notas_id;
+    private Long asignacion_carrera_id, asignacion_grado_id, curso_id, distribucion_notas_id;
 
     public Long getId() { return id; }
     public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }
-    public Long getGrado_id() { return grado_id; }
+    public Long getAsignacion_grado_id() { return asignacion_grado_id; }
     public Long getCurso_id() { return curso_id; }
     public Long getDistribucion_notas_id() { return distribucion_notas_id; }
     public void setId(Long id) { this.id = id; }
     public void setAsignacion_carrera_id(Long asignacion_carrera_id) { this.asignacion_carrera_id = asignacion_carrera_id; }
-    public void setGrado_id(Long grado_id) { this.grado_id = grado_id; }
+    public void setAsignacion_grado_id(Long asignacion_grado_id) { this.asignacion_grado_id = asignacion_grado_id; }
     public void setCurso_id(Long curso_id) { this.curso_id = curso_id; }
     public void setDistribucion_notas_id(Long distribucion_notas_id) { this.distribucion_notas_id = distribucion_notas_id; }
 
@@ -63,7 +64,7 @@ public class AsignacionCursoEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.AsignacionCursoEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", grado_id=" + grado_id + ", curso_id=" + curso_id + ", distribucion_notas_id=" + distribucion_notas_id + '}';
+        return "sce.principal.entity.AsignacionCursoEntity{" + "id=" + id + ", asignacion_carrera_id=" + asignacion_carrera_id + ", grado_id=" + asignacion_grado_id + ", curso_id=" + curso_id + ", distribucion_notas_id=" + distribucion_notas_id + '}';
     }
     
     public void copy(Object object) {
@@ -71,7 +72,7 @@ public class AsignacionCursoEntity implements Serializable {
             AsignacionCursoEntity aux = (AsignacionCursoEntity)object;
             this.id = aux.id;
             this.asignacion_carrera_id = aux.asignacion_carrera_id;
-            this.grado_id = aux.grado_id;
+            this.asignacion_grado_id = aux.asignacion_grado_id;
             this.curso_id = aux.curso_id;
             this.distribucion_notas_id = aux.distribucion_notas_id;
         }

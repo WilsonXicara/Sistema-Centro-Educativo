@@ -11,18 +11,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.entity.AtributosAdicionalesEntity;
+import sce.principal.entity.TablaExtendidaEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
 /**
  *
  * @author Usuario
  */
-public class AtributosAdicionalesEntityJpaController implements Serializable {
+public class TablaExtendidaJpaController implements Serializable {
 
-    public AtributosAdicionalesEntityJpaController(EntityManagerFactory emf) {
+    public TablaExtendidaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -30,13 +31,23 @@ public class AtributosAdicionalesEntityJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public TablaExtendidaEntity buscarTabla(String nombreTabla) {
+        EntityManager em = getEntityManager();
+        TypedQuery<TablaExtendidaEntity> query = em.createNamedQuery("NombreTabla.buscarTabla", TablaExtendidaEntity.class);
+        List<TablaExtendidaEntity> encontrados = query.setParameter("nombreTabla", nombreTabla).getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
+    }
 
-    public void create(AtributosAdicionalesEntity atributosAdicionalesEntity) {
+    public void create(TablaExtendidaEntity nombreTablaEntity) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(atributosAdicionalesEntity);
+            em.persist(nombreTablaEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,19 +56,19 @@ public class AtributosAdicionalesEntityJpaController implements Serializable {
         }
     }
 
-    public void edit(AtributosAdicionalesEntity atributosAdicionalesEntity) throws NonexistentEntityException, Exception {
+    public void edit(TablaExtendidaEntity nombreTablaEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            atributosAdicionalesEntity = em.merge(atributosAdicionalesEntity);
+            nombreTablaEntity = em.merge(nombreTablaEntity);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = atributosAdicionalesEntity.getId();
-                if (findAtributosAdicionalesEntity(id) == null) {
-                    throw new NonexistentEntityException("The atributosAdicionalesEntity with id " + id + " no longer exists.");
+                Long id = nombreTablaEntity.getId();
+                if (findNombreTablaEntity(id) == null) {
+                    throw new NonexistentEntityException("The nombreTablaEntity with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -73,14 +84,14 @@ public class AtributosAdicionalesEntityJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AtributosAdicionalesEntity atributosAdicionalesEntity;
+            TablaExtendidaEntity nombreTablaEntity;
             try {
-                atributosAdicionalesEntity = em.getReference(AtributosAdicionalesEntity.class, id);
-                atributosAdicionalesEntity.getId();
+                nombreTablaEntity = em.getReference(TablaExtendidaEntity.class, id);
+                nombreTablaEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The atributosAdicionalesEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The nombreTablaEntity with id " + id + " no longer exists.", enfe);
             }
-            em.remove(atributosAdicionalesEntity);
+            em.remove(nombreTablaEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -89,19 +100,19 @@ public class AtributosAdicionalesEntityJpaController implements Serializable {
         }
     }
 
-    public List<AtributosAdicionalesEntity> findAtributosAdicionalesEntityEntities() {
-        return findAtributosAdicionalesEntityEntities(true, -1, -1);
+    public List<TablaExtendidaEntity> findNombreTablaEntityEntities() {
+        return findNombreTablaEntityEntities(true, -1, -1);
     }
 
-    public List<AtributosAdicionalesEntity> findAtributosAdicionalesEntityEntities(int maxResults, int firstResult) {
-        return findAtributosAdicionalesEntityEntities(false, maxResults, firstResult);
+    public List<TablaExtendidaEntity> findNombreTablaEntityEntities(int maxResults, int firstResult) {
+        return findNombreTablaEntityEntities(false, maxResults, firstResult);
     }
 
-    private List<AtributosAdicionalesEntity> findAtributosAdicionalesEntityEntities(boolean all, int maxResults, int firstResult) {
+    private List<TablaExtendidaEntity> findNombreTablaEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(AtributosAdicionalesEntity.class));
+            cq.select(cq.from(TablaExtendidaEntity.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -113,20 +124,20 @@ public class AtributosAdicionalesEntityJpaController implements Serializable {
         }
     }
 
-    public AtributosAdicionalesEntity findAtributosAdicionalesEntity(Long id) {
+    public TablaExtendidaEntity findNombreTablaEntity(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(AtributosAdicionalesEntity.class, id);
+            return em.find(TablaExtendidaEntity.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getAtributosAdicionalesEntityCount() {
+    public int getNombreTablaEntityCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<AtributosAdicionalesEntity> rt = cq.from(AtributosAdicionalesEntity.class);
+            Root<TablaExtendidaEntity> rt = cq.from(TablaExtendidaEntity.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

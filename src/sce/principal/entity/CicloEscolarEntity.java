@@ -20,7 +20,8 @@ import javax.persistence.Table;
  */
 @Entity(name = CicloEscolarEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="CicloEscolar.buscarPorAnio", query="SELECT ce FROM ciclo_escolar AS ce WHERE ce.ciclo_escolar = :cicloEscolar")
+    @NamedQuery(name="CicloEscolar.buscarPorAnio", query="SELECT ce FROM "+CicloEscolarEntity.tableName+" AS ce WHERE ce.ciclo_escolar = :cicloEscolar"),
+    @NamedQuery(name="CicloEscolar.buscarCicloNoListo", query="SELECT ce FROM "+CicloEscolarEntity.tableName+" AS ce WHERE ce.listo = 0")
 })
 @Table(name = CicloEscolarEntity.tableName)
 public class CicloEscolarEntity implements Serializable {

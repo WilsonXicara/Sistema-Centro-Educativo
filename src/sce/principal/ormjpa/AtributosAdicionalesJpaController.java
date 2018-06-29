@@ -14,16 +14,17 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.entity.AsignacionEstudianteEntity;
+import sce.principal.entity.AtributosAdicionalesEntity;
+import sce.principal.entity.TablaExtendidaEntity;
 import sce.principal.ormjpa.exceptions.NonexistentEntityException;
 
 /**
  *
  * @author Usuario
  */
-public class AsignacionEstudianteJpaController implements Serializable {
+public class AtributosAdicionalesJpaController implements Serializable {
 
-    public AsignacionEstudianteJpaController(EntityManagerFactory emf) {
+    public AtributosAdicionalesJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -32,28 +33,18 @@ public class AsignacionEstudianteJpaController implements Serializable {
         return emf.createEntityManager();
     }
     
-    public List<AsignacionEstudianteEntity> buscarPorCarrera(Long idCarrera) {
+    public List<AtributosAdicionalesEntity> buscarAtributosParaTabla(Long idTablaExtendida) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarPorCarrera", AsignacionEstudianteEntity.class);
-        return query.setParameter("idCarrera", idCarrera).getResultList();
-    }
-    public List<AsignacionEstudianteEntity> buscarPorGrado(Long idGrado) {
-        EntityManager em = getEntityManager();
-        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarPorGrado", AsignacionEstudianteEntity.class);
-        return query.setParameter("idEstudiante", idGrado).getResultList();
+        TypedQuery<AtributosAdicionalesEntity> query = em.createNamedQuery("AtributoAdicional.buscarAtributosParaTabla", AtributosAdicionalesEntity.class);
+        return query.setParameter("idTablaExtendida", idTablaExtendida).getResultList();
     }
 
-    public void create(AsignacionEstudianteEntity asignacionEstudiante) {
+    public void create(AtributosAdicionalesEntity atributosAdicionalesEntity) {
         EntityManager em = null;
         try {
-            /*AsignacionEstudianteEntity existente = buscarPorCarrera(asignacionEstudiante);
-            if (existente != null) {
-                asignacionEstudiante.copy(existente);
-                return;
-            }*/
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(asignacionEstudiante);
+            em.persist(atributosAdicionalesEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -62,19 +53,19 @@ public class AsignacionEstudianteJpaController implements Serializable {
         }
     }
 
-    public void edit(AsignacionEstudianteEntity asignacionEstudiante) throws NonexistentEntityException, Exception {
+    public void edit(AtributosAdicionalesEntity atributosAdicionalesEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            asignacionEstudiante = em.merge(asignacionEstudiante);
+            atributosAdicionalesEntity = em.merge(atributosAdicionalesEntity);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = asignacionEstudiante.getId();
-                if (findAsignacion_Estudiante(id) == null) {
-                    throw new NonexistentEntityException("The asignacionEstudiante with id " + id + " no longer exists.");
+                Long id = atributosAdicionalesEntity.getId();
+                if (findAtributosAdicionalesEntity(id) == null) {
+                    throw new NonexistentEntityException("The atributosAdicionalesEntity with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -90,14 +81,14 @@ public class AsignacionEstudianteJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            AsignacionEstudianteEntity asignacionEstudiante;
+            AtributosAdicionalesEntity atributosAdicionalesEntity;
             try {
-                asignacionEstudiante = em.getReference(AsignacionEstudianteEntity.class, id);
-                asignacionEstudiante.getId();
+                atributosAdicionalesEntity = em.getReference(AtributosAdicionalesEntity.class, id);
+                atributosAdicionalesEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The asignacionEstudiante with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The atributosAdicionalesEntity with id " + id + " no longer exists.", enfe);
             }
-            em.remove(asignacionEstudiante);
+            em.remove(atributosAdicionalesEntity);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -106,19 +97,19 @@ public class AsignacionEstudianteJpaController implements Serializable {
         }
     }
 
-    public List<AsignacionEstudianteEntity> findAsignacion_EstudianteEntities() {
-        return findAsignacion_EstudianteEntities(true, -1, -1);
+    public List<AtributosAdicionalesEntity> findAtributosAdicionalesEntityEntities() {
+        return findAtributosAdicionalesEntityEntities(true, -1, -1);
     }
 
-    public List<AsignacionEstudianteEntity> findAsignacion_EstudianteEntities(int maxResults, int firstResult) {
-        return findAsignacion_EstudianteEntities(false, maxResults, firstResult);
+    public List<AtributosAdicionalesEntity> findAtributosAdicionalesEntityEntities(int maxResults, int firstResult) {
+        return findAtributosAdicionalesEntityEntities(false, maxResults, firstResult);
     }
 
-    private List<AsignacionEstudianteEntity> findAsignacion_EstudianteEntities(boolean all, int maxResults, int firstResult) {
+    private List<AtributosAdicionalesEntity> findAtributosAdicionalesEntityEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(AsignacionEstudianteEntity.class));
+            cq.select(cq.from(AtributosAdicionalesEntity.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -130,20 +121,20 @@ public class AsignacionEstudianteJpaController implements Serializable {
         }
     }
 
-    public AsignacionEstudianteEntity findAsignacion_Estudiante(Long id) {
+    public AtributosAdicionalesEntity findAtributosAdicionalesEntity(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(AsignacionEstudianteEntity.class, id);
+            return em.find(AtributosAdicionalesEntity.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getAsignacion_EstudianteCount() {
+    public int getAtributosAdicionalesEntityCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<AsignacionEstudianteEntity> rt = cq.from(AsignacionEstudianteEntity.class);
+            Root<AtributosAdicionalesEntity> rt = cq.from(AtributosAdicionalesEntity.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

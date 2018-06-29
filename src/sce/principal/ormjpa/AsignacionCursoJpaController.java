@@ -32,13 +32,28 @@ public class AsignacionCursoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<AsignacionCursoEntity> buscarAsignacionAGrado(Long idCicloEscolar, Long idGrado) {
+    public List<AsignacionCursoEntity> buscarPorCarrera(Long idCarrera) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.obtenerCursosAsignadosAGrado", AsignacionCursoEntity.class);
+        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorCarrera", AsignacionCursoEntity.class);
         return query
-                .setParameter("idCicloEscolar", idCicloEscolar)
+                .setParameter("idCarrera", idCarrera)
+                .getResultList();
+    }
+    public List<AsignacionCursoEntity> buscarPorGrado(Long idGrado) {
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorGrado", AsignacionCursoEntity.class);
+        return query
                 .setParameter("idGrado", idGrado)
                 .getResultList();
+    }
+    public AsignacionCursoEntity buscarPorCurso(Long idCurso) {
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorCurso", AsignacionCursoEntity.class);
+        List<AsignacionCursoEntity> encontrados =  query.setParameter("idGrado", idCurso) .getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
     }
     public void create(AsignacionCursoEntity asignacion_Curso) {
         EntityManager em = null;

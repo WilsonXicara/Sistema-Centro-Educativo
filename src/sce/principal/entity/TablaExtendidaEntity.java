@@ -18,29 +18,24 @@ import javax.persistence.Table;
  *
  * @author Usuario
  */
-@Entity(name=CursoEntity.tableName)
+@Entity(name = TablaExtendidaEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="Curso.buscarCurso", query="SELECT c FROM "+CursoEntity.tableName+" AS c WHERE c.curso = :nombreCurso")
+    @NamedQuery(name="NombreTabla.buscarTabla", query="SELECT nt FROM "+TablaExtendidaEntity.tableName+" AS nt WHERE nt.nombre_tabla = :nombreTabla")
 })
-@Table(name = CursoEntity.tableName)
-public class CursoEntity implements Serializable {
+@Table(name = TablaExtendidaEntity.tableName)
+public class TablaExtendidaEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String tableName = "curso";
+    public static final String tableName = "tabla_extendida";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String curso, descripcion;
-    private Integer creditos;
+    private String nombre_tabla;
 
     public Long getId() { return id; }
-    public String getCurso() { return curso; }
-    public String getDescripcion() { return descripcion; }
-    public Integer getCreditos() { return creditos; }
+    public String getNombre_tabla() { return nombre_tabla; }
     public void setId(Long id) { this.id = id; }
-    public void setCurso(String curso) { this.curso = curso; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public void setCreditos(Integer creditos) { this.creditos = creditos; }
+    public void setNombre_tabla(String nombre_tabla) { this.nombre_tabla = nombre_tabla; }
 
     @Override
     public int hashCode() {
@@ -50,28 +45,30 @@ public class CursoEntity implements Serializable {
     }
     @Override
     public boolean equals(Object object) {
+        if (object instanceof String && nombre_tabla.equals((String)object)) {
+            return true;
+        }
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CursoEntity)) {
+        if (!(object instanceof TablaExtendidaEntity)) {
             return false;
         }
-        CursoEntity other = (CursoEntity) object;
+        TablaExtendidaEntity other = (TablaExtendidaEntity) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
     }
+
     @Override
     public String toString() {
-        return "sce.principal.entity.CursoEntity{" + "id=" + id + ", curso=" + curso + ", descripcion=" + descripcion + ", creditos=" + creditos + '}';
+        return "sce.principal.entity.NombreTablaEntity{" + "id=" + id + ", nombre_tabla=" + nombre_tabla + '}';
     }
     
     public void copy(Object object) {
-        if (object instanceof CursoEntity) {
-            CursoEntity aux = (CursoEntity)object;
+        if (object instanceof TablaExtendidaEntity) {
+            TablaExtendidaEntity aux = (TablaExtendidaEntity)object;
             this.id = aux.id;
-            this.curso = aux.curso;
-            this.descripcion = aux.descripcion;
-            this.creditos = aux.creditos;
+            this.nombre_tabla = aux.nombre_tabla;
         }
     }
 }

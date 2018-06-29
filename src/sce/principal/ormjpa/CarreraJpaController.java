@@ -20,9 +20,9 @@ import sce.principal.ormjpa.exceptions.NonexistentEntityException;
  *
  * @author Usuario
  */
-public class CarreraEntityJpaController implements Serializable {
+public class CarreraJpaController implements Serializable {
 
-    public CarreraEntityJpaController(EntityManagerFactory emf) {
+    public CarreraJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;

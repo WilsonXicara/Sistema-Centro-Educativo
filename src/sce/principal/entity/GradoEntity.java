@@ -32,18 +32,20 @@ public class GradoEntity implements Serializable {
     private Long id;
     private String grado, seccion;
     private Integer capacidad;
-    private Long prerequisito_id;
+    private Long prerequisito_id, asignacion_id=0l;
 
     public Long getId() { return id; }
     public String getGrado() { return grado; }
     public String getSeccion() { return seccion; }
     public Integer getCapacidad() { return capacidad; }
     public Long getPrerequisito_id() { return prerequisito_id; }
+    public Long getAsignacion_id() { return asignacion_id; }
     public void setId(Long id) { this.id = id; }
     public void setGrado(String grado) { this.grado = grado; }
     public void setSeccion(String seccion) { this.seccion = seccion; }
     public void setCapacidad(Integer capacidad) { this.capacidad = capacidad; }
     public void setPrerequisito_id(Long prerequisito_id) { this.prerequisito_id = prerequisito_id; }
+    public void setAsignacion_id(Long asignacion_id) { this.asignacion_id = asignacion_id; }
 
     @Override
     public int hashCode() {
@@ -65,7 +67,7 @@ public class GradoEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.GradoEntity{" + "id=" + id + ", grado=" + grado + ", seccion=" + seccion + ", capacidad=" + capacidad + ", prerequisito_id=" + prerequisito_id + '}';
+        return "sce.principal.entity.GradoEntity{" + "id=" + id + ", grado=" + grado + ", seccion=" + seccion + ", capacidad=" + capacidad + ", prerequisito_id=" + prerequisito_id + ", asignacion_id=" + asignacion_id + '}';
     }
     
     public void copy(Object object) {
@@ -76,6 +78,7 @@ public class GradoEntity implements Serializable {
             this.seccion = aux.seccion;
             this.capacidad = aux.capacidad;
             this.prerequisito_id = aux.prerequisito_id;
+            this.asignacion_id = aux.asignacion_id;
         }
     }
 }

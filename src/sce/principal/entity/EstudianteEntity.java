@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import sce.persona.PersonaEntity;
 
 /**
  *
@@ -24,7 +25,7 @@ import javax.persistence.Table;
     @NamedQuery(name="Estudiante.buscarPorAsignacionId", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.asignacion_id = :asignacionId")
 })
 @Table(name = EstudianteEntity.tableName)
-public class EstudianteEntity implements Serializable {
+public class EstudianteEntity implements Serializable, PersonaEntity {
     private static final long serialVersionUID = 1L;
     public static final String tableName = "estudiante";
     
@@ -47,7 +48,11 @@ public class EstudianteEntity implements Serializable {
     public Boolean getAnulado() { return anulado; }
     public String getRazon_anulacion() { return razon_anulacion; }
     public void setId(Long id) { this.id = id; }
-    public void setCui(String cui) { this.cui = cui; }
+    public void setCui(String cui) {
+        if (this.id == null) {
+            this.cui = cui;
+        }
+    }
     public void setNombres(String nombres) { this.nombres = nombres; }
     public void setApellidos(String apellidos) { this.apellidos = apellidos; }
     public void setDireccion(String direccion) { this.direccion = direccion; }

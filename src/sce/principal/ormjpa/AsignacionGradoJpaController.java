@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.AsignacionGradoEntity;
@@ -30,7 +31,13 @@ public class AsignacionGradoJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    
+    public List<AsignacionGradoEntity> buscarPorCarrera(Long idAsigCarrera){
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionGradoEntity> query = em.createNamedQuery("AsignacionGrado.buscarPorCarrera",AsignacionGradoEntity.class);
+        return query.setParameter("idAsigCarrera", idAsigCarrera).getResultList();
+    }
+    
     public void create(AsignacionGradoEntity asignacion_Grado) {
         EntityManager em = null;
         try {
