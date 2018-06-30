@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -17,6 +18,7 @@ import javax.persistence.Table;
  * @author Usuario
  */
 @Entity(name = PensumEntity.tableName)
+@NamedQuery(name="Pensum.buscarPorCodigo", query="SELECT p FROM "+PensumEntity.tableName+" AS p WHERE p.codigo = :pensumCodigo")
 @Table(name = PensumEntity.tableName)
 public class PensumEntity implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.PensumEntity;
@@ -30,10 +31,25 @@ public class PensumJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    
+    public PensumEntity buscarPorCodigo(String pensumCodigo){
+        EntityManager em = getEntityManager();
+        TypedQuery<PensumEntity> query = em.createNamedQuery("Pensum.buscarPorCodigo", PensumEntity.class);
+        List<PensumEntity> encontrados = query.setParameter("pensumCodigo", pensumCodigo).getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
+    }
+    
     public void create(PensumEntity pensumEntity) {
         EntityManager em = null;
         try {
+            PensumEntity existente = buscarPorCodigo(pensumEntity.getCodigo());
+            if (existente != null) {
+                pensumEntity.copy(existente);
+                return;
+            }
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(pensumEntity);

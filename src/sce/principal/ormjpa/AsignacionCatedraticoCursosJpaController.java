@@ -44,6 +44,10 @@ public class AsignacionCatedraticoCursosJpaController implements Serializable {
             }
         }
     }
+    
+    public void create(AsignacionCatedraticoCursosEntity asignacionCatedraticoCursosEntity, EntityManager em){
+     em.persist(asignacionCatedraticoCursosEntity);
+    }
 
     public void edit(AsignacionCatedraticoCursosEntity asignacionCatedraticoCursosEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;

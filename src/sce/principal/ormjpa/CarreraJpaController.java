@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.CarreraEntity;
@@ -30,10 +31,25 @@ public class CarreraJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public CarreraEntity buscarPorNombre(String nombreCarrera){
+        EntityManager em = getEntityManager();
+        TypedQuery<CarreraEntity> query = em.createNamedQuery("Carrera.buscarPorNombre", CarreraEntity.class);
+        List<CarreraEntity> encontrados = query.setParameter("nombreCarrera", nombreCarrera).getResultList();
+        if (encontrados.isEmpty()) {
+            return null;
+        }
+        return encontrados.get(0);
+    }
 
     public void create(CarreraEntity carreraEntity) {
         EntityManager em = null;
         try {
+            CarreraEntity existente = buscarPorNombre(carreraEntity.getNombre());
+            if (existente != null) {
+                carreraEntity.copy(existente);
+                return;
+            }
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(carreraEntity);

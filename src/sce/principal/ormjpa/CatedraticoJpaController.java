@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import sce.principal.entity.CatedraticoEntity;
@@ -30,10 +31,25 @@ public class CatedraticoJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+    
+    public CatedraticoEntity buscarPorDpi(String dpi){
+        EntityManager em = getEntityManager();
+        TypedQuery<CatedraticoEntity> query = em.createNamedQuery("Catedratico.buscarPorDpi",CatedraticoEntity.class);
+        List<CatedraticoEntity> encontrados = query.setParameter("dpi", dpi).getResultList();
+        if (encontrados.isEmpty()){
+            return null;
+        }
+        return encontrados.get(0);
+    }
 
     public void create(CatedraticoEntity catedraticoEntity) {
         EntityManager em = null;
         try {
+            CatedraticoEntity existente = buscarPorDpi(catedraticoEntity.getDpi());
+            if (existente != null){
+                catedraticoEntity.copy(existente);
+                return;
+            }
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(catedraticoEntity);

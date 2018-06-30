@@ -28,10 +28,16 @@ public class AsignacionGradoEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long asignacion_carrera_id, grado_id;
+    private Boolean anulado = false;
+    private String razon_anulacion;
 
     public Long getId() { return id; }
     public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }
     public Long getGrado_id() { return grado_id; }
+    public Boolean getAnulado() {return anulado; }
+    public String getRazon_anulacion() { return razon_anulacion; }
+    public void setAnulado(Boolean anulado) { this.anulado = anulado;}
+    public void setRazon_anulacion(String razon_anulacion) { this.razon_anulacion = razon_anulacion; }
     public void setId(Long id) { this.id = id; }
     public void setAsignacion_carrera_id(Long asignacion_carrera_id) { this.asignacion_carrera_id = asignacion_carrera_id; }
     public void setGrado_id(Long grado_id) { this.grado_id = grado_id; }
@@ -65,6 +71,8 @@ public class AsignacionGradoEntity implements Serializable {
             this.id = aux.id;
             this.asignacion_carrera_id = aux.asignacion_carrera_id;
             this.grado_id = aux.grado_id;
+            this.anulado = aux.anulado;
+            this.razon_anulacion = aux.razon_anulacion;
         }
     }
 }

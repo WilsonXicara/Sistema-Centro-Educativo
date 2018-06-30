@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import sce.persona.PersonaEntity;
 
@@ -18,6 +19,7 @@ import sce.persona.PersonaEntity;
  * @author Usuario
  */
 @Entity(name = CatedraticoEntity.tableName)
+@NamedQuery(name ="Catedratico.buscarPorDpi", query ="SELECT c FROM "+CatedraticoEntity.tableName +" AS c WHERE c.dpi = :dpi")
 @Table(name = CatedraticoEntity.tableName)
 public class CatedraticoEntity implements Serializable, PersonaEntity {
     private static final long serialVersionUID = 1L;

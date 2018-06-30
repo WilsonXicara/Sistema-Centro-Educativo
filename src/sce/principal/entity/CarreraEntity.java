@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -17,6 +18,7 @@ import javax.persistence.Table;
  * @author Usuario
  */
 @Entity(name = CarreraEntity.tableName)
+@NamedQuery(name ="Carrera.buscarPorNombre", query ="SELECT c FROM "+CarreraEntity.tableName +" AS c WHERE c.nombre = :nombreCarrera")
 @Table(name = CarreraEntity.tableName)
 public class CarreraEntity implements Serializable {
     private static final long serialVersionUID = 1L;
