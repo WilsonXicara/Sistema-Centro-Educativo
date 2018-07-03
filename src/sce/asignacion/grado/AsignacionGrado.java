@@ -8,12 +8,12 @@ package sce.asignacion.grado;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.command.AsignacionCommand;
-import sce.principal.entity.AsignacionCarreraEntity;
-import sce.principal.entity.AsignacionGradoEntity;
-import sce.principal.entity.GradoEntity;
-import sce.principal.ormjpa.AsignacionGradoJpaController;
-import sce.principal.ormjpa.GradoJpaController;
+import sce.asignacion.AsignacionCommand;
+import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
+import sce.asignacion.grado.orm.AsignacionGradoEntity;
+import sce.principal.elemento_asignatura.grado.orm.GradoEntity;
+import sce.asignacion.grado.orm.AsignacionGradoJpaController;
+import sce.principal.elemento_asignatura.grado.orm.GradoJpaController;
 
 /**
  *

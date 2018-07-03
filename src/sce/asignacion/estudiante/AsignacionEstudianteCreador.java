@@ -6,19 +6,23 @@
 package sce.asignacion.estudiante;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.command.AsignacionCommand;
-import sce.principal.entity.AsignacionCarreraEntity;
-import sce.principal.entity.AsignacionCursoEntity;
-import sce.principal.entity.AsignacionCursosEstudianteEntity;
-import sce.principal.entity.AsignacionEstudianteEntity;
-import sce.principal.entity.AsignacionGradoEntity;
-import sce.principal.entity.EstudianteEntity;
-import sce.principal.ormjpa.AsignacionCursosEstudianteJpaController;
-import sce.principal.ormjpa.AsignacionEstudianteJpaController;
-import sce.principal.ormjpa.EstudianteJpaController;
+import sce.asignacion.AsignacionCommand;
+import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
+import sce.asignacion.curso.orm.AsignacionCursoEntity;
+import sce.asignacion.estudiante.orm.AsignacionCursosEstudianteEntity;
+import sce.asignacion.estudiante.orm.AsignacionEstudianteEntity;
+import sce.asignacion.grado.orm.AsignacionGradoEntity;
+import sce.persona.estudiante.orm.EstudianteEntity;
+import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
+import sce.asignacion.curso.orm.AsignacionCursoJpaController;
+import sce.asignacion.estudiante.orm.AsignacionCursosEstudianteJpaController;
+import sce.asignacion.estudiante.orm.AsignacionEstudianteJpaController;
+import sce.asignacion.grado.orm.AsignacionGradoJpaController;
+import sce.persona.estudiante.orm.EstudianteJpaController;
+import sce.excepciones.ExcepcionEntityAnulado;
+import sce.excepciones.NonexistentEntityException;
 
 /**
  *
@@ -26,52 +30,96 @@ import sce.principal.ormjpa.EstudianteJpaController;
  */
 public class AsignacionEstudianteCreador implements AsignacionCommand {
     private final EntityManagerFactory emf;
-    private final AsignacionCarreraEntity carrera;
-    private AsignacionGradoEntity grado;
-    private EstudianteEntity estudiante;
-    private ArrayList<AsignacionCursoEntity> listaCursos;
+    private final Long idAsignacionCarrera;
+    private Long idAsignacionGrado;
+    private Long idEstudiante;
+    private ArrayList<Long> listaIDAsignacionCursos;
 
-    public AsignacionEstudianteCreador(EntityManagerFactory emf, AsignacionCarreraEntity carrera) {
+    public AsignacionEstudianteCreador(EntityManagerFactory emf, Long idAsignacionCarrera) {
         this.emf = emf;
-        this.carrera = carrera;
-        this.listaCursos = new ArrayList<>();
+        this.idAsignacionCarrera = idAsignacionCarrera;
+        this.listaIDAsignacionCursos = new ArrayList<>();
     }
     
-    public void setGrado(AsignacionGradoEntity grado) { this.grado = grado; }
-    public void setEstudiante(EstudianteEntity estudiante) { this.estudiante = estudiante; }
-    public void addCurso(AsignacionCursoEntity curso) { this.listaCursos.add(curso); }
-    public void setCursos(ArrayList<AsignacionCursoEntity> listaCursos) { this.listaCursos = listaCursos; }
+    public void setGrado(Long idAsignacionGrado) { this.idAsignacionGrado = idAsignacionGrado; }
+    public void setEstudiante(Long idEstudiante) { this.idEstudiante = idEstudiante; }
+    public void addCurso(Long curso) { this.listaIDAsignacionCursos.add(curso); }
+    public void setCursos(ArrayList<Long> listaIDCursos) { this.listaIDAsignacionCursos = listaIDCursos; }
 
     @Override
-    public void crearAsignacion() {
-        // Se crean tantos registros en 'asignacion_estudiante_cursos' como AsignacionCursoEntity estén agregados. Los pasos son:
+    public void crearAsignacion() throws NonexistentEntityException, ExcepcionEntityAnulado {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        // Se comprueba que exista la Asignación Carrera y que no esté anulada
+        // @Nota para módulo correspondiente
+        AsignacionCarreraEntity asigCarrera = new AsignacionCarreraJpaController(emf).findAsignacionCarreraEntity(idAsignacionCarrera);
+        if (asigCarrera == null) {
+            em.getTransaction().rollback();
+            throw new NonexistentEntityException("No existe una Asignación de Carrera con id="+idAsignacionCarrera);
+        } if (asigCarrera.getAnulado()) {
+            em.getTransaction().rollback();
+            throw new ExcepcionEntityAnulado("La Asignación de Carrera con id="+idAsignacionCarrera+" ya ha sido anulada");
+        }
+        // Se comprueba que exista la Asignación Grado (si se proporciona) y que no esté anulada
+        if (idAsignacionGrado != null) {
+            // Si el grado existe, se comprueba que no esté anulado
+            // @Nota para módulo correspondiente
+            AsignacionGradoJpaController asigGrado = new AsignacionGradoJpaController(emf);
+            AsignacionGradoEntity grado = asigGrado.findAsignacion_Grado(idAsignacionGrado);
+            if (grado == null) {
+                em.getTransaction().rollback();
+                throw new NonexistentEntityException("No existe una Asgnación de Grado con id="+idAsignacionGrado);
+            } if (grado.getAnulado()) {
+                em.getTransaction().rollback();
+                throw new ExcepcionEntityAnulado("La Asignación de Grado con id="+idAsignacionGrado+" ya ha sido anulada");
+            }
+        }
+        // Se comprueba que exista el Estudiante y que no esté anulado
+        // @Nota para módulo correspondiente
+        EstudianteEntity estudiante = new EstudianteJpaController(emf).findEstudianteEntity(idEstudiante);
+        if (estudiante == null) {
+            em.getTransaction().rollback();
+            throw new NonexistentEntityException("No existe un Estudiante con id="+idAsignacionCarrera);
+        } if (estudiante.getAnulado()) {
+            em.getTransaction().rollback();
+            throw new ExcepcionEntityAnulado("El Estudiante con id="+idAsignacionCarrera+" ya ha sido anulado");
+        }
+        // Se crean tantos registros en 'asignacion_estudiante_cursos' como Cursos estén agregados. Los pasos son:
         // 1. Crear el registro en 'asignacion_estudiante'
         // 2. Actualizar 'estudiante.asignacion_id' = 'asignacion_estudiante.id'
         // 3. Para cada AsignacionCursoEntity:
 	//    3.1. Crear el registro en 'asignacion_estudiante_cursos'
-        Long idAsginacionCarrera = carrera.getId();
-        Long idGrado = grado == null ? null : grado.getId();
-        Long idEstudiante = estudiante.getId();
         // PASO 1:
         AsignacionEstudianteEntity asignacionEst = new AsignacionEstudianteEntity();
-        asignacionEst.setAsignacion_carrera_id(idAsginacionCarrera);
-        asignacionEst.setAsignacion_grado_id(idGrado);
+        asignacionEst.setAsignacion_carrera_id(idAsignacionCarrera);
         asignacionEst.setEstudiante_id(idEstudiante);
-        new AsignacionEstudianteJpaController(emf).create(asignacionEst);
+        asignacionEst.setAsignacion_grado_id(idAsignacionGrado);
+        new AsignacionEstudianteJpaController(emf).create(asignacionEst, em);
         // PASO 2:
+        // @Nota para módulo correspondiente
         estudiante.setAsignacion_id(asignacionEst.getId());
-        try {
-            new EstudianteJpaController(emf).edit(estudiante);
-        } catch (Exception ex) {
-            Logger.getLogger(AsignacionEstudianteCreador.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        new EstudianteJpaController(emf).edit(estudiante, em);
         // PASO 3:
-        for (AsignacionCursoEntity curso : listaCursos) {
+        // @Nota para módulo correspondiente
+        AsignacionCursoJpaController controllerAsigCurso = new AsignacionCursoJpaController(emf);
+        for (Long idAsignacionCurso : listaIDAsignacionCursos) {
+            // Se comprueba que exista la Asignación Curso y que no esté anulada
+            // @Nota para módulo correspondiente
+            // Una Asignación Curso está anulada si la Asignación Carrera o la Asignación Grado relacionadas están anuladas
+            AsignacionCursoEntity asigCurso = new AsignacionCursoJpaController(emf).findAsignacion_Curso(idAsignacionCurso);
+            if (asigCurso == null) {
+                em.getTransaction().rollback();
+                throw new NonexistentEntityException("No existe una Asignación de Curso con id="+idAsignacionCarrera);
+            } if (!asigCurso.getAsignacion_carrera_id().equals(idAsignacionCarrera) || asigCurso.getAsignacion_grado_id().equals(idAsignacionGrado)) {
+                em.getTransaction().rollback();
+                throw new ExcepcionEntityAnulado("Puede que la Asignación de Curso con id="+idAsignacionCarrera+" ya ha sido anulado");
+            }
             AsignacionCursosEstudianteEntity asignacionCurso = new AsignacionCursosEstudianteEntity();
             asignacionCurso.setAsignacion_estudiante_id(asignacionEst.getId());
-            asignacionCurso.setAsignacion_curso_id(curso.getId());
+            asignacionCurso.setAsignacion_curso_id(idAsignacionCurso);
             asignacionCurso.setAcumulado(0f);
             new AsignacionCursosEstudianteJpaController(emf).create(asignacionCurso);
         }
+        em.getTransaction().commit();
     }
 }

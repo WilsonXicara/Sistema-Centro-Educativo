@@ -7,8 +7,8 @@ package sce.asignacion.carrera;
 
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.entity.AsignacionCarreraEntity;
-import sce.principal.ormjpa.AsignacionCarreraJpaController;
+import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
+import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
 
 /**
  *

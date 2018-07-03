@@ -5,12 +5,12 @@
  */
 package sce.asignacion.carrera;
 
+import sce.asignacion.carrera.orm.CarreraEntity;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.command.AsignacionCommand;
-import sce.principal.entity.AsignacionCarreraEntity;
-import sce.principal.entity.CarreraEntity;
-import sce.principal.entity.CicloEscolarEntity;
-import sce.principal.ormjpa.AsignacionCarreraJpaController;
+import sce.asignacion.AsignacionCommand;
+import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
+import sce.principal.elemento_asignatura.ciclo.orm.CicloEscolarEntity;
+import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
 
 /**
  *

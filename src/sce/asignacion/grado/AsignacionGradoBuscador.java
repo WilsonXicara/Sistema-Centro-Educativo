@@ -7,8 +7,8 @@ package sce.asignacion.grado;
 
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.entity.AsignacionGradoEntity;
-import sce.principal.ormjpa.AsignacionGradoJpaController;
+import sce.asignacion.grado.orm.AsignacionGradoEntity;
+import sce.asignacion.grado.orm.AsignacionGradoJpaController;
 
 /**
  *

@@ -6,18 +6,18 @@
 package sce.persona;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.entity.AtributosAdicionalesEntity;
-import sce.principal.entity.TablaExtendidaEntity;
-import sce.principal.ormjpa.AtributosAdicionalesJpaController;
-import sce.principal.ormjpa.TablaExtendidaJpaController;
-import sce.principal.ormjpa.exceptions.NonexistentEntityException;
+import sce.persona.orm.AtributosAdicionalesEntity;
+import sce.persona.orm.TablaExtendidaEntity;
+import sce.persona.orm.AtributosAdicionalesJpaController;
+import sce.persona.orm.TablaExtendidaJpaController;
+import sce.excepciones.NonexistentEntityException;
 
 /**
  *
@@ -25,79 +25,88 @@ import sce.principal.ormjpa.exceptions.NonexistentEntityException;
  */
 public class AtributoAdicionalEditor {
     private final EntityManagerFactory emf;
-    private final String nombreTabla;
     private final TablaExtendidaEntity tablaExtendida;
     private final ArrayList<AtributosAdicionalesEntity> listaAtributos, listaAtributosEliminados;
+    
     public AtributoAdicionalEditor(EntityManagerFactory emf, String nombreTabla) {
         this.emf = emf;
-        this.nombreTabla = nombreTabla;
-        // Se obtiene el registro de la tabla
-        TablaExtendidaEntity auxTabla = new TablaExtendidaJpaController(emf).buscarTabla(nombreTabla);
         this.tablaExtendida = new TablaExtendidaEntity();
+        this.listaAtributos = new ArrayList<>();
+        this.listaAtributosEliminados = new ArrayList<>();
+        // Se obtiene el registro de la tabla
+        TablaExtendidaEntity auxTabla = new TablaExtendidaJpaController(emf).buscarTablaExtendida(nombreTabla);
         if (auxTabla == null) {
             this.tablaExtendida.setNombre_tabla(nombreTabla);
-            new TablaExtendidaJpaController(emf).create(tablaExtendida);
+            return;
         } else {
             this.tablaExtendida.copy(auxTabla);
         }
         // Se obtienen los atributos ya existentes para la tabla actual
         List<AtributosAdicionalesEntity> atributos = new AtributosAdicionalesJpaController(emf).buscarAtributosParaTabla(tablaExtendida.getId());
-        this.listaAtributos = new ArrayList<>();
-        this.listaAtributosEliminados = new ArrayList<>();
         for (AtributosAdicionalesEntity atributo : atributos) {
             listaAtributos.add(atributo);
         }
     }
     public boolean agregarAtributo(String atributo) {
+        // Verifico si el nuevo atributo es uno ya eliminado
+        int cantidad = listaAtributosEliminados.size(), index;
+        for(index=0; index<cantidad; index++) {
+            if (listaAtributosEliminados.get(index).getNombre_atributo().equals(atributo)) {
+                listaAtributos.add(listaAtributosEliminados.remove(index));
+                return true;
+            }
+        }
+        // Verifico si el nuevo atributo ya existe
+        cantidad = listaAtributos.size();
+        for(index=0; index<cantidad; index++) {
+            if (listaAtributos.get(index).getNombre_atributo().equals(atributo)) {
+                return false;
+            }
+        }
+        // No existe. Se agrega como nuevo
         AtributosAdicionalesEntity nuevo = new AtributosAdicionalesEntity();
         nuevo.setNombre_atributo(atributo);
-        int index = listaAtributosEliminados.indexOf(nuevo);
-        if (index != -1) {
-            listaAtributos.add(listaAtributosEliminados.remove(index));
-            return true;
-        }
-        if (listaAtributos.contains(nuevo)) {
-            return false;
-        }
         listaAtributos.add(nuevo);
         return true;
     }
     public boolean eliminarAtributo(String atributo) {
-        AtributosAdicionalesEntity nuevo = new AtributosAdicionalesEntity();
-        nuevo.setNombre_atributo(atributo);
-        int index = listaAtributos.indexOf(nuevo);
-        if (index == -1) {
-            return false;
+        // Verifico que el atributo a eliminar exista
+        int cantidad = listaAtributos.size(), index;
+        for(index=0; index<cantidad; index++) {
+            if (listaAtributos.get(index).getNombre_atributo().equals(atributo)) {
+                listaAtributosEliminados.add(listaAtributos.remove(index));
+                return true;
+            }
         }
-        listaAtributosEliminados.add(listaAtributos.remove(index));
-        return true;
+        return false;
     }
-    public void guardarAtributos(EntityManagerFactory emf) {
-        // Se crear el registro en tabla_extendida si aún no existe
+    public void guardarCambios() throws NonexistentEntityException {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        // Se crear el registro en tabla_extendida (si aún no existe)
         if (tablaExtendida.getId() == null) {
-            new TablaExtendidaJpaController(emf).create(tablaExtendida);
+            new TablaExtendidaJpaController(emf).create(tablaExtendida, em);
         }
         AtributosAdicionalesJpaController controller = new AtributosAdicionalesJpaController(emf);
-        // Eliminación de atributos eliminados
+        // Eliminación de los atributos eliminados
         for (AtributosAdicionalesEntity eliminado : listaAtributosEliminados) {
-            try {
-                controller.destroy(eliminado.getId());
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(AtributoAdicionalEditor.class.getName()).log(Level.SEVERE, null, ex);
+            if (eliminado.getId() != null) {
+                controller.destroy(eliminado.getId(), em);
             }
         }
         // Creación de los registros aún no existentes
         for (AtributosAdicionalesEntity nuevo : listaAtributos) {
             if (nuevo.getId() == null) {
                 nuevo.setTabla_extendida_id(tablaExtendida.getId());
-                controller.create(nuevo);
+                controller.create(nuevo, em);
             }
         }
+        em.getTransaction().commit();
     }
     
     public static ArrayList<String> obtenerListaAtributos(EntityManagerFactory emf, String nombreTabla) {
         ArrayList<String> lista = new ArrayList<>();
-        TablaExtendidaEntity tablaExtendida = new TablaExtendidaJpaController(emf).buscarTabla(nombreTabla);
+        TablaExtendidaEntity tablaExtendida = new TablaExtendidaJpaController(emf).buscarTablaExtendida(nombreTabla);
         if (tablaExtendida == null) {
             return lista;
         }
@@ -121,10 +130,10 @@ public class AtributoAdicionalEditor {
     }
     public static ArrayList<String> convertirJSONAArrayList(ArrayList<String> listaAtributos, String cadenaJSON) {
         ArrayList<String> listaValores = new ArrayList<>();
-        JsonObject jsonElement = new JsonParser().parse(cadenaJSON).getAsJsonObject();
+        JsonObject jsonObject = new JsonParser().parse(cadenaJSON).getAsJsonObject();
         for (String atributo : listaAtributos) {
-            String valor = jsonElement.get(atributo).toString();
-            listaValores.add(valor == null ? "" : valor.replace("\\\"", ""));
+            JsonElement valor = jsonObject.get(atributo);
+            listaValores.add(valor == null ? "" : valor.toString().replace("\"", ""));
         }
         return listaValores;
     }
