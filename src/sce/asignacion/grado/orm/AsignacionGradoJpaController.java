@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.asignacion.grado.orm.AsignacionGradoEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -50,6 +49,10 @@ public class AsignacionGradoJpaController implements Serializable {
                 em.close();
             }
         }
+    }
+    
+    public void create(AsignacionGradoEntity asignacion_Grado, EntityManager em) {
+        em.persist(asignacion_Grado);
     }
 
     public void edit(AsignacionGradoEntity asignacion_Grado) throws NonexistentEntityException, Exception {

@@ -32,7 +32,7 @@ public class ActividadEntity implements Serializable {
     private Long id;
     private Long asignacion_curso_id;
     private String grupo_actividad, actividad;
-    private Float esperado;
+    private Float esperado=0f;
 
     public Long getId() { return id; }
     public Long getAsignacion_curso_id() { return asignacion_curso_id; }

@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import sce.persona.orm.AtributosAdicionalesEntity;
 import sce.persona.orm.TablaExtendidaEntity;
@@ -42,7 +41,8 @@ public class AtributoAdicionalEditor {
             this.tablaExtendida.copy(auxTabla);
         }
         // Se obtienen los atributos ya existentes para la tabla actual
-        List<AtributosAdicionalesEntity> atributos = new AtributosAdicionalesJpaController(emf).buscarAtributosParaTabla(tablaExtendida.getId());
+        List<AtributosAdicionalesEntity> atributos = new AtributosAdicionalesJpaController(emf)
+                .buscarAtributosParaTabla(tablaExtendida.getId());
         for (AtributosAdicionalesEntity atributo : atributos) {
             listaAtributos.add(atributo);
         }
@@ -53,6 +53,7 @@ public class AtributoAdicionalEditor {
         for(index=0; index<cantidad; index++) {
             if (listaAtributosEliminados.get(index).getNombre_atributo().equals(atributo)) {
                 listaAtributos.add(listaAtributosEliminados.remove(index));
+                System.out.println("+"+atributo+": true; Elim; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
                 return true;
             }
         }
@@ -60,14 +61,30 @@ public class AtributoAdicionalEditor {
         cantidad = listaAtributos.size();
         for(index=0; index<cantidad; index++) {
             if (listaAtributos.get(index).getNombre_atributo().equals(atributo)) {
+                System.out.println("+"+atributo+": false; Exist; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
                 return false;
             }
         }
         // No existe. Se agrega como nuevo
         AtributosAdicionalesEntity nuevo = new AtributosAdicionalesEntity();
         nuevo.setNombre_atributo(atributo);
+        nuevo.setTabla_extendida_id(tablaExtendida.getId());
         listaAtributos.add(nuevo);
+        System.out.println("+"+atributo+": true; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
         return true;
+    }
+    public boolean editarAtributo(String nombreAnterior, String nombreNuevo) {
+        // Verifico que el atributo a eliminar exista
+        int cantidad = listaAtributos.size(), index;
+        for(index=0; index<cantidad; index++) {
+            if (listaAtributos.get(index).getNombre_atributo().equals(nombreAnterior)) {
+                listaAtributos.get(index).setNombre_atributo(nombreNuevo);
+                System.out.println("*"+nombreAnterior+": true; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
+                return true;
+            }
+        }
+        System.out.println("*"+nombreAnterior+": true; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
+        return false;
     }
     public boolean eliminarAtributo(String atributo) {
         // Verifico que el atributo a eliminar exista
@@ -75,33 +92,84 @@ public class AtributoAdicionalEditor {
         for(index=0; index<cantidad; index++) {
             if (listaAtributos.get(index).getNombre_atributo().equals(atributo)) {
                 listaAtributosEliminados.add(listaAtributos.remove(index));
+                System.out.println("-"+atributo+": true; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
                 return true;
             }
         }
+        System.out.println("-"+atributo+": false; NoExist; size=["+listaAtributos.size()+","+listaAtributosEliminados.size()+"]");
         return false;
     }
     public void guardarCambios() throws NonexistentEntityException {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        // Se crear el registro en tabla_extendida (si aún no existe)
-        if (tablaExtendida.getId() == null) {
-            new TablaExtendidaJpaController(emf).create(tablaExtendida, em);
+        TablaExtendidaJpaController controller = new TablaExtendidaJpaController(emf);
+        try {
+            // Se crear el registro en tabla_extendida (si aún no existe)
+            if (tablaExtendida.getId() == null) {
+                controller.create(tablaExtendida);
+            }
+            // Eliminación de la BD de los registros eliminados
+            eliminarListaAtributosAdicionales();
+            // Creación de los registros aún no existentes
+            guardarListaAtributosAdicionales();
+        } catch (NonexistentEntityException ex) {
+            if (tablaExtendida.getId() != null) {
+                controller.destroy(tablaExtendida.getId());
+            }
+            throw new NonexistentEntityException(ex.getMessage());
         }
-        AtributosAdicionalesJpaController controller = new AtributosAdicionalesJpaController(emf);
+            
+    }
+    private void eliminarListaAtributosAdicionales() throws NonexistentEntityException {
         // Eliminación de los atributos eliminados
-        for (AtributosAdicionalesEntity eliminado : listaAtributosEliminados) {
-            if (eliminado.getId() != null) {
-                controller.destroy(eliminado.getId(), em);
+        AtributosAdicionalesJpaController controller = new AtributosAdicionalesJpaController(emf);
+        int cantidad = listaAtributosEliminados.size(), indexError = 0;
+        Long idError = 0l;
+        System.out.println("SE ELIMINARÀN "+cantidad+" REGISTROS");
+        try {
+            for(indexError=0; indexError<cantidad; indexError++) {
+                AtributosAdicionalesEntity eliminado = listaAtributosEliminados.get(indexError);
+                System.out.println("eliminando "+eliminado);
+                idError = eliminado.getId();
+                if (idError != null) {
+                    controller.destroy(idError);
+                }
             }
+        } catch (NonexistentEntityException ex) {
+            // Haciendo un "ROLLBACK" propio
+            for(int index=0; index<indexError; index++) {
+                if (listaAtributosEliminados.get(index).getId() == null) {
+                    controller.create(listaAtributosEliminados.get(index));
+                }
+            }
+            throw new NonexistentEntityException("No existe un Atributo Adicional con id="+idError);
         }
+    }
+    private void guardarListaAtributosAdicionales() throws NonexistentEntityException {
         // Creación de los registros aún no existentes
-        for (AtributosAdicionalesEntity nuevo : listaAtributos) {
-            if (nuevo.getId() == null) {
+        AtributosAdicionalesJpaController controller = new AtributosAdicionalesJpaController(emf);
+        int cantidad = listaAtributos.size(), indexError=0;
+        Long idError = 0l;
+        try {
+            for(indexError=0; indexError<cantidad; indexError++) {
+                AtributosAdicionalesEntity nuevo = listaAtributos.get(indexError);
                 nuevo.setTabla_extendida_id(tablaExtendida.getId());
-                controller.create(nuevo, em);
+                if (nuevo.getNombre_atributo().equals("sexo")) {
+                    nuevo.setTabla_extendida_id(null);
+                }
+                System.out.println("guardando "+nuevo);
+                idError = nuevo.getId();
+                if (idError == null) {
+                    controller.create(nuevo);
+                }
             }
+        } catch (Exception ex) {
+            // Haciendo un "ROLLBACK" propio
+            for(int index=0; index<indexError; index++) {
+                if (listaAtributos.get(index).getId() != null) {
+                    controller.destroy(listaAtributos.get(index).getId());
+                }
+            }
+            throw new NonexistentEntityException("Ocurrió un error con Atributo Adicional con id="+idError);
         }
-        em.getTransaction().commit();
     }
     
     public static ArrayList<String> obtenerListaAtributos(EntityManagerFactory emf, String nombreTabla) {

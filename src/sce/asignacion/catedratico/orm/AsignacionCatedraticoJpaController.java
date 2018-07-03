@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**

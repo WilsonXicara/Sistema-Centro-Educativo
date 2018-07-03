@@ -5,27 +5,17 @@
  */
 package sce.asignacion.catedratico;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import sce.asignacion.AsignacionCommand;
-import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoCursosEntity;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoEntity;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoGradosEntity;
-import sce.asignacion.curso.orm.AsignacionCursoEntity;
-import sce.asignacion.grado.orm.AsignacionGradoEntity;
-import sce.persona.catedratico.orm.CatedraticoEntity;
-import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoCursosJpaController;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoGradosJpaController;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoJpaController;
-import sce.persona.catedratico.orm.CatedraticoJpaController;
+import sce.asignacion.consultor.ConsultorGeneral;
 import sce.excepciones.NonexistentEntityException;
+import sce.persona.catedratico.orm.CatedraticoEntity;
+import sce.persona.catedratico.orm.CatedraticoJpaController;
 
 /**
  *
@@ -54,26 +44,32 @@ public class AsignacionCatedratico implements AsignacionCommand{
         EntityManager em = null;
         em = emf.createEntityManager();
         em.getTransaction().begin();
-        AsignacionCarreraEntity carreraExistente = new AsignacionCarreraJpaController(emf).findAsignacionCarreraEntity(idAsignacionCarrera);
-        CatedraticoEntity catedraticoExistente = new CatedraticoJpaController(emf).findCatedraticoEntity(idCatedratico);
-        if (carreraExistente != null && catedraticoExistente != null){
-            AsignacionCatedraticoEntity asignacionCat = new AsignacionCatedraticoEntity();
-            asignacionCat.setAsignacion_carrera_id(idAsignacionCarrera);
-            asignacionCat.setCatedratico_id(idCatedratico);
-            new AsignacionCatedraticoJpaController(emf).create(asignacionCat);
-            catedraticoExistente.setAsignacion_id(asignacionCat.getId());
-            try {
-                new CatedraticoJpaController(emf).edit(catedraticoExistente);
-            } catch (Exception ex) {
-                Logger.getLogger(AsignacionCatedratico.class.getName()).log(Level.SEVERE, null, ex);
-            }    
-        } else {
+        if (!ConsultorGeneral.asignacionCarreraExistente(idAsignacionCarrera, emf)){
             em.getTransaction().rollback();
-            throw new NonexistentEntityException("No existen un catedrático con el id siguiente: " + idCatedratico); 
+            throw new NonexistentEntityException("La asignaciÃ³n carrera con id " +idAsignacionCarrera+ "no existe.");
+        } else {
+            if (ConsultorGeneral.asignacionCarreraAnulada(idAsignacionCarrera, emf)){
+                throw new NonexistentEntityException("La asignaciÃ³n carrera con id " + idAsignacionCarrera + "estÃ¡ anulada");
+            } else{
+                if (ConsultorGeneral.catedraticoExistente(idCatedratico, emf)){
+                    CatedraticoEntity catedratico = new CatedraticoJpaController(emf).findCatedraticoEntity(idCatedratico);
+                    AsignacionCatedraticoEntity asignacionCat = new AsignacionCatedraticoEntity();
+                    asignacionCat.setAsignacion_carrera_id(idAsignacionCarrera);
+                    asignacionCat.setCatedratico_id(idCatedratico);
+                    new AsignacionCatedraticoJpaController(emf).create(asignacionCat);
+                    catedratico.setAsignacion_id(asignacionCat.getId());
+                    try {
+                        new CatedraticoJpaController(emf).edit(catedratico);
+                    } catch (Exception ex) {
+                        Logger.getLogger(AsignacionCatedratico.class.getName()).log(Level.SEVERE, null, ex);
+                    }   
+                } else {
+                    em.getTransaction().rollback();
+                    throw new NonexistentEntityException("El catedrÃ¡tico con id " +idCatedratico+ "no existe.");
+                }
+            }
         }
-        
         em.getTransaction().commit();
-
     }
     
 }

@@ -5,17 +5,13 @@
  */
 package sce.asignacion.catedratico;
 
+import sce.asignacion.consultor.ConsultorGeneral;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import sce.asignacion.AsignacionCommand;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoEntity;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoGradosEntity;
-import sce.asignacion.grado.orm.AsignacionGradoEntity;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoGradosJpaController;
-import sce.asignacion.catedratico.orm.AsignacionCatedraticoJpaController;
-import sce.asignacion.grado.orm.AsignacionGradoJpaController;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -48,23 +44,23 @@ public class AsignacionCatedraticoGrados implements AsignacionCommand{
         EntityManager em = null;
         em = emf.createEntityManager();
         em.getTransaction().begin();
-        AsignacionCatedraticoEntity catedraticoExistente = new AsignacionCatedraticoJpaController(emf).findAsignacionCatedraticoEntity(idAsignacionCat);
-        if (catedraticoExistente != null){
+        
+        if (!ConsultorGeneral.asignacionCatedraticoAnulada(idAsignacionCat, emf)){
             AsignacionCatedraticoGradosEntity asignacionCatGrados = new AsignacionCatedraticoGradosEntity(); 
             asignacionCatGrados.setAsignacion_catedratico_id(idAsignacionCat);
             for (Long elementos : idAsignacionGrado){
-                AsignacionGradoEntity asigGradoExistente = new AsignacionGradoJpaController(emf).findAsignacion_Grado(elementos);
-                if(asigGradoExistente != null){
+                if (ConsultorGeneral.asignaciongradoExistente(elementos, emf)){
                     asignacionCatGrados.setAsignacion_grado_id(elementos);
                     new AsignacionCatedraticoGradosJpaController(emf).create(asignacionCatGrados,em);    
-                } else {
+                }
+                else {
                     em.getTransaction().rollback();
-                    throw new NonexistentEntityException("No existen una asignación grado con el id siguiente: " + elementos);
+                    throw new NonexistentEntityException("No existen una asignaciÃ³n grado con el id siguiente: " + elementos);
                 }  
             }
         } else {
             em.getTransaction().rollback();
-            throw new NonexistentEntityException("No existen una asignación catedratico con el id siguiente: " + idAsignacionCat );
+            throw new NonexistentEntityException("No existen una asignaciÃ³n catedratico con el id siguiente: " + idAsignacionCat );
         }
         
         em.getTransaction().commit();

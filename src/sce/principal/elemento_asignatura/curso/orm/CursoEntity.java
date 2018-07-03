@@ -32,7 +32,6 @@ public class CursoEntity implements Serializable, ElementoAsignaturaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String curso, descripcion;
-    private Integer creditos;
 
     public CursoEntity() {}
     public CursoEntity(String curso, String descripcion) {
@@ -42,11 +41,9 @@ public class CursoEntity implements Serializable, ElementoAsignaturaEntity {
     public Long getId() { return id; }
     public String getCurso() { return curso; }
     public String getDescripcion() { return descripcion; }
-    public Integer getCreditos() { return creditos; }
     public void setId(Long id) { this.id = id; }
     public void setCurso(String curso) { this.curso = curso; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public void setCreditos(Integer creditos) { this.creditos = creditos; }
 
     @Override
     public int hashCode() {
@@ -68,7 +65,7 @@ public class CursoEntity implements Serializable, ElementoAsignaturaEntity {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.CursoEntity{" + "id=" + id + ", curso=" + curso + ", descripcion=" + descripcion + ", creditos=" + creditos + '}';
+        return "sce.principal.entity.CursoEntity{" + "id=" + id + ", curso=" + curso + ", descripcion=" + descripcion + '}';
     }
     
     public void copy(Object object) {
@@ -77,7 +74,6 @@ public class CursoEntity implements Serializable, ElementoAsignaturaEntity {
             this.id = aux.id;
             this.curso = aux.curso;
             this.descripcion = aux.descripcion;
-            this.creditos = aux.creditos;
         }
     }
 }
