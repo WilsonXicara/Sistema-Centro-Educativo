@@ -5,18 +5,18 @@
  */
 package sce.asignacion.catedratico;
 
+import sce.asignacion.consultor.ConsultorGeneral;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.command.AsignacionCommand;
-import sce.principal.entity.AsignacionCatedraticoCursosEntity;
-import sce.principal.entity.AsignacionCatedraticoEntity;
-import sce.principal.entity.AsignacionCursoEntity;
-import sce.principal.ormjpa.AsignacionCatedraticoCursosJpaController;
-import sce.principal.ormjpa.AsignacionCatedraticoJpaController;
-import sce.principal.ormjpa.AsignacionCursoJpaController;
+import sce.asignacion.AsignacionCommand;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoCursosEntity;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoCursosJpaController;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoEntity;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoJpaController;
+import sce.asignacion.curso.orm.AsignacionCursoEntity;
+import sce.asignacion.curso.orm.AsignacionCursoJpaController;
+import sce.excepciones.NonexistentEntityException;
 
 /**
  *
@@ -45,27 +45,28 @@ public class AsignacionCatedraticoCursos implements AsignacionCommand{
    
 
     @Override
-    public void crearAsignacion() {
+    public void crearAsignacion() throws NonexistentEntityException {
         EntityManager em = null;
         em = emf.createEntityManager();
         em.getTransaction().begin();
+        
         AsignacionCatedraticoEntity catedraticoExistente = new AsignacionCatedraticoJpaController(emf).findAsignacionCatedraticoEntity(idAsignacionCat);
-        if (catedraticoExistente != null){
+        if (ConsultorGeneral.asignacionCatedraticoExistente(idAsignacionCat, emf)){
         AsignacionCatedraticoCursosEntity asignacionCatCursos = new AsignacionCatedraticoCursosEntity();
         asignacionCatCursos.setAsignacion_catedratico_id(idAsignacionCat);
            for (Long elementos : idAsignacionCurso){
             AsignacionCursoEntity AsigCursosExistente = new AsignacionCursoJpaController(emf).findAsignacion_Curso(elementos);
-            if (AsigCursosExistente != null){
+            if (AsigCursosExistente != null){ //Tengo que usar los consultores de Willy
                 asignacionCatCursos.setAsignacion_curso_id(elementos);
                 new AsignacionCatedraticoCursosJpaController(emf).create(asignacionCatCursos, em);
             } else{
-                //Pendiente (excepcion)
                 em.getTransaction().rollback();
+                throw new NonexistentEntityException("No existen una asignaciÃ³n curso con el id siguiente: " + elementos);
             }
         }
         } else{
-            //Excepcion pendiente 
             em.getTransaction().rollback();
+            throw new NonexistentEntityException("No existe una asignaciÃ³n catedrÃ¡tico con el id siguiente: " + idAsignacionCat);
         }
         
         em.getTransaction().commit();

@@ -5,22 +5,17 @@
  */
 package sce.asignacion.catedratico;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.command.AsignacionCommand;
-import sce.principal.entity.AsignacionCarreraEntity;
-import sce.principal.entity.AsignacionCatedraticoCursosEntity;
-import sce.principal.entity.AsignacionCatedraticoEntity;
-import sce.principal.entity.AsignacionCatedraticoGradosEntity;
-import sce.principal.entity.AsignacionCursoEntity;
-import sce.principal.entity.AsignacionGradoEntity;
-import sce.principal.entity.CatedraticoEntity;
-import sce.principal.ormjpa.AsignacionCatedraticoCursosJpaController;
-import sce.principal.ormjpa.AsignacionCatedraticoGradosJpaController;
-import sce.principal.ormjpa.AsignacionCatedraticoJpaController;
-import sce.principal.ormjpa.CatedraticoJpaController;
+import sce.asignacion.AsignacionCommand;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoEntity;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoJpaController;
+import sce.asignacion.consultor.ConsultorGeneral;
+import sce.excepciones.NonexistentEntityException;
+import sce.persona.catedratico.orm.CatedraticoEntity;
+import sce.persona.catedratico.orm.CatedraticoJpaController;
 
 /**
  *
@@ -28,65 +23,53 @@ import sce.principal.ormjpa.CatedraticoJpaController;
  */
 public class AsignacionCatedratico implements AsignacionCommand{
         private final EntityManagerFactory emf;
-        private AsignacionCarreraEntity ace;
-        private CatedraticoEntity catedratico;
-        private ArrayList<AsignacionGradoEntity> listaGrados;
-        private ArrayList<AsignacionCursoEntity> listaCursos;
-
+        private Long idAsignacionCarrera;
+        private Long idCatedratico;
+       
     public AsignacionCatedratico(EntityManagerFactory emf) {
-        this.emf = emf;
-        this.listaGrados = new ArrayList<>();
-        this.listaCursos = new ArrayList<>();
+        this.emf = emf;    
     }
 
-    public void setAce(AsignacionCarreraEntity ace) {
-        this.ace = ace;
+    public void setIdAsignacionCarrera(Long idAsignacionCarrera) {
+        this.idAsignacionCarrera = idAsignacionCarrera;
     }
 
-    public void setCatedratico(CatedraticoEntity catedratico) {
-        this.catedratico = catedratico;
+    public void setIdCatedratico(Long idCatedratico) {
+        this.idCatedratico = idCatedratico;
     }
 
-    public void addGrado(AsignacionGradoEntity grado) { 
-         this.listaGrados.add(grado); 
-    }
-    
-    public void addCurso(AsignacionCursoEntity curso) { 
-         this.listaCursos.add(curso); 
-    }
-    
     
     @Override
-    public void crearAsignacion() {
-        //Se crea la asignacion de un catedrático con una carrera en espicífico
-        AsignacionCatedraticoJpaController asignadorCat = new AsignacionCatedraticoJpaController(emf);
-        AsignacionCatedraticoEntity asignacionCat = new AsignacionCatedraticoEntity();
-        asignacionCat.setAsignacion_carrera_id(ace.getId());
-        asignacionCat.setCatedratico_id(catedratico.getId());
-        asignadorCat.create(asignacionCat);
-        catedratico.setAsignacion_id(asignacionCat.getId());
-            try {
-                new CatedraticoJpaController(emf).edit(catedratico);
-            } catch (Exception ex) {
-                Logger.getLogger(AsignacionCatedratico.class.getName()).log(Level.SEVERE, null, ex);
+    public void crearAsignacion() throws NonexistentEntityException{
+        EntityManager em = null;
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        if (!ConsultorGeneral.asignacionCarreraExistente(idAsignacionCarrera, emf)){
+            em.getTransaction().rollback();
+            throw new NonexistentEntityException("La asignaciÃ³n carrera con id " +idAsignacionCarrera+ "no existe.");
+        } else {
+            if (ConsultorGeneral.asignacionCarreraAnulada(idAsignacionCarrera, emf)){
+                throw new NonexistentEntityException("La asignaciÃ³n carrera con id " + idAsignacionCarrera + "estÃ¡ anulada");
+            } else{
+                if (ConsultorGeneral.catedraticoExistente(idCatedratico, emf)){
+                    CatedraticoEntity catedratico = new CatedraticoJpaController(emf).findCatedraticoEntity(idCatedratico);
+                    AsignacionCatedraticoEntity asignacionCat = new AsignacionCatedraticoEntity();
+                    asignacionCat.setAsignacion_carrera_id(idAsignacionCarrera);
+                    asignacionCat.setCatedratico_id(idCatedratico);
+                    new AsignacionCatedraticoJpaController(emf).create(asignacionCat);
+                    catedratico.setAsignacion_id(asignacionCat.getId());
+                    try {
+                        new CatedraticoJpaController(emf).edit(catedratico);
+                    } catch (Exception ex) {
+                        Logger.getLogger(AsignacionCatedratico.class.getName()).log(Level.SEVERE, null, ex);
+                    }   
+                } else {
+                    em.getTransaction().rollback();
+                    throw new NonexistentEntityException("El catedrÃ¡tico con id " +idCatedratico+ "no existe.");
+                }
             }
-        //Se asignan tantos cursos sean necesarios a un catedrático
-        for (AsignacionCursoEntity cursos : listaCursos){
-            AsignacionCatedraticoCursosJpaController asignadorCursos = new AsignacionCatedraticoCursosJpaController(emf);
-            AsignacionCatedraticoCursosEntity asignacionCursos = new AsignacionCatedraticoCursosEntity();
-            asignacionCursos.setAsignacion_catedratico_id(asignacionCat.getId());
-            asignacionCursos.setAsignacion_curso_id(cursos.getId());
-            asignadorCursos.create(asignacionCursos);
         }
-        //Se asignan los grados necesarios a un catedrático 
-        for (AsignacionGradoEntity grados : listaGrados){
-            AsignacionCatedraticoGradosJpaController asignadorGrados = new AsignacionCatedraticoGradosJpaController(emf);
-            AsignacionCatedraticoGradosEntity asignacionGrados = new AsignacionCatedraticoGradosEntity();
-            asignacionGrados.setAsignacion_catedratico_id(asignacionCat.getId());
-            asignacionGrados.setAsignacion_grado_id(grados.getId());
-            asignadorGrados.create(asignacionGrados);
-        }
-        
+        em.getTransaction().commit();
     }
     
 }

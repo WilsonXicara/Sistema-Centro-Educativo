@@ -5,12 +5,13 @@
  */
 package sce.asignacion.carrera;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.command.AsignacionCommand;
-import sce.principal.entity.AsignacionCarreraEntity;
-import sce.principal.entity.CarreraEntity;
-import sce.principal.entity.CicloEscolarEntity;
-import sce.principal.ormjpa.AsignacionCarreraJpaController;
+import sce.asignacion.AsignacionCommand;
+import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
+import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
+import sce.asignacion.consultor.ConsultorGeneral;
+import sce.excepciones.NonexistentEntityException;
 
 /**
  *
@@ -19,30 +20,44 @@ import sce.principal.ormjpa.AsignacionCarreraJpaController;
 public class AsignacionCarrera implements AsignacionCommand {
     
     private final EntityManagerFactory emf;
-    private CicloEscolarEntity cicloEscolar;
-    private CarreraEntity  carrera;
+    private Long idCicloEscolar;
+    private Long idCarrera;
 
     public AsignacionCarrera(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
-    public void setCicloEscolar(CicloEscolarEntity cicloEscolar) {
-        this.cicloEscolar = cicloEscolar;
+    public void setIdCicloEscolar(Long idCicloEscolar) {
+        this.idCicloEscolar = idCicloEscolar;
     }
 
-    public void setCarrera(CarreraEntity carrera) {
-        this.carrera = carrera;
+    public void setIdCarrera(Long idCarrera) {
+        this.idCarrera = idCarrera;
     }
-    
+
     
     
     @Override
-    public void crearAsignacion() {
-        AsignacionCarreraJpaController asignador = new AsignacionCarreraJpaController(emf);
-        AsignacionCarreraEntity nuevaAsignacion = new AsignacionCarreraEntity();
-        nuevaAsignacion.setCiclo_escolar_id(cicloEscolar.getId());
-        nuevaAsignacion.setCarrera_id(carrera.getId());
-        asignador.create(nuevaAsignacion);
+    public void crearAsignacion() throws NonexistentEntityException {
+        EntityManager em = null;
+        em = emf.createEntityManager();
+        em.getTransaction().begin();
+        if (ConsultorGeneral.cicloExistente(idCicloEscolar, emf) && ConsultorGeneral.cicloVigente(idCicloEscolar, emf)){
+            AsignacionCarreraEntity asignacionCarrera = new AsignacionCarreraEntity();
+            asignacionCarrera.setCiclo_escolar_id(idCicloEscolar);
+            if (ConsultorGeneral.carreraExistente(idCarrera, emf)){
+                asignacionCarrera.setCarrera_id(idCarrera);
+                new AsignacionCarreraJpaController(emf).create(asignacionCarrera,em);
+            } else {
+                em.getTransaction().rollback();
+                throw new NonexistentEntityException("No existe una carrera con el id siguiente: " + idCarrera);
+            }
+        } else {
+            em.getTransaction().rollback();
+            throw new NonexistentEntityException("El ciclo escolar con el id siguiente: " + idCicloEscolar + "no está disponible o pueda que no exista");
+        }
+        
+     em.getTransaction().commit();
     }
     
 }

@@ -7,8 +7,8 @@ package sce.asignacion.curso;
 
 import java.util.ArrayList;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.entity.AsignacionCursoEntity;
-import sce.principal.ormjpa.AsignacionCursoJpaController;
+import sce.asignacion.curso.orm.AsignacionCursoEntity;
+import sce.asignacion.curso.orm.AsignacionCursoJpaController;
 
 /**
  *

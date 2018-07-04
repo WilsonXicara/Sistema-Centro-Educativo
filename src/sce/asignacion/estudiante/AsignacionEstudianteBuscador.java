@@ -7,8 +7,8 @@ package sce.asignacion.estudiante;
 
 import java.util.ArrayList;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.entity.AsignacionEstudianteEntity;
-import sce.principal.ormjpa.AsignacionEstudianteJpaController;
+import sce.asignacion.estudiante.orm.AsignacionEstudianteEntity;
+import sce.asignacion.estudiante.orm.AsignacionEstudianteJpaController;
 
 /**
  *

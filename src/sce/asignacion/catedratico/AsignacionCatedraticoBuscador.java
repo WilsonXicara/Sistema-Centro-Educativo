@@ -7,8 +7,8 @@ package sce.asignacion.catedratico;
 
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import sce.principal.entity.AsignacionCatedraticoEntity;
-import sce.principal.ormjpa.AsignacionCatedraticoJpaController;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoEntity;
+import sce.asignacion.catedratico.orm.AsignacionCatedraticoJpaController;
 
 /**
  *
