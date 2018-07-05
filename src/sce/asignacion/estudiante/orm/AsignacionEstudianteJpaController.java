@@ -67,6 +67,7 @@ public class AsignacionEstudianteJpaController implements Serializable {
 
     public void edit(AsignacionEstudianteEntity asignacionEstudiante) throws NonexistentEntityException, Exception {
         EntityManager em = null;
+        Long id=null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
@@ -75,12 +76,12 @@ public class AsignacionEstudianteJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = asignacionEstudiante.getId();
+                id = asignacionEstudiante.getId();
                 if (findAsignacion_Estudiante(id) == null) {
-                    throw new NonexistentEntityException("The asignacionEstudiante with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("No existe una Asignación de Estudiante con id="+id);
                 }
             }
-            throw ex;
+            throw new NonexistentEntityException("Ocurrió un eror al intentar anular la Asignación de Estudiante con id="+id);
         } finally {
             if (em != null) {
                 em.close();
@@ -98,7 +99,7 @@ public class AsignacionEstudianteJpaController implements Serializable {
                 asignacionEstudiante = em.getReference(AsignacionEstudianteEntity.class, id);
                 asignacionEstudiante.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The asignacionEstudiante with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("No existe una Asignación de Estudiante con id="+id);
             }
             em.remove(asignacionEstudiante);
             em.getTransaction().commit();

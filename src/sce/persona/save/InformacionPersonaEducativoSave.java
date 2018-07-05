@@ -9,6 +9,7 @@ import sce.excepciones.ExcepcionTipoNoSoportado;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import sce.excepciones.ExcepcionEntityAnulado;
 import sce.persona.AtributoAdicionalEditor;
 import sce.persona.builder.AbstractInformacionPersona;
 import sce.persona.catedratico.InformacionCatedratico;
@@ -29,7 +30,8 @@ public class InformacionPersonaEducativoSave implements InformacionPersonaComman
     public InformacionPersonaEducativoSave(EntityManagerFactory emf) { this.emf = emf; }
 
     @Override
-    public void guardarInformacionPersona(AbstractInformacionPersona informacionPersona) throws PreexistingEntityException, ExcepcionTipoNoSoportado {
+    public void guardarInformacionPersona(AbstractInformacionPersona informacionPersona)
+            throws ExcepcionEntityAnulado, PreexistingEntityException, ExcepcionTipoNoSoportado {
         if (informacionPersona instanceof InformacionEstudiante) {
             // Se guardará el registro en la tabla de Estudiantes (dentro de la BD)
             EntityManager em = emf.createEntityManager();

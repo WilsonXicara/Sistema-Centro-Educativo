@@ -5,6 +5,7 @@
  */
 package sce.persona.save;
 
+import sce.excepciones.ExcepcionEntityAnulado;
 import sce.excepciones.ExcepcionTipoNoSoportado;
 import sce.persona.builder.AbstractInformacionPersona;
 import sce.excepciones.PreexistingEntityException;
@@ -14,5 +15,6 @@ import sce.excepciones.PreexistingEntityException;
  * @author Usuario
  */
 public interface InformacionPersonaCommand {
-    public void guardarInformacionPersona(AbstractInformacionPersona informacionPersona) throws PreexistingEntityException, ExcepcionTipoNoSoportado;
+    public void guardarInformacionPersona(AbstractInformacionPersona informacionPersona)
+            throws ExcepcionEntityAnulado, PreexistingEntityException, ExcepcionTipoNoSoportado;
 }

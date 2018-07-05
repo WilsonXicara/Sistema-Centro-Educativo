@@ -6,8 +6,11 @@
 package sce.persona.estudiante;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import sce.excepciones.ExcepcionEntityAnulado;
 import sce.persona.AtributoAdicionalEditor;
 import sce.persona.builder.AbstractInformacionPersona;
 import sce.excepciones.ExcepcionTipoNoSoportado;
@@ -26,17 +29,19 @@ public class InformacionEstudianteSave implements InformacionPersonaCommand {
     public InformacionEstudianteSave(EntityManagerFactory emf) { this.emf = emf; }
 
     @Override
-    public void guardarInformacionPersona(AbstractInformacionPersona informacionPersona) throws PreexistingEntityException, ExcepcionTipoNoSoportado {
+    public void guardarInformacionPersona(AbstractInformacionPersona informacionPersona)
+            throws ExcepcionEntityAnulado, PreexistingEntityException, ExcepcionTipoNoSoportado {
         if (informacionPersona instanceof InformacionEstudiante) {
-            // Se guardará el registro en la tabla de Estudiantes (dentro de la BD)
-            EntityManager em = emf.createEntityManager();
-            em.getTransaction().begin();
-            EstudianteJpaController controller = new EstudianteJpaController(emf);
+            // No se podrán guardar los cambios si el Estudiante ya fue anulado
             EstudianteEntity estudiante = (EstudianteEntity)informacionPersona.getPersonaEntity();
+            if (estudiante.getAnulado()) {
+                throw new  ExcepcionEntityAnulado("El Estudiante con id="+estudiante.getId()+" no puede editarse pues ya fue anulado");
+            }
+            // Se guardará el registro en la tabla de Estudiantes (dentro de la BD)
+            EstudianteJpaController controller = new EstudianteJpaController(emf);
             // Verifico que no existe un registro con el mismo CUI
             EstudianteEntity existente = controller.buscarPorCui(estudiante.getAtributoUnico());
             if (existente != null) {
-                em.getTransaction().rollback();
                 throw new PreexistingEntityException("Ya existe un registro Estudiante con CUI="+estudiante.getAtributoUnico());
             }
             // Obtención y conversión de los Valores adicionales a formato JSON
@@ -46,14 +51,16 @@ public class InformacionEstudianteSave implements InformacionPersonaCommand {
             estudiante.setAtributos_adicionales(valorAtributosAdicionales);
             // Creación o editación del registro
             if (estudiante.getId() == null) {
-                controller.create(estudiante, em);
+                controller.create(estudiante);
             } else {
-                controller.edit(estudiante, em);
+                try {
+                    controller.edit(estudiante);
+                } catch (Exception ex) {
+                    throw new PreexistingEntityException(ex.getMessage());
+                }
             }
-            em.getTransaction().commit();
         } else {
             throw new ExcepcionTipoNoSoportado("La clase '"+this.getClass().getName()+"' no puede guardar un registro de la clase '"+informacionPersona.getClass().getName()+"'");
         }
     }
-    
 }

@@ -6,14 +6,16 @@
 package sce.asignacion.curso.nota.estudiante;
 
 import java.util.ArrayList;
+import sce.asignacion.curso.nota.orm.ActividadEntity;
 
 /**
- *
+ * Clase que obtendrá las
+ * @Sugerencia: Renombrar la clase a EstudianteConsultaNotasCurso
  * @author Usuario
  */
 public class ConsultaNotaCurso {
     private final Float notaEsperadaCurso;
-    private final ArrayList<ConsultaNotaActividad> listaNotaActividades;
+    private final ArrayList<ConsultaNotaActividadEstudiante> listaNotaActividades;
     
     public ConsultaNotaCurso(Float notaEsperadaCurso) {
         this.notaEsperadaCurso = notaEsperadaCurso;
@@ -21,33 +23,38 @@ public class ConsultaNotaCurso {
     }
 
     public Float getNotaEsperadaCurso() { return notaEsperadaCurso; }
-    public ConsultaNotaActividad getNotaActividad(int index) {
+    public ConsultaNotaActividadEstudiante getNotaActividad(int index) {
         if (index<0 || index>=listaNotaActividades.size()) {
             return null;
         }
         return listaNotaActividades.get(index);
     }
-    public void addNotaActividad(ConsultaNotaActividad notaActividad) { this.listaNotaActividades.add(notaActividad); }
-    public void setNotaObtenida(int index, Float notaObtenida) {
+    public void addNotaActividad(ConsultaNotaActividadEstudiante notaActividad) { this.listaNotaActividades.add(notaActividad); }
+    public boolean setNotaObtenida(int index, Float notaObtenida) {
         if (index<0 || index>=listaNotaActividades.size()) {
-            return;
+            return false;
         }
         listaNotaActividades.get(index).setNotaObtenida(notaObtenida);
+        return true;
     }
-    
-    public static class ConsultaNotaActividad {
-        private String grupoActividad, nombreActividad;
-        private Float notaEsperada, notaObtenida;
+    /**
+     * Registro no editable para mostrar la Nota de una Actividad de un Estudiante.
+     */
+    public static class ConsultaNotaActividadEstudiante {
+        private final String grupoActividad, nombreActividad;
+        private final Float notaEsperada;
+        private Float notaObtenida=0f;
         
-        public ConsultaNotaActividad() {}
+        public ConsultaNotaActividadEstudiante(ActividadEntity actividad) {
+            this.grupoActividad = actividad.getGrupo_actividad();
+            this.nombreActividad = actividad.getActividad();
+            this.notaEsperada = actividad.getEsperado();
+        }
 
         public String getGrupoActividad() { return grupoActividad; }
         public String getNombreActividad() { return nombreActividad; }
         public Float getNotaEsperada() { return notaEsperada; }
-        public Float getNotaObtenida() { return notaObtenida; }        
-        public void setGrupoActividad(String grupoActividad) { this.grupoActividad = grupoActividad; }
-        public void setNombreActividad(String nombreActividad) { this.nombreActividad = nombreActividad; }
-        public void setNotaEsperada(Float notaEsperada) { this.notaEsperada = notaEsperada; }
+        public Float getNotaObtenida() { return notaObtenida; }
         public void setNotaObtenida(Float notaObtenida) { this.notaObtenida = notaObtenida; }
     }
 }

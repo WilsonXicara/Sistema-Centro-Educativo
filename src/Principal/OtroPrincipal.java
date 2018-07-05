@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import sce.excepciones.ExcepcionParametrosIncompletos;
 import sce.excepciones.NonexistentEntityException;
 import sce.persona.AtributoAdicionalEditor;
 
@@ -43,6 +44,8 @@ public class OtroPrincipal {
             creador.guardarCambios();
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcepcionParametrosIncompletos ex) {
+            Logger.getLogger(OtroPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

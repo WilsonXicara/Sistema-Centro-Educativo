@@ -6,27 +6,24 @@
 package sce.asignacion.estudiante;
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import sce.asignacion.estudiante.orm.AsignacionEstudianteEntity;
-import sce.asignacion.estudiante.orm.AsignacionEstudianteJpaController;
+import sce.persona.estudiante.orm.EstudianteEntity;
+import sce.persona.estudiante.orm.EstudianteJpaController;
 
 /**
  *
  * @author Usuario
  */
 public class AsignacionEstudianteBuscador {
-    public static final int ESTUDIANTES_A_CARRERA = 400;
-    public static final int ESTUDIANTES_A_GRADO = 401;
-    
-    public static ArrayList<AsignacionEstudianteEntity> obtenerEstudiantesAsignados(EntityManagerFactory emf, int tipoAsignacion, Long idAsociado) {
-        switch(tipoAsignacion) {
-            case ESTUDIANTES_A_CARRERA:
-                return (ArrayList<AsignacionEstudianteEntity>)new AsignacionEstudianteJpaController(emf)
-                        .buscarPorCarrera(idAsociado);
-            case ESTUDIANTES_A_GRADO:
-                return (ArrayList<AsignacionEstudianteEntity>)new AsignacionEstudianteJpaController(emf)
-                        .buscarPorGrado(idAsociado);
+    public static ArrayList<InformacionEstudianteParaListado> obtenerListadoEstudiantesPorCurso(EntityManagerFactory emf, Long idAsignacionCurso) {
+        ArrayList<InformacionEstudianteParaListado> listaEstudiantes = new ArrayList<>();
+        List<EstudianteEntity> estudiantes = new EstudianteJpaController(emf).buscarPorActividad(idAsignacionCurso);
+        for (EstudianteEntity estudiante : estudiantes) {
+            listaEstudiantes.add(new InformacionEstudianteParaListado(
+                    estudiante.getId(),
+                    estudiante.getNombres(), estudiante.getApellidos()));
         }
-        return new ArrayList<>();
+        return listaEstudiantes;
     }
 }

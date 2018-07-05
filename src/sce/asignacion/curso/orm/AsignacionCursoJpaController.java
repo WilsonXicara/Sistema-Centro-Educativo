@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.asignacion.curso.orm.AsignacionCursoEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -39,10 +38,11 @@ public class AsignacionCursoJpaController implements Serializable {
                 .setParameter("idCarrera", idCarrera)
                 .getResultList();
     }
-    public List<AsignacionCursoEntity> buscarPorGrado(Long idGrado) {
+    public List<AsignacionCursoEntity> buscarPorGrado(Long idCarrera, Long idGrado) {
         EntityManager em = getEntityManager();
         TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorGrado", AsignacionCursoEntity.class);
         return query
+                .setParameter("idCarrera", idCarrera)
                 .setParameter("idGrado", idGrado)
                 .getResultList();
     }
