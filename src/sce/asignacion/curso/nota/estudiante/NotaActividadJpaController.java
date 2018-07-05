@@ -79,7 +79,7 @@ public class NotaActividadJpaController implements Serializable {
                 notaActividadEntity = em.getReference(NotaActividadEntity.class, id);
                 notaActividadEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The notaActividadEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("No existe una Nota de Actividad con id="+id);
             }
             em.remove(notaActividadEntity);
             em.getTransaction().commit();

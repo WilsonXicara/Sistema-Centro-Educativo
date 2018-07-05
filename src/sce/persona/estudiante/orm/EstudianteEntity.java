@@ -21,8 +21,16 @@ import sce.persona.PersonaEntity;
  */
 @Entity(name = EstudianteEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="Estudiante.buscarPorCui", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.cui = :estudianteCui"),
-    @NamedQuery(name="Estudiante.buscarPorAsignacionId", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.asignacion_id = :asignacionId")
+    @NamedQuery(name="Estudiante.buscarPorCui", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.cui = :cuiEstudiante"),
+    @NamedQuery(name="Estudiante.buscarPorAsignacionId", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.asignacion_id = :idAsignacion"),
+    @NamedQuery(name="Estudiante.buscarAnulados", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.anulado = 1"),
+    @NamedQuery(name="Estudiante.buscarNoAsignados", query="SELECT e FROM "+EstudianteEntity.tableName+" AS e WHERE e.asignacion_id = 0"),
+    @NamedQuery(
+            name="Estudiante.buscarPorActividad",
+            query="SELECT e, ae FROM asignacion_estudiante_cursos AS aec "
+                    + "INNER JOIN asignacion_estudiante AS ae ON aec.asignacion_estudiante_id = ae.id "
+                    + "INNER JOIN estudiante AS e ON ae.estudiante_id = e.id "
+                    + "WHERE aec.asignacion_curso_id = :idAsignacionCurso")
 })
 @Table(name = EstudianteEntity.tableName)
 public class EstudianteEntity implements Serializable, PersonaEntity {

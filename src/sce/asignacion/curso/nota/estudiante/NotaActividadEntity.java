@@ -19,10 +19,10 @@ import javax.persistence.Table;
  * @author Usuario
  */
 @Entity(name = NotaActividadEntity.tableName)
-/*@NamedQueries({
+@NamedQueries({
     @NamedQuery(name="NotaActividad.buscarPorAsignacionEstudianteCurso", query="SELECT na FROM "+NotaActividadEntity.tableName+" AS na WHERE na.asignacion_estudiante_cursos_id = :idAsignacionEstudianteCurso"),
     @NamedQuery(name="NotaActividad.buscarPorActividad", query="SELECT na FROM "+NotaActividadEntity.tableName+" AS na WHERE na.actividad_id = :idActividad")
-})*/
+})
 @Table(name = NotaActividadEntity.tableName)
 public class NotaActividadEntity implements Serializable {
     private static final long serialVersionUID = 1L;

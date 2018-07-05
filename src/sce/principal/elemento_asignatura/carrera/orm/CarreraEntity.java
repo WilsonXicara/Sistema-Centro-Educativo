@@ -1,24 +1,29 @@
+package sce.principal.elemento_asignatura.carrera.orm;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sce.asignacion.carrera.orm;
+
 
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import sce.principal.elemento_asignatura.ElementoAsignaturaEntity;
 
 /**
  *
  * @author Usuario
  */
 @Entity(name = CarreraEntity.tableName)
+@NamedQuery(name ="Carrera.buscarPorNombre", query ="SELECT c FROM "+CarreraEntity.tableName +" AS c WHERE c.nombre = :nombreCarrera")
 @Table(name = CarreraEntity.tableName)
-public class CarreraEntity implements Serializable {
+public class CarreraEntity implements Serializable, ElementoAsignaturaEntity{
     private static final long serialVersionUID = 1L;
     public static final String tableName = "carrera";
     
@@ -28,6 +33,17 @@ public class CarreraEntity implements Serializable {
     private String nombre, descripcion;
     private Long pensum_id;
 
+    public CarreraEntity() {
+    }
+
+    public CarreraEntity(String nombre, String descripcion, Long pensum_id) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.pensum_id = pensum_id;
+    }
+
+    
+    
     public Long getId() { return id; }
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }

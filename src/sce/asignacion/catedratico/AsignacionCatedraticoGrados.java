@@ -5,13 +5,12 @@
  */
 package sce.asignacion.catedratico;
 
-import sce.asignacion.consultor.ConsultorGeneral;
 import java.util.ArrayList;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import sce.asignacion.AsignacionCommand;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoGradosEntity;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoGradosJpaController;
+import sce.asignacion.grado.ConsultorAsignacionGrado;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -41,30 +40,29 @@ public class AsignacionCatedraticoGrados implements AsignacionCommand{
     
     @Override
     public void crearAsignacion() throws NonexistentEntityException{
-        EntityManager em = null;
-        em = emf.createEntityManager();
-        em.getTransaction().begin();
-        
-        if (!ConsultorGeneral.asignacionCatedraticoAnulada(idAsignacionCat, emf)){
-            AsignacionCatedraticoGradosEntity asignacionCatGrados = new AsignacionCatedraticoGradosEntity(); 
-            asignacionCatGrados.setAsignacion_catedratico_id(idAsignacionCat);
-            for (Long elementos : idAsignacionGrado){
-                if (ConsultorGeneral.asignaciongradoExistente(elementos, emf)){
-                    asignacionCatGrados.setAsignacion_grado_id(elementos);
-                    new AsignacionCatedraticoGradosJpaController(emf).create(asignacionCatGrados,em);    
-                }
-                else {
-                    em.getTransaction().rollback();
-                    throw new NonexistentEntityException("No existen una asignaciÃ³n grado con el id siguiente: " + elementos);
-                }  
-            }
-        } else {
-            em.getTransaction().rollback();
-            throw new NonexistentEntityException("No existen una asignaciÃ³n catedratico con el id siguiente: " + idAsignacionCat );
+        if (!ConsultorAsignacionCatedratico.existeAsignacionCatedratico(idAsignacionCat, emf)){
+            throw new NonexistentEntityException("No existen una asignacion catedratico con el id siguiente: " + idAsignacionCat);
+        }
+        if (ConsultorAsignacionCatedratico.isAsignacionCatedraticoAnulada(idAsignacionCat, emf)){
+            throw new NonexistentEntityException("La asignacion catedratico con id " + idAsignacionCat + "está anulada");
         }
         
-        em.getTransaction().commit();
-    
-    }
+        AsignacionCatedraticoGradosEntity asignacionCatGrados = new AsignacionCatedraticoGradosEntity(); 
+        asignacionCatGrados.setAsignacion_catedratico_id(idAsignacionCat);
+        for (Long elementos : idAsignacionGrado){
+            if (ConsultorAsignacionGrado.existeAsignacionGrado(elementos, emf)){
+                if (!ConsultorAsignacionGrado.isAsignacionGradoAnulada(elementos, emf))
+                {
+                    asignacionCatGrados.setAsignacion_grado_id(elementos);
+                    new AsignacionCatedraticoGradosJpaController(emf).create(asignacionCatGrados);
+                } else {
+                    throw new NonexistentEntityException("La asignacion grado con id " +idAsignacionGrado+ "está anulada.");
+                }        
+            }
+            else {
+                throw new NonexistentEntityException("No existen una asignacion grado con el id siguiente: " + elementos);
+            }  
+        }
+    } 
     
 }

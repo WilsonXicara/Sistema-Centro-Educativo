@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.persona.estudiante.orm.EstudianteEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -35,7 +34,7 @@ public class EstudianteJpaController implements Serializable {
     public EstudianteEntity buscarPorCui(String cui) {
         EntityManager em = getEntityManager();
         TypedQuery<EstudianteEntity> query = em.createNamedQuery("Estudiante.buscarPorCui", EstudianteEntity.class);
-        List<EstudianteEntity> encontrados = query.setParameter("estudianteCui", cui).getResultList();
+        List<EstudianteEntity> encontrados = query.setParameter("cuiEstudiante", cui).getResultList();
         if (encontrados.isEmpty()) {
             return null;
         }
@@ -44,7 +43,22 @@ public class EstudianteJpaController implements Serializable {
     public List<EstudianteEntity> buscarPorAsignacionId(Long idAsignacion) {
         EntityManager em = getEntityManager();
         TypedQuery<EstudianteEntity> query = em.createNamedQuery("Estudiante.buscarPorAsignacionId", EstudianteEntity.class);
-        return query.setParameter("asignacionId", idAsignacion).getResultList();
+        return query.setParameter("idAsignacion", idAsignacion).getResultList();
+    }
+    public List<EstudianteEntity> buscarAnulados() {
+        EntityManager em = getEntityManager();
+        TypedQuery<EstudianteEntity> query = em.createNamedQuery("Estudiante.buscarAnulados", EstudianteEntity.class);
+        return query.getResultList();
+    }
+    public List<EstudianteEntity> buscarNoAsignados() {
+        EntityManager em = getEntityManager();
+        TypedQuery<EstudianteEntity> query = em.createNamedQuery("Estudiante.buscarNoAsignados", EstudianteEntity.class);
+        return query.getResultList();
+    }
+    public List<EstudianteEntity> buscarPorActividad(Long idAsignacionCurso) {
+        EntityManager em = getEntityManager();
+        TypedQuery<EstudianteEntity> query = em.createNamedQuery("Estudiante.buscarPorActividad", EstudianteEntity.class);
+        return query.setParameter("idAsignacionCurso", idAsignacionCurso).getResultList();
     }
 
     public void create(EstudianteEntity estudianteEntity) {
@@ -71,6 +85,7 @@ public class EstudianteJpaController implements Serializable {
 
     public void edit(EstudianteEntity estudianteEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
+        Long id = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
@@ -79,12 +94,12 @@ public class EstudianteJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = estudianteEntity.getId();
+                id = estudianteEntity.getId();
                 if (findEstudianteEntity(id) == null) {
-                    throw new NonexistentEntityException("The estudianteEntity with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("No existe un Estudiante con id="+id);
                 }
             }
-            throw ex;
+            throw new Exception("Ocurrió un error al intentar actualizar el Estudiante con id="+id);
         } finally {
             if (em != null) {
                 em.close();
