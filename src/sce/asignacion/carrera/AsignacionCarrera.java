@@ -5,13 +5,13 @@
  */
 package sce.asignacion.carrera;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import sce.asignacion.AsignacionCommand;
 import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
 import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
-import sce.asignacion.consultor.ConsultorGeneral;
 import sce.excepciones.NonexistentEntityException;
+import sce.principal.elemento_asignatura.carrera.ConsultorRegistroCarrera;
+import sce.principal.elemento_asignatura.ciclo.ConsultorRegistroCiclo;
 
 /**
  *
@@ -39,25 +39,18 @@ public class AsignacionCarrera implements AsignacionCommand {
     
     @Override
     public void crearAsignacion() throws NonexistentEntityException {
-        EntityManager em = null;
-        em = emf.createEntityManager();
-        em.getTransaction().begin();
-        if (ConsultorGeneral.cicloExistente(idCicloEscolar, emf) && ConsultorGeneral.cicloVigente(idCicloEscolar, emf)){
+        if (!ConsultorRegistroCarrera.existeCarrera(idCarrera, emf)){
+            throw new NonexistentEntityException("No existe una carrera con el id siguiente: " + idCarrera);  
+        }
+        if (ConsultorRegistroCiclo.existeCicloEscolar(idCicloEscolar, emf) && ConsultorRegistroCiclo.esVigenteCicloEscolar(idCicloEscolar, emf)){
             AsignacionCarreraEntity asignacionCarrera = new AsignacionCarreraEntity();
+            asignacionCarrera.setCarrera_id(idCarrera);
             asignacionCarrera.setCiclo_escolar_id(idCicloEscolar);
-            if (ConsultorGeneral.carreraExistente(idCarrera, emf)){
-                asignacionCarrera.setCarrera_id(idCarrera);
-                new AsignacionCarreraJpaController(emf).create(asignacionCarrera,em);
-            } else {
-                em.getTransaction().rollback();
-                throw new NonexistentEntityException("No existe una carrera con el id siguiente: " + idCarrera);
-            }
+            new AsignacionCarreraJpaController(emf).create(asignacionCarrera);
         } else {
-            em.getTransaction().rollback();
-            throw new NonexistentEntityException("El ciclo escolar con el id siguiente: " + idCicloEscolar + "no está disponible o pueda que no exista");
+            throw new NonexistentEntityException("El ciclo con id " +idCicloEscolar+ "no existe o no está vigente.");
         }
         
-     em.getTransaction().commit();
     }
     
 }

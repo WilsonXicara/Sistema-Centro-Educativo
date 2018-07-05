@@ -52,6 +52,7 @@ public class ActividadJpaController implements Serializable {
 
     public void edit(ActividadEntity actividadEntity) throws NonexistentEntityException, Exception {
         EntityManager em = null;
+        Long id = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
@@ -60,12 +61,12 @@ public class ActividadJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = actividadEntity.getId();
+                id = actividadEntity.getId();
                 if (findActividadEntity(id) == null) {
-                    throw new NonexistentEntityException("The actividadEntity with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("No existe la Actividad con id="+id);
                 }
             }
-            throw ex;
+            throw new Exception("Ocurrió un error al actualizar la Actividad con id="+id);
         } finally {
             if (em != null) {
                 em.close();
@@ -86,7 +87,7 @@ public class ActividadJpaController implements Serializable {
                 actividadEntity = em.getReference(ActividadEntity.class, id);
                 actividadEntity.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The actividadEntity with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("No existe una Actividad con id="+id);
             }
             em.remove(actividadEntity);
             em.getTransaction().commit();

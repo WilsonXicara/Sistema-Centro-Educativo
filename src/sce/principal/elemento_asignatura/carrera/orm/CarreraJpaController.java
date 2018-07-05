@@ -1,9 +1,11 @@
+package sce.principal.elemento_asignatura.carrera.orm;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sce.asignacion.carrera.orm;
+
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +16,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.asignacion.carrera.orm.CarreraEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import sce.principal.elemento_asignatura.ElementoAsignaturaEntity;
 
 /**
  *
@@ -24,7 +25,7 @@ import javax.persistence.Table;
     @NamedQuery(name="CicloEscolar.buscarCicloNoListo", query="SELECT ce FROM "+CicloEscolarEntity.tableName+" AS ce WHERE ce.listo = 0")
 })
 @Table(name = CicloEscolarEntity.tableName)
-public class CicloEscolarEntity implements Serializable {
+public class CicloEscolarEntity implements Serializable, ElementoAsignaturaEntity {
     private static final long serialVersionUID = 1L;
     public static final String tableName = "ciclo_escolar";
     
@@ -33,6 +34,15 @@ public class CicloEscolarEntity implements Serializable {
     private Long id;
     private String ciclo_escolar;
     private Boolean listo=false, cerrado=false;
+    
+     public CicloEscolarEntity() {
+    }
+
+    public CicloEscolarEntity(String ciclo_escolar, Boolean listo, Boolean cerrado) {
+        this.ciclo_escolar = ciclo_escolar;
+        this.listo = listo;
+        this.cerrado = cerrado;
+    }
 
     public Long getId() { return id; }
     public String getCiclo_escolar() { return ciclo_escolar; }

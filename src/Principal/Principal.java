@@ -21,18 +21,19 @@ import sce.persona.estudiante.InformacionEstudianteBuilder;
 import sce.persona.builder.InformacionPersonaBuilder;
 import sce.persona.builder.InformacionPersonaDirector;
 import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
-import sce.asignacion.carrera.orm.CarreraEntity;
 import sce.principal.elemento_asignatura.ciclo.orm.CicloEscolarEntity;
 import sce.principal.elemento_asignatura.curso.orm.CursoEntity;
 import sce.asignacion.carrera.orm.DetallePensumEntity;
 import sce.asignacion.carrera.orm.PensumEntity;
 import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
-import sce.asignacion.carrera.orm.CarreraJpaController;
 import sce.principal.elemento_asignatura.ciclo.orm.CicloEscolarJpaController;
 import sce.principal.elemento_asignatura.curso.orm.CursoJpaController;
 import sce.asignacion.carrera.orm.DetallePensumJpaController;
 import sce.asignacion.carrera.orm.PensumJpaController;
+import sce.excepciones.ExcepcionParametrosIncompletos;
 import sce.excepciones.NonexistentEntityException;
+import sce.principal.elemento_asignatura.carrera.orm.CarreraEntity;
+import sce.principal.elemento_asignatura.carrera.orm.CarreraJpaController;
 
 /**
  *
@@ -114,6 +115,8 @@ public class Principal {
             atributos.guardarCambios();
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcepcionParametrosIncompletos ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         InformacionPersonaBuilder builder;
         InformacionPersonaDirector administrador = new InformacionPersonaDirector();
@@ -159,6 +162,8 @@ public class Principal {
             //System.out.println("-telefono: "+creador.eliminarAtributo("telefono"));
             creador.guardarCambios();
         } catch (NonexistentEntityException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExcepcionParametrosIncompletos ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("LISTAS");
