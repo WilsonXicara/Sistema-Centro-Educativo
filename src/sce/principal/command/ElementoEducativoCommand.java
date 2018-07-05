@@ -9,7 +9,5 @@ package sce.principal.command;
  *
  * @author Usuario
  */
-public interface CatedraticoCommand {
-    public void consultarGrados();
-    public void consultarCursos();
+public interface ElementoEducativoCommand {
 }

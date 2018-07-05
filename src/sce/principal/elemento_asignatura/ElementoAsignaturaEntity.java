@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sce.principal.command;
+package sce.principal.elemento_asignatura;
 
 /**
  *
  * @author Usuario
  */
-public interface CatedraticoCommand {
-    public void consultarGrados();
-    public void consultarCursos();
+public interface ElementoAsignaturaEntity {
+    
 }
