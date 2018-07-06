@@ -32,23 +32,33 @@ public class AsignacionCursosEstudianteJpaController implements Serializable {
         return emf.createEntityManager();
     }
     
-    public AsignacionCursosEstudianteEntity buscarCursoAsignado(Long idAsignacionEst, Long idCurso) {
+    public AsignacionCursosEstudianteEntity buscarPorEstudianteCurso(Long idAsignacionEst, Long idCurso) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionCursosEstudianteEntity> query = em.createNamedQuery("AsignacionCursosEstudiante.buscarCursoAsignado", AsignacionCursosEstudianteEntity.class);
+        TypedQuery<AsignacionCursosEstudianteEntity> query = em.createNamedQuery("AsignacionCursosEstudiante.buscarPorEstudianteCurso", AsignacionCursosEstudianteEntity.class);
         List<AsignacionCursosEstudianteEntity> encontrados = query
-                .setParameter("idAsignacionEst", idAsignacionEst)
-                .setParameter("idCurso", idCurso)
+                .setParameter("idAsignacionEstudiante", idAsignacionEst)
+                .setParameter("idAsignacionCurso", idCurso)
                 .getResultList();
         if (encontrados.isEmpty()) {
             return null;
         }
         return encontrados.get(0);
     }
+    public List<AsignacionCursosEstudianteEntity> buscarPorAsignacionEstudiante(Long idAsignacionEstudiante) {
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCursosEstudianteEntity> query = em.createNamedQuery("AsignacionCursosEstudiante.buscarPorAsignacionEstudiante", AsignacionCursosEstudianteEntity.class);
+        return query.setParameter("idAsignacionEstudiante", idAsignacionEstudiante).getResultList();
+    }
+    public List<AsignacionCursosEstudianteEntity> buscarPorAsignacionCurso(Long idAsignacionCurso) {
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCursosEstudianteEntity> query = em.createNamedQuery("AsignacionCursosEstudiante.buscarPorAsignacionCurso", AsignacionCursosEstudianteEntity.class);
+        return query.setParameter("idAsignacionCurso", idAsignacionCurso).getResultList();
+    }
 
     public void create(AsignacionCursosEstudianteEntity asignacionCursosEstudiante) {
         EntityManager em = null;
         try {
-            AsignacionCursosEstudianteEntity existente = buscarCursoAsignado(asignacionCursosEstudiante.getAsignacion_estudiante_id(), asignacionCursosEstudiante.getAsignacion_curso_id());
+            AsignacionCursosEstudianteEntity existente = buscarPorEstudianteCurso(asignacionCursosEstudiante.getAsignacion_estudiante_id(), asignacionCursosEstudiante.getAsignacion_curso_id());
             if (existente != null) {
                 asignacionCursosEstudiante.copy(existente);
                 return;

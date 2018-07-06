@@ -7,36 +7,35 @@ package sce.asignacion.estudiante;
 
 import java.util.ArrayList;
 import java.util.List;
-import sce.asignacion.estudiante.orm.AsignacionEstudianteEntity;
-import sce.asignacion.estudiante.orm.AsignacionEstudianteJpaController;
+import sce.asignacion.estudiante.orm.AsignacionCursosEstudianteEntity;
+import sce.asignacion.estudiante.orm.AsignacionCursosEstudianteJpaController;
 import sce.excepciones.ExcepcionParametrosIncompletos;
 import sce.excepciones.NonexistentEntityException;
 import sce.principal.GestorConexion;
 
 /**
- * Anulación de Asignación de Estudiante. Al anular dicha asignación, se debe anular las Asignaciones del Estudiante
- * a Cursos que estén relacionadas.
+ *
  * @author Usuario
  */
-public class AsignacionEstudianteAnulador {
-    private final Long idAsignacionCarrera;
-    private Long idAsignacionGrado;
-    private final ArrayList<Long> listaIDAsignacionEsutdiantes;
+public class AsignacionEstudianteCursoAnulador {
+    private final Long idAsignacionCurso;
+    private final Long idAsignacionEstudiante;
+    private final ArrayList<Long> listaIDAsignacionEsutdiantesCurso;
     private final ArrayList<String> listaRazonAnulacion;
 
-    public AsignacionEstudianteAnulador() {
-        idAsignacionCarrera = 0l;
-        listaIDAsignacionEsutdiantes = new ArrayList<>();
+    public AsignacionEstudianteCursoAnulador() {
+        idAsignacionCurso = idAsignacionEstudiante = 0l;
+        listaIDAsignacionEsutdiantesCurso = new ArrayList<>();
         listaRazonAnulacion = new ArrayList<>();
     }
-    public AsignacionEstudianteAnulador(Long idAsignacionCarrera) {
-        this.idAsignacionCarrera = idAsignacionCarrera;
-        this.listaIDAsignacionEsutdiantes = new ArrayList<>();
+    public AsignacionEstudianteCursoAnulador(Long idAsignacionCurso, Long idAsigancionEstudiante) {
+        this.idAsignacionCurso = idAsignacionCurso;
+        this.idAsignacionEstudiante = idAsigancionEstudiante;
+        this.listaIDAsignacionEsutdiantesCurso = new ArrayList<>();
         this.listaRazonAnulacion = new ArrayList<>();
     }
-    public void setIdAsignacionGrado(Long idAsignacionGrado) { this.idAsignacionGrado = idAsignacionGrado; }
-    public void addAsignacionEstudianteParaAnular(Long idAsignacionEstudiante, String razonAnulacion) {
-        listaIDAsignacionEsutdiantes.add(idAsignacionEstudiante);
+    public void addAsignacionEstudianteCursoParaAnular(Long idAsignacionEstudianteCurso, String razonAnulacion) {
+        listaIDAsignacionEsutdiantesCurso.add(idAsignacionEstudianteCurso);
         listaRazonAnulacion.add(razonAnulacion);
     }
     /**
@@ -46,24 +45,19 @@ public class AsignacionEstudianteAnulador {
      */
     public void anularAsignacionesEstudiante()
             throws ExcepcionParametrosIncompletos, NonexistentEntityException {
-        //@Nota para módulo correspondiente
-        // CONSULTAR QUE LA ASIGNACIÓN DE CARRERA Y LA ASIGNACIÓN DE GRADO (si se especifica) EXISTAN
         int hashCodeEntityManager = GestorConexion.solicitarEntityManager(GestorConexion.NUEVO_ENTITY_MANAGER).hashCode();
         int miHashCode = this.hashCode();
         GestorConexion.transaccionBEGIN(hashCodeEntityManager, miHashCode);
-        int cantidad = listaIDAsignacionEsutdiantes.size(), index;
-        Long idAsignacionEstudiante;
+        int cantidad = listaIDAsignacionEsutdiantesCurso.size(), index;
+        Long idAsignacionEstudianteCurso;
         String razonAnulacion;
         try {
             for(index=0; index<cantidad; index++) {
-                idAsignacionEstudiante = listaIDAsignacionEsutdiantes.get(index);
+                idAsignacionEstudianteCurso = listaIDAsignacionEsutdiantesCurso.get(index);
                 razonAnulacion = listaRazonAnulacion.get(index);
-                // Anulación de la Asignación de Estudiante
-                AsignacionEstudianteAnulador
-                        .anularAsignacionEstudianteCurso(hashCodeEntityManager, idAsignacionEstudiante, razonAnulacion);
-                //@Nota para módulo correspondiente
-                // Se procede a anular todas las Asignaciones de Estudiante a Curso de todos los cursos que el estudiante
-                // tenga asignado. Esto es una llamada a MÓDULO_ASIGNACION_ESTUDIANTE_CURSO.anularAsignaciones(idAsignacionEstudiante)
+                // Anulación de la Asignación de Estudiante a Curso
+                AsignacionEstudianteCursoAnulador
+                        .anularAsignacionEstudianteCurso(hashCodeEntityManager, idAsignacionEstudiante, idAsignacionCurso, razonAnulacion);
             }
         } catch (ExcepcionParametrosIncompletos | NonexistentEntityException ex) {
             GestorConexion.transaccionROLLBACK(hashCodeEntityManager, miHashCode);
@@ -76,11 +70,12 @@ public class AsignacionEstudianteAnulador {
      * Anula UNA Asignaciòn de Estudiante.
      * @param hashCodeEntityManager
      * @param idAsignacionEstudiante
+     * @param idAsignacionCurso
      * @param razonAnulacion
      * @throws ExcepcionParametrosIncompletos
      * @throws NonexistentEntityException 
      */
-    public static void anularAsignacionEstudianteCurso(int hashCodeEntityManager, Long idAsignacionEstudiante, String razonAnulacion)
+    public static void anularAsignacionEstudianteCurso(int hashCodeEntityManager, Long idAsignacionEstudiante, Long idAsignacionCurso, String razonAnulacion)
             throws ExcepcionParametrosIncompletos, NonexistentEntityException {
         // Se comprueba que la Asignación de Estudiante exista y no esté anulada
         if (idAsignacionEstudiante == null) {
@@ -88,16 +83,16 @@ public class AsignacionEstudianteAnulador {
         } if (razonAnulacion.length() == 0) {
             throw new ExcepcionParametrosIncompletos("Especifique la razón de anulación de la Asignación de Estudiante con id="+idAsignacionEstudiante);
         }
-        AsignacionEstudianteJpaController controller = new AsignacionEstudianteJpaController(GestorConexion.crearEntityManagerFactory());
-        AsignacionEstudianteEntity asignacion = controller.findAsignacion_Estudiante(idAsignacionEstudiante);
+        AsignacionCursosEstudianteJpaController controller = new AsignacionCursosEstudianteJpaController(GestorConexion.crearEntityManagerFactory());
+        AsignacionCursosEstudianteEntity asignacion = controller.buscarPorEstudianteCurso(idAsignacionEstudiante, idAsignacionCurso);
         if (asignacion == null) {
-            throw new NonexistentEntityException("No existe una Asignación de Estudiante con id="+idAsignacionEstudiante);
+            throw new NonexistentEntityException("No existe una Asignación de Estudiante con id="+idAsignacionEstudiante+" relacionada con una Asignación de Curso con id="+idAsignacionCurso);
         } if (asignacion.getAnulado()) {
-            System.err.println("La Asigación de Estudiante con id="+idAsignacionEstudiante+" ya ha sido anulada");
+            System.err.println("La Asigación de Estudiante a Curso con id="+idAsignacionEstudiante+" ya ha sido anulada");
         }
         // Inicio de la Transacción
         int miEntityManagerHashCode = GestorConexion.solicitarEntityManager(hashCodeEntityManager).hashCode();
-        int miHashCode = new AsignacionEstudianteAnulador().hashCode();
+        int miHashCode = new AsignacionEstudianteCursoAnulador().hashCode();
         GestorConexion.transaccionBEGIN(miEntityManagerHashCode, miHashCode);
         //@Nota para módulo correspondiente
         // Se procede a anular todas las Asignaciones de Estudiante a Curso de todos los cursos que el estudiante
@@ -119,30 +114,30 @@ public class AsignacionEstudianteAnulador {
         GestorConexion.eliminarEntityManager(miEntityManagerHashCode, miHashCode);
     }
     /**
-     * Anula las Asignaciones de Estudiante relacionadas a la Asignación de Grado especificada.
+     * Anula las Asignaciones de Estudiante a Curso relacionadas a la Asignación de Estudiante especificada.
      * @param hashCodeEntityManager
-     * @param idAsignacionGrado
+     * @param idAsignacionEstudianteCurso
      * @param razonAnulacion
      * @throws ExcepcionParametrosIncompletos
      * @throws NonexistentEntityException 
      */
-    public static void anularAsignacionEstudiantesPorAnulacionGrado(int hashCodeEntityManager, Long idAsignacionGrado, String razonAnulacion)
+    public static void anularAsignacionEstudianteCursoPorAnulacionEstudiante(int hashCodeEntityManager, Long idAsignacionEstudianteCurso, String razonAnulacion)
             throws ExcepcionParametrosIncompletos, NonexistentEntityException {
-        if (idAsignacionGrado == null) {
+        if (idAsignacionEstudianteCurso == null) {
             return;
         } if (razonAnulacion.length() == 0) {
-            throw new ExcepcionParametrosIncompletos("Especifique la razón de anulación de las Asignaciones de Estudiante");
+            throw new ExcepcionParametrosIncompletos("Especifique la razón de anulación de las Asignaciones de Estudiantes a Curso");
         }
-        // Búsqueda de todas las Asignaciones de Estudiante relacionadas a la Asignación de Grado a anular
-        AsignacionEstudianteJpaController controller = new AsignacionEstudianteJpaController(GestorConexion.crearEntityManagerFactory());
-        List<AsignacionEstudianteEntity> listaEstudiantes = controller.buscarPorAsignacionGrado(idAsignacionGrado);
+        // Búsqueda de todas las Asignaciones de Estudiante a Curso relacionadas a la Asignación de Estudiante a anular
+        AsignacionCursosEstudianteJpaController controller = new AsignacionCursosEstudianteJpaController(GestorConexion.crearEntityManagerFactory());
+        List<AsignacionCursosEstudianteEntity> listaEstudiantesCurso = controller.buscarPorAsignacionEstudiante(idAsignacionEstudianteCurso);
         
         int miHashCodeEntityManager = GestorConexion.solicitarEntityManager(hashCodeEntityManager).hashCode();
-        int miHashCode = new AsignacionEstudianteAnulador().hashCode();
+        int miHashCode = new AsignacionEstudianteCursoAnulador().hashCode();
         GestorConexion.transaccionBEGIN(miHashCodeEntityManager, miHashCode);
         try {
-            for (AsignacionEstudianteEntity estudiante : listaEstudiantes) {
-                anularAsignacionEstudianteCurso(hashCodeEntityManager, estudiante.getId(), razonAnulacion);
+            for (AsignacionCursosEstudianteEntity estudiantesCurso : listaEstudiantesCurso) {
+                anularAsignacionEstudianteCurso(hashCodeEntityManager, idAsignacionEstudianteCurso, estudiantesCurso.getAsignacion_curso_id(), razonAnulacion);
             }
             GestorConexion.transaccionCOMMIT(miHashCodeEntityManager, miHashCode);
         } catch (ExcepcionParametrosIncompletos | NonexistentEntityException ex) {
@@ -151,30 +146,30 @@ public class AsignacionEstudianteAnulador {
         }
     }
     /**
-     * Anula las Asignaciones de Estudiante relacionadas a la Asignación de Carrera especificada.
+     * Anula las Asignaciones de Estudiante a Curso relacionadas a la Asignación de Curso especificada.
      * @param hashCodeEntityManager
-     * @param idAsignacionCarrera 
+     * @param idAsignacionCurso 
      * @param razonAnulacion
      * @throws ExcepcionParametrosIncompletos
      * @throws NonexistentEntityException 
      */
-    public static void anularAsignacionEstudiantesPorAnulacionCarrera(int hashCodeEntityManager, Long idAsignacionCarrera, String razonAnulacion)
+    public static void anularAsignacionEstudiantesPorAnulacionCurso(int hashCodeEntityManager, Long idAsignacionCurso, String razonAnulacion)
             throws ExcepcionParametrosIncompletos, NonexistentEntityException {
-        if (idAsignacionCarrera == null) {
+        if (idAsignacionCurso == null) {
             throw new ExcepcionParametrosIncompletos("La Asignación de Carrera con id=null no puede existir");
         } if (razonAnulacion.length() == 0) {
             throw new ExcepcionParametrosIncompletos("Especifique la razón de anulación de las Asignaciones de Estudiante");
         }
         // Búsqueda de todas las Asignaciones de Estudiante relacionadas a la Asignación de Carrera a anular
-        AsignacionEstudianteJpaController controller = new AsignacionEstudianteJpaController(GestorConexion.crearEntityManagerFactory());
-        List<AsignacionEstudianteEntity> listaEstudiantes = controller.buscarPorAsignacionCarrera(idAsignacionCarrera);
+        AsignacionCursosEstudianteJpaController controller = new AsignacionCursosEstudianteJpaController(GestorConexion.crearEntityManagerFactory());
+        List<AsignacionCursosEstudianteEntity> listaEstudiantesCurso = controller.buscarPorAsignacionCurso(idAsignacionCurso);
         
         int miHashCodeEntityManager = GestorConexion.solicitarEntityManager(hashCodeEntityManager).hashCode();
-        int miHashCode = new AsignacionEstudianteAnulador().hashCode();
+        int miHashCode = new AsignacionEstudianteCursoAnulador().hashCode();
         GestorConexion.transaccionBEGIN(miHashCodeEntityManager, miHashCode);
         try {
-            for (AsignacionEstudianteEntity estudiante : listaEstudiantes) {
-                anularAsignacionEstudianteCurso(hashCodeEntityManager, estudiante.getId(), razonAnulacion);
+            for (AsignacionCursosEstudianteEntity estudianteCurso : listaEstudiantesCurso) {
+                anularAsignacionEstudianteCurso(hashCodeEntityManager, estudianteCurso.getAsignacion_estudiante_id(), idAsignacionCurso, razonAnulacion);
             }
             GestorConexion.transaccionCOMMIT(miHashCodeEntityManager, miHashCode);
         } catch (ExcepcionParametrosIncompletos | NonexistentEntityException ex) {

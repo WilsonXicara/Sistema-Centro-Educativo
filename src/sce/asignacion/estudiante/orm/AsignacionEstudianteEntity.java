@@ -20,8 +20,8 @@ import javax.persistence.Table;
  */
 @Entity(name = AsignacionEstudianteEntity.tableName)
 @NamedQueries({
-    @NamedQuery(name="AsignacionEstudiante.buscarPorCarrera", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.asignacion_carrera_id = :idCarrera"),
-    @NamedQuery(name="AsignacionEstudiante.buscarPorGrado", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.asignacion_grado_id = :idGrado")
+    @NamedQuery(name="AsignacionEstudiante.buscarPorAsignacionCarrera", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.asignacion_carrera_id = :idAsignacionCarrera"),
+    @NamedQuery(name="AsignacionEstudiante.buscarPorAsignacionGrado", query="SELECT ae FROM "+AsignacionEstudianteEntity.tableName+" AS ae WHERE ae.asignacion_grado_id = :idAsignacionGrado")
 })
 @Table(name = AsignacionEstudianteEntity.tableName)
 public class AsignacionEstudianteEntity implements Serializable {

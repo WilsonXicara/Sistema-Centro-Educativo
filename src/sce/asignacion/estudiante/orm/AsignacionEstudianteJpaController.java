@@ -14,7 +14,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.asignacion.estudiante.orm.AsignacionEstudianteEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -32,21 +31,21 @@ public class AsignacionEstudianteJpaController implements Serializable {
         return emf.createEntityManager();
     }
     
-    public List<AsignacionEstudianteEntity> buscarPorCarrera(Long idCarrera) {
+    public List<AsignacionEstudianteEntity> buscarPorAsignacionCarrera(Long idAsignacionCarrera) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarPorCarrera", AsignacionEstudianteEntity.class);
-        return query.setParameter("idCarrera", idCarrera).getResultList();
+        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarPorAsignacionCarrera", AsignacionEstudianteEntity.class);
+        return query.setParameter("idAsignacionCarrera", idAsignacionCarrera).getResultList();
     }
-    public List<AsignacionEstudianteEntity> buscarPorGrado(Long idGrado) {
+    public List<AsignacionEstudianteEntity> buscarPorAsignacionGrado(Long idAsignacionGrado) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarPorGrado", AsignacionEstudianteEntity.class);
-        return query.setParameter("idEstudiante", idGrado).getResultList();
+        TypedQuery<AsignacionEstudianteEntity> query = em.createNamedQuery("AsignacionEstudiante.buscarPorAsignacionGrado", AsignacionEstudianteEntity.class);
+        return query.setParameter("idAsignacionGrado", idAsignacionGrado).getResultList();
     }
 
     public void create(AsignacionEstudianteEntity asignacionEstudiante) {
         EntityManager em = null;
         try {
-            /*AsignacionEstudianteEntity existente = buscarPorCarrera(asignacionEstudiante);
+            /*AsignacionEstudianteEntity existente = buscarPorAsignacionCarrera(asignacionEstudiante);
             if (existente != null) {
                 asignacionEstudiante.copy(existente);
                 return;
