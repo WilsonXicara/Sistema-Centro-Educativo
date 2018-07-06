@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import sce.asignacion.carrera.orm.AsignacionCarreraEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -35,6 +36,11 @@ public class AsignacionCatedraticoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         TypedQuery<AsignacionCatedraticoEntity> query = em.createNamedQuery("AsignacionCatedratico.buscarPorCarrera", AsignacionCatedraticoEntity.class);
         return query.setParameter("idCarrera",idCarrera).getResultList();
+    }
+     public List<AsignacionCatedraticoEntity> buscarPorCatedratico(Long idCatedratico){
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCatedraticoEntity> query = em.createNamedQuery("AsignacionCatedratico.buscarPorCatedratico", AsignacionCatedraticoEntity.class);
+        return query.setParameter("idCatedratico", idCatedratico).getResultList();
     }
 
     public void create(AsignacionCatedraticoEntity asignacionCatedraticoEntity) {

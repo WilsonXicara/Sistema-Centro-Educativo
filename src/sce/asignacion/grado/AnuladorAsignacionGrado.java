@@ -5,6 +5,8 @@
  */
 package sce.asignacion.grado;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import sce.asignacion.grado.orm.AsignacionGradoEntity;
 import sce.asignacion.grado.orm.AsignacionGradoJpaController;
@@ -35,6 +37,11 @@ public class AnuladorAsignacionGrado {
         AsignacionGradoEntity asignacionAnulada = new AsignacionGradoJpaController(emf).findAsignacion_Grado(idAsignacionGrado);
         asignacionAnulada.setAnulado(true);
         asignacionAnulada.setRazon_anulacion(razon_anulacion);      
+        try {
+            new AsignacionGradoJpaController(emf).edit(asignacionAnulada);
+        } catch (Exception ex) {
+            throw new NonexistentEntityException(ex.getMessage());
+        }
     }
     
 }

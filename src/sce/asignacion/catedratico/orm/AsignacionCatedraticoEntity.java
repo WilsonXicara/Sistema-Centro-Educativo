@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -18,7 +19,11 @@ import javax.persistence.Table;
  * @author Usuario
  */
 @Entity(name = AsignacionCatedraticoEntity.tableName)
-@NamedQuery(name ="AsignacionCatedratico.buscarPorCarrera", query ="SELECT ac FROM "+AsignacionCatedraticoEntity.tableName+" AS ac WHERE ac.asignacion_carrera_id = :idCarrera")
+@NamedQueries({ 
+    @NamedQuery(name ="AsignacionCatedratico.buscarPorCarrera", query ="SELECT ac FROM "+AsignacionCatedraticoEntity.tableName+" AS ac WHERE ac.asignacion_carrera_id = :idCarrera"),
+    @NamedQuery(name ="AsignacionCatedratico.buscarPorCatedratico", query ="SELECT c FROM "+AsignacionCatedraticoEntity.tableName+" AS c WHERE c.catedratico_id = :idCatedratico")
+})
+
 @Table(name = AsignacionCatedraticoEntity.tableName)
 public class AsignacionCatedraticoEntity implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -34,6 +34,11 @@ public class AnuladorAsignacionCatedratico {
         }
         AsignacionCatedraticoEntity asignacionAnulada = new AsignacionCatedraticoJpaController(emf).findAsignacionCatedraticoEntity(idAsignacionCatedratico);
         asignacionAnulada.setAnulado(true);
-        asignacionAnulada.setRazon_anulacion(razon_anulacion);      
+        asignacionAnulada.setRazon_anulacion(razon_anulacion); 
+        try {
+            new AsignacionCatedraticoJpaController(emf).edit(asignacionAnulada);
+        } catch (Exception ex) {
+            throw new NonexistentEntityException(ex.getMessage());
+        }
     }
 }
