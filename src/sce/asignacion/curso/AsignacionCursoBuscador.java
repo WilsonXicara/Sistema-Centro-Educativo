@@ -126,8 +126,8 @@ public class AsignacionCursoBuscador {
             AsignacionCursoJpaController controller = new AsignacionCursoJpaController(emf);
             List<AsignacionCursoEntity> cursosAsignados;
             cursosAsignados = (idAsignacionGrado == null)
-                    ? controller.buscarPorCarrera(idAsignacionCarrera)
-                    : controller.buscarPorGrado(idAsignacionCarrera, idAsignacionGrado);
+                    ? controller.buscarPorAsignacionCarrera(idAsignacionCarrera)
+                    : controller.buscarPorAsignacionGrado(idAsignacionCarrera, idAsignacionGrado);
             for (AsignacionCursoEntity cursoAsignado : cursosAsignados) {
                 DetalleAsignacionCurso nuevo = new DetalleAsignacionCurso(
                         cursoAsignado.getId(),  // idAsignacionCurso

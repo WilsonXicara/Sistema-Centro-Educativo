@@ -26,13 +26,16 @@ public class PensumEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String codigo, descripcion;
+    private Boolean listo = false;
 
     public Long getId() { return id; }
     public String getCodigo() { return codigo; }
     public String getDescripcion() { return descripcion; }
+    public Boolean isListo() { return listo; }
     public void setId(Long id) { this.id = id; }
     public void setCodigo(String codigo) { this.codigo = codigo; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setListo(Boolean listo) { this.listo = listo; }
     
     @Override
     public int hashCode() {
@@ -54,7 +57,7 @@ public class PensumEntity implements Serializable {
     }
     @Override
     public String toString() {
-        return "sce.principal.entity.PensumEntity{" + "id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + '}';
+        return "sce.principal.entity.PensumEntity{" + "id=" + id + ", codigo=" + codigo + ", descripcion=" + descripcion + ", listo="+listo+"}";
     }
     
     public void copy(Object object) {
@@ -63,6 +66,7 @@ public class PensumEntity implements Serializable {
             this.id = aux.id;
             this.codigo = aux.codigo;
             this.descripcion = aux.descripcion;
+            this.listo = aux.listo;
         }
     }
 }

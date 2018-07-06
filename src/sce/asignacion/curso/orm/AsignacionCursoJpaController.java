@@ -31,29 +31,20 @@ public class AsignacionCursoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public List<AsignacionCursoEntity> buscarPorCarrera(Long idCarrera) {
+    public List<AsignacionCursoEntity> buscarPorAsignacionCarrera(Long idAsignacionCarrera) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorCarrera", AsignacionCursoEntity.class);
+        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorAsignacionCarrera", AsignacionCursoEntity.class);
         return query
-                .setParameter("idCarrera", idCarrera)
+                .setParameter("idAsignacionCarrera", idAsignacionCarrera)
                 .getResultList();
     }
-    public List<AsignacionCursoEntity> buscarPorGrado(Long idCarrera, Long idGrado) {
+    public List<AsignacionCursoEntity> buscarPorAsignacionGrado(Long idAsignacionCarrera, Long idAsignacionGrado) {
         EntityManager em = getEntityManager();
-        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorGrado", AsignacionCursoEntity.class);
+        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorAsignacionGrado", AsignacionCursoEntity.class);
         return query
-                .setParameter("idCarrera", idCarrera)
-                .setParameter("idGrado", idGrado)
+                .setParameter("idAsignacionCarrera", idAsignacionCarrera)
+                .setParameter("idAsignacionGrado", idAsignacionGrado)
                 .getResultList();
-    }
-    public AsignacionCursoEntity buscarPorCurso(Long idCurso) {
-        EntityManager em = getEntityManager();
-        TypedQuery<AsignacionCursoEntity> query = em.createNamedQuery("AsignacionCurso.buscarPorCurso", AsignacionCursoEntity.class);
-        List<AsignacionCursoEntity> encontrados =  query.setParameter("idGrado", idCurso) .getResultList();
-        if (encontrados.isEmpty()) {
-            return null;
-        }
-        return encontrados.get(0);
     }
     public void create(AsignacionCursoEntity asignacion_Curso) {
         EntityManager em = null;

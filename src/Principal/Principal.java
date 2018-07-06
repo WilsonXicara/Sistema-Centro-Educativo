@@ -5,7 +5,7 @@
  */
 package Principal;
 
-import sce.principal.EMF;
+import sce.principal.GestorConexion;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -30,6 +30,7 @@ import sce.principal.elemento_asignatura.ciclo.orm.CicloEscolarJpaController;
 import sce.principal.elemento_asignatura.curso.orm.CursoJpaController;
 import sce.asignacion.carrera.orm.DetallePensumJpaController;
 import sce.asignacion.carrera.orm.PensumJpaController;
+import sce.asignacion.estudiante.AsignacionEstudianteAnulador;
 import sce.excepciones.ExcepcionParametrosIncompletos;
 import sce.excepciones.NonexistentEntityException;
 import sce.principal.elemento_asignatura.carrera.orm.CarreraEntity;
@@ -47,11 +48,18 @@ public class Principal {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        EntityManagerFactory emf = EMF.crearEntityManagerFactory("Sistema-Centro-EducativoPU");
-        EntityManagerFactory emf2 = EMF.crearEntityManagerFactory("Sistema-Centro-EducativoPU");
+        GestorConexion.definirNombrePersistenceUnit("Sistema-Centro-EducativoPU");
+        EntityManagerFactory emf = GestorConexion.crearEntityManagerFactory();
+        EntityManagerFactory emf2 = GestorConexion.crearEntityManagerFactory();
         System.out.println("emf  = "+emf);
         System.out.println("emf2 = "+emf2);
-        crear_atributos_adicionales(emf);
+        AsignacionEstudianteAnulador a = new AsignacionEstudianteAnulador(0l);
+        try {
+            a.anularAsignacionesEstudiante();
+        } catch (ExcepcionParametrosIncompletos | NonexistentEntityException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //crear_atributos_adicionales(emf);
     }
     public static void registrar_asignacion_carrera(EntityManagerFactory emf) {
         CicloEscolarJpaController controllerCiclo = new CicloEscolarJpaController(emf);
