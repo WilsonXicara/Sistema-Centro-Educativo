@@ -11,9 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import sce.principal.elemento_asignatura.calendario.orm.CalendarioCicloEscolarEntity;
 import sce.excepciones.NonexistentEntityException;
 
 /**
@@ -29,6 +29,16 @@ public class CalendarioCicloEscolarJpaController implements Serializable {
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+    
+    public CalendarioCicloEscolarEntity buscarPorParametros(Long idAsigCarrera,int mes, int diainicio, int diafin, String actividad){
+        EntityManager em = getEntityManager();
+        TypedQuery<CalendarioCicloEscolarEntity> query = em.createNamedQuery("CalendarioCicloEscolar.buscarParametros", CalendarioCicloEscolarEntity.class);
+        List<CalendarioCicloEscolarEntity> encontrados = query.setParameter("idAsigCarrera", idAsigCarrera).setParameter("mes",mes).setParameter("dia_inicio", diainicio).setParameter("dia_fin", diafin).setParameter("actividad", actividad).getResultList();   
+        if (encontrados.isEmpty()){
+            return null;
+        }
+        return encontrados.get(0);  
     }
 
     public void create(CalendarioCicloEscolarEntity calendarioCicloEscolarEntity) {

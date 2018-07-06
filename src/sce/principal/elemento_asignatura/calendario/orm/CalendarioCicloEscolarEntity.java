@@ -10,15 +10,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import sce.principal.elemento_asignatura.ElementoAsignaturaEntity;
 
 /**
  *
  * @author Usuario
  */
 @Entity(name = CalendarioCicloEscolarEntity.tableName)
+@NamedQuery(name="CalendarioCicloEscolar.buscarParametros",query="SELECT p FROM "+CalendarioCicloEscolarEntity.tableName+" AS p WHERE "
+        + "p.asignacion_carrera_id = :idAsigCarrera AND p.mes = :mes AND p.dia_inicio = :diainicio AND p.dia_fin = :diafin AND p.actividad = :actividad")
 @Table(name = CalendarioCicloEscolarEntity.tableName)
-public class CalendarioCicloEscolarEntity implements Serializable {
+public class CalendarioCicloEscolarEntity implements Serializable, ElementoAsignaturaEntity {
     private static final long serialVersionUID = 1L;
     public static final String tableName = "calendario_ciclo_escolar";
     
@@ -28,6 +32,19 @@ public class CalendarioCicloEscolarEntity implements Serializable {
     private Long asignacion_carrera_id;
     private Integer mes, dia_inicio, dia_fin;
     private String actividad;
+
+    
+    public CalendarioCicloEscolarEntity(){
+        
+    }
+    
+    public CalendarioCicloEscolarEntity(Long asignacion_carrera_id, Integer mes, Integer dia_inicio, Integer dia_fin, String actividad) {
+        this.asignacion_carrera_id = asignacion_carrera_id;
+        this.mes = mes;
+        this.dia_inicio = dia_inicio;
+        this.dia_fin = dia_fin;
+        this.actividad = actividad;
+    }
 
     public Long getId() { return id; }
     public Long getAsignacion_carrera_id() { return asignacion_carrera_id; }

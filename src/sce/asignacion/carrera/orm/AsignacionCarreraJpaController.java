@@ -37,6 +37,7 @@ public class AsignacionCarreraJpaController implements Serializable {
         return query.setParameter("idCicloEscolar", idCicloEscolar).getResultList();
     }
     
+    
     public void create(AsignacionCarreraEntity asignacionCarreraEntity) {
         EntityManager em = null;
         try {

@@ -25,8 +25,8 @@ public class RegistroCicloSave extends AbstractRegistroElementoAsignaturaSave {
     public void guardarElementosAsignatura(EntityManagerFactory emf) throws PreexistingEntityException, ExcepcionTipoNoSoportado {
         for (AbstractElementoAsignatura elemento : elementosAsignatura) {
             if (elemento instanceof RegistroCiclo) {
-                RegistroCiclo registroCarrera = (RegistroCiclo)elemento;
-                CicloEscolarEntity cicloEscolar = (CicloEscolarEntity)registroCarrera.getElementoAsignaturaEntity();
+                RegistroCiclo registroCiclo = (RegistroCiclo)elemento;
+                CicloEscolarEntity cicloEscolar = (CicloEscolarEntity)registroCiclo.getElementoAsignaturaEntity();
                 CicloEscolarJpaController controller = new CicloEscolarJpaController(emf);
                 if (cicloEscolar.getId() == null) {
                     CicloEscolarEntity existente = controller.buscarPorAnio(cicloEscolar.getCiclo_escolar());

@@ -10,6 +10,7 @@ import javax.persistence.EntityManagerFactory;
 import sce.asignacion.AsignacionCommand;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoCursosEntity;
 import sce.asignacion.catedratico.orm.AsignacionCatedraticoCursosJpaController;
+import sce.asignacion.curso.ConsultorAsignacionCurso;
 import sce.asignacion.curso.orm.AsignacionCursoEntity;
 import sce.asignacion.curso.orm.AsignacionCursoJpaController;
 import sce.excepciones.NonexistentEntityException;
@@ -52,13 +53,19 @@ public class AsignacionCatedraticoCursos implements AsignacionCommand{
         asignacionCatCursos.setAsignacion_catedratico_id(idAsignacionCat);
            for (Long elementos : idAsignacionCurso){
             AsignacionCursoEntity AsigCursosExistente = new AsignacionCursoJpaController(emf).findAsignacion_Curso(elementos);
-            if (AsigCursosExistente != null){ //Tengo que usar los consultores de Willy
-                asignacionCatCursos.setAsignacion_curso_id(elementos);
-                new AsignacionCatedraticoCursosJpaController(emf).create(asignacionCatCursos);
+            if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, elementos)){
+                throw new NonexistentEntityException("No existe una asignacion curso con id "+elementos);
+            }
+            if (ConsultorAsignacionCurso.esAsignacionCursoAnulada(emf, elementos)){
+                throw new NonexistentEntityException("La asignacion curso con id "+elementos+" ha sido anulada.");
+            }
+
+            asignacionCatCursos.setAsignacion_curso_id(elementos);
+            new AsignacionCatedraticoCursosJpaController(emf).create(asignacionCatCursos);
            
-        }
-        } 
+            }
+    } 
         
-    }
+    
  
 }
