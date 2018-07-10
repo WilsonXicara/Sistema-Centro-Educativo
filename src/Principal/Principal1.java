@@ -5,6 +5,8 @@
  */
 package Principal;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +71,10 @@ public class Principal1 {
         } catch (PreexistingEntityException | ExcepcionTipoNoSoportado ex) {
             Logger.getLogger(Principal1.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("ClassPath:");
+            for (URL url : ((URLClassLoader) ClassLoader.getSystemClassLoader()).getURLs()) {
+                System.out.println("\t" + url.getFile());
+            }
     }
     public static void otro_metodo() {
         GestorConexion.definirNombrePersistenceUnit("Sistema-Centro-EducativoPU");

@@ -14,5 +14,6 @@ import sce.excepciones.NonexistentEntityException;
  * @author Usuario
  */
 public interface AsignacionCommand {
-    public void crearAsignacion() throws ExcepcionParametrosIncompletos, NonexistentEntityException, ExcepcionEntityAnulado;
+    public void crearAsignacion()
+            throws ExcepcionParametrosIncompletos, NonexistentEntityException, ExcepcionEntityAnulado;
 }

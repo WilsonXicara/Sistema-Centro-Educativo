@@ -195,7 +195,6 @@ public class AtributoAdicionalEditor {
                 if (nuevo.getNombre_atributo().equals("sexo")) {
                     nuevo.setTabla_extendida_id(null);
                 }
-                System.out.println("guardando "+nuevo);
                 idError = nuevo.getId();
                 if (idError == null) {
                     controller.create(nuevo);

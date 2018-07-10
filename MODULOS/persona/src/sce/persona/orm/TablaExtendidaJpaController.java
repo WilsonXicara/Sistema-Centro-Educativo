@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -25,7 +24,6 @@ public class TablaExtendidaJpaController implements Serializable {
 
     public TablaExtendidaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
-        this.emf = Persistence.createEntityManagerFactory("Sistema-Centro-EducativoPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -35,7 +33,6 @@ public class TablaExtendidaJpaController implements Serializable {
     
     public TablaExtendidaEntity buscarTablaExtendida(String nombreTabla) {
         EntityManager em = getEntityManager();
-        System.out.println("emf: "+emf);
         TypedQuery<TablaExtendidaEntity> query = em.createNamedQuery("TablaExtendida.buscarTablaExtendida", TablaExtendidaEntity.class);
         List<TablaExtendidaEntity> encontrados = query.setParameter("nombreTabla", nombreTabla).getResultList();
         if (encontrados.isEmpty()) {
