@@ -5,7 +5,7 @@
  */
 package Principal;
 
-import sce.persona.catedratico.InformacionCatedraticoBuilder;
+/*import sce.persona.catedratico.InformacionCatedraticoBuilder;
 import sce.persona.catedratico.InformacionCatedratico;
 import sce.persona.estudiante.InformacionEstudianteBuilder;
 import sce.persona.estudiante.InformacionEstudiante;
@@ -15,7 +15,7 @@ import java.util.List;
 import javax.persistence.Persistence;
 import sce.persona.builder.AbstractInformacionPersona;
 import sce.persona.builder.InformacionPersonaBuilder;
-import sce.persona.builder.InformacionPersonaDirector;
+import sce.persona.builder.InformacionPersonaDirector;*/
 
 /**
  *
@@ -26,7 +26,7 @@ public class DirectorPrincipal {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         crear_registro_persona();
     }
     public void concatenar_array() {
@@ -60,5 +60,5 @@ public class DirectorPrincipal {
         administrador.setIdPersona(2l);
         administrador.construirInformacionPersona();
         InformacionCatedratico catedratico = (InformacionCatedratico)administrador.getInformacionPersona();
-    }
+    }*/
 }

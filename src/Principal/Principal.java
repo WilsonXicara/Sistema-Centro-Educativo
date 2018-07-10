@@ -5,7 +5,7 @@
  */
 package Principal;
 
-import sce.principal.GestorConexion;
+/*import sce.principal.GestorConexion;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -34,7 +34,7 @@ import sce.asignacion.estudiante.AsignacionEstudianteAnulador;
 import sce.excepciones.ExcepcionParametrosIncompletos;
 import sce.excepciones.NonexistentEntityException;
 import sce.principal.elemento_asignatura.carrera.orm.CarreraEntity;
-import sce.principal.elemento_asignatura.carrera.orm.CarreraJpaController;
+import sce.principal.elemento_asignatura.carrera.orm.CarreraJpaController;*/
 
 /**
  *
@@ -47,7 +47,7 @@ public class Principal {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         GestorConexion.definirNombrePersistenceUnit("Sistema-Centro-EducativoPU");
         EntityManagerFactory emf = GestorConexion.crearEntityManagerFactory();
         EntityManagerFactory emf2 = GestorConexion.crearEntityManagerFactory();
@@ -178,5 +178,5 @@ public class Principal {
         System.out.println("estudiante = "+AtributoAdicionalEditor.obtenerListaAtributos(emf, "estudiante"));
         System.out.println("encargado = "+AtributoAdicionalEditor.obtenerListaAtributos(emf, "encargado"));
         System.out.println("catedratico = "+AtributoAdicionalEditor.obtenerListaAtributos(emf, "catedratico"));
-    }
+    }*/
 }

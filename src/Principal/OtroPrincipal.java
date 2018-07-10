@@ -5,13 +5,13 @@
  */
 package Principal;
 
-import java.util.logging.Level;
+/*import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import sce.excepciones.ExcepcionParametrosIncompletos;
 import sce.excepciones.NonexistentEntityException;
-import sce.persona.AtributoAdicionalEditor;
+import sce.persona.AtributoAdicionalEditor;*/
 
 /**
  *
@@ -22,7 +22,7 @@ public class OtroPrincipal {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Sistema-Centro-EducativoPU");
         try {
             AtributoAdicionalEditor creador = new AtributoAdicionalEditor(emf, "estudiante");
@@ -36,10 +36,10 @@ public class OtroPrincipal {
             creador.agregarAtributo("sexo");
             creador.eliminarAtributo("edad");
             //System.out.println("-telefono: "+creador.eliminarAtributo("telefono"));
-            /*creador.eliminarAtributo("telefono");
+            creador.eliminarAtributo("telefono");
             creador.eliminarAtributo("fecha_nacimiento");
             creador.eliminarAtributo("etnia");
-            creador.eliminarAtributo("sexo");*/
+            creador.eliminarAtributo("sexo");
             
             creador.guardarCambios();
         } catch (NonexistentEntityException ex) {
@@ -47,6 +47,6 @@ public class OtroPrincipal {
         } catch (ExcepcionParametrosIncompletos ex) {
             Logger.getLogger(OtroPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
     
 }
