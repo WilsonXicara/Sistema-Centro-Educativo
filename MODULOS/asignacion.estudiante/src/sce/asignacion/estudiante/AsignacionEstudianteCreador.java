@@ -76,9 +76,9 @@ public class AsignacionEstudianteCreador implements AsignacionCommand {
         // @Nota para módulo correspondiente
         EstudianteEntity estudiante = new EstudianteJpaController(emf).findEstudianteEntity(idEstudiante);
         if (estudiante == null) {
-            throw new NonexistentEntityException("No existe un Estudiante con id="+idAsignacionCarrera);
+            throw new NonexistentEntityException("No existe un Estudiante con id="+idEstudiante);
         } if (estudiante.getAnulado()) {
-            throw new ExcepcionEntityAnulado("El Estudiante con id="+idAsignacionCarrera+" ya ha sido anulado");
+            throw new ExcepcionEntityAnulado("El Estudiante con id="+idEstudiante+" ya ha sido anulado");
         }
         // Se crean tantos registros en 'asignacion_estudiante_cursos' como Cursos estén agregados. Los pasos son:
         // 1. Crear el registro en 'asignacion_estudiante'

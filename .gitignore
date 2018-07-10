@@ -47,3 +47,7 @@ hs_err_pid*
 /MODULOS/asignacion.curso/build/
 /MODULOS/asignacion.carrera/build/
 /MODULOS/asignacion.catedratico/build/
+/MODULOS/asignacion.carrera/dist/
+/MODULOS/asignacion.curso/dist/
+/MODULOS/asignacion.estudiante/dist/
+/MODULOS/asignacion.catedratico/dist/
