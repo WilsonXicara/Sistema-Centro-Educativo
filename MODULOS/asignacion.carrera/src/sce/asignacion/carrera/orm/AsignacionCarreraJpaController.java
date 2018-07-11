@@ -37,6 +37,12 @@ public class AsignacionCarreraJpaController implements Serializable {
         return query.setParameter("idCicloEscolar", idCicloEscolar).getResultList();
     }
     
+    public AsignacionCarreraEntity buscarPorCarreraId(Long idCarrera){
+        EntityManager em = getEntityManager();
+        TypedQuery<AsignacionCarreraEntity> query = em.createNamedQuery("AsignacionCarrera.buscarPorCarreraID",AsignacionCarreraEntity.class);
+        return query.setParameter("idCarrera",idCarrera).getResultList().get(0);
+    }
+    
     
     public void create(AsignacionCarreraEntity asignacionCarreraEntity) {
         EntityManager em = null;

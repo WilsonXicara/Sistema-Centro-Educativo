@@ -8,7 +8,7 @@ package sce.asignacion.curso.nota.estudiante;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import sce.asignacion.curso.ConsultorAsignacionCurso;
+//import sce.asignacion.curso.ConsultorAsignacionCurso;
 import sce.asignacion.curso.nota.orm.ActividadEntity;
 import sce.asignacion.curso.nota.orm.ActividadJpaController;
 import sce.asignacion.curso.orm.AsignacionCursoEntity;
@@ -53,9 +53,9 @@ public class ConsultorEstudianteNotasCurso {
         
         // Obtención del Entity con la Asignación de Curso al que está relacionado las Notas del estudiante
         Long idAsignacionCurso = asignacionEstudianteCurso.getId();
-        if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, idAsignacionCurso)) {
+        /*if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, idAsignacionCurso)) {
             throw new NonexistentEntityException("No existe una Asignación de Curso con id="+idAsignacionCurso+" para la Asignación del Estudiante a Curso con id="+idAsignacionEstudianteCurso);
-        }
+        }*/
         // No se verifica si la Asignación de Curso está anulada, ya que sólo se mostrán las Notas
         AsignacionCursoEntity asignacionCurso = new AsignacionCursoJpaController(emf)
                 .findAsignacion_Curso(idAsignacionCurso);

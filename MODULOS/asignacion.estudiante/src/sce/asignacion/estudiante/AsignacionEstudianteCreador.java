@@ -15,7 +15,7 @@ import sce.asignacion.estudiante.orm.AsignacionEstudianteEntity;
 import sce.asignacion.grado.orm.AsignacionGradoEntity;
 import sce.persona.estudiante.orm.EstudianteEntity;
 import sce.asignacion.carrera.orm.AsignacionCarreraJpaController;
-import sce.asignacion.curso.ConsultorAsignacionCurso;
+//import sce.asignacion.curso.ConsultorAsignacionCurso;
 import sce.asignacion.estudiante.orm.AsignacionCursosEstudianteJpaController;
 import sce.asignacion.estudiante.orm.AsignacionEstudianteJpaController;
 import sce.asignacion.grado.orm.AsignacionGradoJpaController;
@@ -97,7 +97,7 @@ public class AsignacionEstudianteCreador implements AsignacionCommand {
         for (Long idAsignacionCurso : listaIDAsignacionCursos) {
             // Se comprueba que exista la Asignación Curso y que no esté anulada
             // Una Asignación Curso está anulada si la Asignación Carrera o la Asignación Grado relacionadas están anuladas
-            if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, idAsignacionCurso)) {
+            /*if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, idAsignacionCurso)) {
                 em.getTransaction().rollback();
                 // Eliminación de la AsignacionEstudianteEntity recién creada
                 new AsignacionEstudianteJpaController(emf).destroy(asignacionEst.getId());
@@ -112,7 +112,7 @@ public class AsignacionEstudianteCreador implements AsignacionCommand {
                 // Eliminación de la AsignacionEstudianteEntity recién creada
                 new AsignacionEstudianteJpaController(emf).destroy(asignacionEst.getId());
                 throw new NonexistentEntityException("No existe una Asignación de Curso con los parámetros especificados");
-            }
+            }*/
             // Creación de la Asignación del Estudiante al Curso especificado
             AsignacionCursosEstudianteEntity asignacionCurso = new AsignacionCursosEstudianteEntity();
             asignacionCurso.setAsignacion_estudiante_id(asignacionEst.getId());
