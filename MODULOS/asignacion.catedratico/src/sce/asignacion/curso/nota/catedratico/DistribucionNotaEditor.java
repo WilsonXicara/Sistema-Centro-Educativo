@@ -8,7 +8,7 @@ package sce.asignacion.curso.nota.catedratico;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
-import sce.asignacion.curso.ConsultorAsignacionCurso;
+//import sce.asignacion.curso.ConsultorAsignacionCurso;
 import sce.asignacion.curso.nota.estudiante.NotaActividadEntity;
 import sce.asignacion.curso.nota.estudiante.NotaActividadJpaController;
 import sce.asignacion.curso.nota.orm.ActividadEntity;
@@ -73,11 +73,11 @@ public class DistribucionNotaEditor {
             throw new ExcepcionParametrosIncompletos("La conexión ya ha sido cerrada");
         } if (idAsignacionCurso == null) {
             throw new ExcepcionParametrosIncompletos("El ID de la Asignación de Curso no puede ser nulo");
-        } if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, idAsignacionCurso)) {
+        }/* if (!ConsultorAsignacionCurso.existeAsignacionCurso(emf, idAsignacionCurso)) {
             throw new NonexistentEntityException("No existe una Asignación de Curso con id="+idAsignacionCurso);
         } if (!ConsultorAsignacionCurso.esAsignacionCursoAnulada(emf, idAsignacionCurso)) {
             throw new ExcepcionEntityAnulado("La Asignación de Curso con id="+idAsignacionCurso+" está anulada");
-        }
+        }*/
     }
     
     /**

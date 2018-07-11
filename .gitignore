@@ -51,3 +51,8 @@ hs_err_pid*
 /MODULOS/asignacion.curso/dist/
 /MODULOS/asignacion.estudiante/dist/
 /MODULOS/asignacion.catedratico/dist/
+/MODULOS/sce.gui/build/
+/MODULOS/elemento.calendario/build/
+/MODULOS/elemento.calendario/dist/
+/MODULOS/sce.gui/dist/
+/MODULOS/sce.gui/nbproject/private/

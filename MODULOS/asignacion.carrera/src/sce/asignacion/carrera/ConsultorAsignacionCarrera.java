@@ -22,23 +22,25 @@ public class ConsultorAsignacionCarrera {
     }
     
     public static Boolean isAsignacionCarreraAnulada(Long idAsignacionCarrera, EntityManagerFactory emf){
-        if (existeAsignacionCarrera(idAsignacionCarrera,emf)){
+        System.out.println("ID = "+idAsignacionCarrera);
+        if (!existeAsignacionCarrera(idAsignacionCarrera,emf)){
             return true;
         }
         AsignacionCarreraEntity asigCarrera = new AsignacionCarreraJpaController(emf).findAsignacionCarreraEntity(idAsignacionCarrera);
         
         //Consulta al módulo "Carrera"
         Long idAuxiliarCarrera = asigCarrera.getCarrera_id();
-        if (ConsultorRegistroCarrera.existeCarrera(idAuxiliarCarrera, emf)){
+        if (!ConsultorRegistroCarrera.existeCarrera(idAuxiliarCarrera, emf)){
+            
             return true;
         }
         //Consultra al módilo "CicloEscolar"
         Long idAuxiliarCicloE = asigCarrera.getCiclo_escolar_id();
-        if (ConsultorRegistroCiclo.existeCicloEscolar(idAuxiliarCicloE, emf) && ConsultorRegistroCiclo.esVigenteCicloEscolar(idAuxiliarCicloE, emf))
+        if (!ConsultorRegistroCiclo.existeCicloEscolar(idAuxiliarCicloE, emf) || !ConsultorRegistroCiclo.esVigenteCicloEscolar(idAuxiliarCicloE, emf))
         {
             return true;
         }
-        return !asigCarrera.getAnulado();
+        return asigCarrera.getAnulado();
     }
     
 }
